@@ -240,6 +240,69 @@
     transition: opacity .15s, transform .1s;
   }
   .btn-save:hover { opacity: .9; transform: translateY(-1px); }
+
+  /* ── Password Gate ── */
+  .gate-overlay {
+    position: fixed; inset: 0; z-index: 9999;
+    background: linear-gradient(135deg, var(--wine-dark) 0%, #1a0a10 100%);
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px;
+  }
+  .gate-overlay.hidden { display: none; }
+  .gate-card {
+    background: #fff; border-radius: 16px;
+    padding: 44px 40px; width: 100%; max-width: 380px;
+    box-shadow: 0 24px 60px rgba(0,0,0,.5);
+    text-align: center;
+  }
+  .gate-logo {
+    width: 64px; height: 64px; border-radius: 50%;
+    border: 3px solid var(--gold); margin: 0 auto 20px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; font-weight: 700; color: var(--gold);
+    background: rgba(107,30,44,.06); letter-spacing: 1px;
+  }
+  .gate-title { font-size: 20px; font-weight: 700; color: var(--wine); margin-bottom: 6px; }
+  .gate-sub { font-size: 13px; color: var(--muted); margin-bottom: 28px; }
+  .gate-input-wrap { position: relative; margin-bottom: 14px; }
+  .gate-input {
+    width: 100%; padding: 12px 44px 12px 14px;
+    border: 1.5px solid var(--border); border-radius: 8px;
+    font-size: 15px; font-family: inherit; background: #FDFAF6;
+    color: var(--ink); letter-spacing: 2px;
+    transition: border-color .15s, box-shadow .15s;
+  }
+  .gate-input:focus { outline: none; border-color: var(--wine); box-shadow: 0 0 0 3px rgba(107,30,44,.1); }
+  .gate-input.shake { animation: shake .4s ease; }
+  .gate-eye {
+    position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+    cursor: pointer; color: var(--muted); font-size: 16px; user-select: none;
+    background: none; border: none; padding: 0;
+  }
+  .gate-eye:hover { color: var(--wine); }
+  .gate-error {
+    font-size: 12px; color: var(--neg); min-height: 18px;
+    margin-bottom: 14px; font-weight: 500;
+  }
+  .gate-btn {
+    width: 100%; padding: 12px;
+    background: linear-gradient(135deg, var(--wine-dark), var(--wine));
+    color: #fff; border: none; border-radius: 8px;
+    font-size: 14px; font-weight: 700; font-family: inherit;
+    cursor: pointer; letter-spacing: .5px;
+    box-shadow: 0 3px 10px rgba(107,30,44,.3);
+    transition: opacity .15s;
+  }
+  .gate-btn:hover { opacity: .9; }
+  .gate-btn:active { opacity: .8; }
+  @keyframes shake {
+    0%,100%{transform:translateX(0)}
+    20%{transform:translateX(-8px)}
+    40%{transform:translateX(8px)}
+    60%{transform:translateX(-6px)}
+    80%{transform:translateX(6px)}
+  }
+
   .btn-export {
     padding: 9px 20px; border-radius: 7px;
     border: 1px solid var(--gold); background: #fff;
@@ -264,6 +327,23 @@
 </style>
 </head>
 <body>
+
+<!-- ══ Password Gate ══ -->
+<div class="gate-overlay" id="gate-overlay">
+  <div class="gate-card">
+    <div class="gate-logo">P&amp;J</div>
+    <div class="gate-title">後臺管理</div>
+    <div class="gate-sub">P&amp;J Capital Limited · Admin Access</div>
+    <div class="gate-input-wrap">
+      <input class="gate-input" type="password" id="gate-input"
+        placeholder="請輸入管理密碼"
+        onkeydown="if(event.key==='Enter')submitGate()" />
+      <button class="gate-eye" id="gate-eye" onclick="toggleGateEye()" tabindex="-1">👁</button>
+    </div>
+    <div class="gate-error" id="gate-error"></div>
+    <button class="gate-btn" onclick="submitGate()">進入後臺 →</button>
+  </div>
+</div>
 
 <!-- ══ Banner ══ -->
 <header class="banner">
@@ -424,6 +504,44 @@
 <div class="toast" id="toast"></div>
 
 <script>
+  /* ── Password Gate (SHA-256) ── */
+  const PASS_HASH = '982f840d0dffbbd69c5c24c3ab4550af7b39451436da4a1a030b2d1d2cbf1a58';
+  const AUTH_KEY  = 'pj_admin_auth';
+
+  async function sha256(str) {
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+  }
+
+  function checkGate() {
+    if (sessionStorage.getItem(AUTH_KEY) === '1') {
+      document.getElementById('gate-overlay').classList.add('hidden');
+    } else {
+      setTimeout(() => document.getElementById('gate-input').focus(), 100);
+    }
+  }
+
+  async function submitGate() {
+    const input = document.getElementById('gate-input');
+    const errEl = document.getElementById('gate-error');
+    const hash  = await sha256(input.value);
+    if (hash === PASS_HASH) {
+      sessionStorage.setItem(AUTH_KEY, '1');
+      document.getElementById('gate-overlay').classList.add('hidden');
+      errEl.textContent = '';
+    } else {
+      errEl.textContent = '密碼錯誤，請再試一次。';
+      input.classList.add('shake');
+      input.value = '';
+      setTimeout(() => { input.classList.remove('shake'); input.focus(); }, 450);
+    }
+  }
+
+  function toggleGateEye() {
+    const input = document.getElementById('gate-input');
+    input.type = input.type === 'password' ? 'text' : 'password';
+  }
+
   /* ── App config ── */
   const STORAGE_KEY = 'pj_portal_config';
 
@@ -679,6 +797,7 @@ localStorage.setItem('pj_portal_config', ${JSON.stringify(json)});
   }
 
   /* ── Boot ── */
+  checkGate();
   init();
 </script>
 </body>
