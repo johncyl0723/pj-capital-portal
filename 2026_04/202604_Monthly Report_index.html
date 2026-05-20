@@ -1,0 +1,1478 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>投資月報 Investment Monthly Report | KS Capital | 2026/4</title>
+<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+<script>
+  window.addEventListener('load', function () {
+    const netlifyIdentity = window.netlifyIdentity;
+    netlifyIdentity.on('init', function (user) {
+      if (!user) {
+        document.body.style.display = 'none';
+        netlifyIdentity.open('login');
+      }
+    });
+    netlifyIdentity.on('login', function () {
+      document.body.style.display = '';
+      netlifyIdentity.close();
+    });
+    netlifyIdentity.on('logout', function () {
+      document.body.style.display = 'none';
+      netlifyIdentity.open('login');
+    });
+  });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+  :root{
+    --wine:#6B1E2C;
+    --wine-dark:#4A1420;
+    --wine-light:#8B3244;
+    --gold:#C9A961;
+    --gold-dark:#A88740;
+    --cream:#FAF7F2;
+    --ink:#1C1917;
+    --muted:#6B6560;
+    --border:#E8E2D8;
+    --pos:#15803D;
+    --pos-bg:#DCFCE7;
+    --neg:#B91C1C;
+    --neg-bg:#FEE2E2;
+    --neutral:#44403C;
+    --card:#FFFFFF;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--cream);color:var(--ink);font-family:'Segoe UI','Helvetica Neue','PingFang TC','Microsoft JhengHei',system-ui,sans-serif;line-height:1.5;font-size:14px}
+  a{color:var(--wine);text-decoration:none}
+
+  .topbar{background:linear-gradient(135deg,var(--wine-dark) 0%,var(--wine) 55%,var(--wine-light) 100%);color:#fff;padding:18px 32px;box-shadow:0 2px 8px rgba(0,0,0,.12)}
+  .topbar-inner{max-width:1400px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap}
+  .brand{display:flex;align-items:center;gap:14px}
+  .logo{width:46px;height:46px;border:2px solid var(--gold);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:18px;color:var(--gold);letter-spacing:1px;background:rgba(0,0,0,.12)}
+  .brand h1{font-size:18px;font-weight:600;letter-spacing:.5px}
+  .brand .sub{font-size:11px;opacity:.75;letter-spacing:2px;text-transform:uppercase;margin-top:2px}
+  .report-meta{display:flex;gap:24px;font-size:12px}
+  .report-meta .label{opacity:.7;margin-bottom:2px}
+  .report-meta .val{font-weight:600;color:var(--gold)}
+  .disclaim{font-size:10px;opacity:.55;font-style:italic;margin-top:4px}
+
+  .tabs{background:#fff;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:50;box-shadow:0 1px 4px rgba(0,0,0,.04)}
+  .tabs-inner{max-width:1400px;margin:0 auto;display:flex;gap:4px;padding:0 24px;overflow-x:auto}
+  .tab{padding:14px 18px;border:none;background:none;cursor:pointer;font-size:13px;font-weight:500;color:var(--muted);border-bottom:3px solid transparent;white-space:nowrap;transition:all .15s;font-family:inherit}
+  .tab:hover{color:var(--wine);background:rgba(107,30,44,.04)}
+  .tab.active{color:var(--wine);border-bottom-color:var(--wine);font-weight:600}
+  .tab .icon{margin-right:6px}
+
+  main{max-width:1400px;margin:0 auto;padding:24px}
+  .panel{display:none;animation:fadeIn .25s ease}
+  .panel.active{display:block}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+
+  .section-title{font-size:16px;font-weight:600;color:var(--wine);margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid var(--gold);display:flex;align-items:center;gap:10px}
+  .section-title .en{font-size:12px;color:var(--muted);font-weight:400;letter-spacing:.5px}
+
+  .grid{display:grid;gap:16px}
+  .grid-2{grid-template-columns:repeat(2,1fr)}
+  .grid-3{grid-template-columns:repeat(3,1fr)}
+  .grid-4{grid-template-columns:repeat(4,1fr)}
+  @media(max-width:900px){.grid-2,.grid-3,.grid-4{grid-template-columns:1fr}}
+
+  .card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:18px;box-shadow:0 1px 2px rgba(0,0,0,.02)}
+  .card-title{font-size:12px;color:var(--muted);letter-spacing:.5px;margin-bottom:10px;font-weight:500;text-transform:uppercase;display:flex;justify-content:space-between;align-items:center}
+
+  .kpi{background:#fff;border:1px solid var(--border);border-radius:10px;padding:20px;position:relative;overflow:hidden}
+  .kpi::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:var(--gold)}
+  .kpi .label{font-size:11px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px}
+  .kpi .value{font-size:26px;font-weight:600;color:var(--ink);font-variant-numeric:tabular-nums}
+  .kpi .sub{font-size:12px;color:var(--muted);margin-top:6px}
+  .kpi.primary::before{background:var(--wine);height:4px}
+  .kpi.primary .value{color:var(--wine);font-size:30px}
+  .change-up{color:var(--pos);font-weight:600}
+  .change-down{color:var(--neg);font-weight:600}
+  .chip{display:inline-block;padding:2px 8px;border-radius:12px;font-size:11px;font-weight:600}
+  .chip.up{background:var(--pos-bg);color:var(--pos)}
+  .chip.down{background:var(--neg-bg);color:var(--neg)}
+
+  table{width:100%;border-collapse:collapse;font-size:13px;font-variant-numeric:tabular-nums}
+  th,td{padding:8px 10px;text-align:right;border-bottom:1px solid var(--border)}
+  th:first-child,td:first-child{text-align:left}
+  thead th{background:#F5EFE5;color:var(--wine-dark);font-weight:600;font-size:12px;letter-spacing:.3px;border-bottom:2px solid var(--gold);position:sticky;top:0}
+  tbody tr:hover{background:#FAF7F2}
+  tbody tr.expandable{cursor:pointer}
+  tbody tr.expandable:hover{background:#F5EFE5}
+  .subtle{color:var(--muted);font-size:11px}
+  .num-pos{color:var(--pos);font-weight:500}
+  .num-neg{color:var(--neg);font-weight:500}
+
+  .filter-bar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px;padding:12px;background:#F5EFE5;border-radius:8px;border:1px solid var(--border);align-items:center}
+  .filter-group{display:flex;align-items:center;gap:6px}
+  .filter-group label{font-size:11px;color:var(--wine-dark);font-weight:600;letter-spacing:.3px;text-transform:uppercase}
+  .pill-group{display:flex;gap:4px;flex-wrap:wrap}
+  .pill{padding:5px 12px;border:1px solid var(--border);background:#fff;border-radius:16px;cursor:pointer;font-size:11px;color:var(--muted);transition:all .15s;font-family:inherit}
+  .pill:hover{border-color:var(--wine);color:var(--wine)}
+  .pill.active{background:var(--wine);color:#fff;border-color:var(--wine);font-weight:600}
+  .filter-reset{margin-left:auto;padding:5px 12px;background:#fff;border:1px solid var(--border);border-radius:16px;font-size:11px;color:var(--muted);cursor:pointer;font-family:inherit}
+  .filter-reset:hover{color:var(--wine);border-color:var(--wine)}
+
+  .chart-wrap{position:relative;height:320px}
+  .chart-wrap.tall{height:400px}
+  .chart-wrap.short{height:220px}
+
+  .bond-detail{background:#FAF7F2;padding:16px;border-left:3px solid var(--gold);font-size:12px}
+  .bond-detail-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+  @media(max-width:900px){.bond-detail-grid{grid-template-columns:repeat(2,1fr)}}
+  .bond-detail-grid .label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px}
+  .bond-detail-grid .val{font-size:13px;font-weight:500;color:var(--ink)}
+
+  .tag{display:inline-block;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:600;letter-spacing:.3px}
+  .tag-usd{background:#E0F2FE;color:#075985}
+  .tag-gbp{background:#FCE7F3;color:#9D174D}
+  .tag-rating-a{background:#DCFCE7;color:#14532D}
+  .tag-rating-bbb{background:#FEF3C7;color:#78350F}
+  .tag-rating-bb{background:#FEE2E2;color:#7F1D1D}
+  .tag-pledged{background:#E5E7EB;color:#374151}
+  .tag-at1{background:#F3E8FF;color:#6B21A8}
+  .tag-sen{background:#DBEAFE;color:#1E3A8A}
+  .tag-sub{background:#FEF3C7;color:#713F12}
+
+  footer{max-width:1400px;margin:40px auto 20px;padding:16px 24px;border-top:1px solid var(--border);font-size:11px;color:var(--muted);display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
+
+  .bs-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:700px){.bs-grid{grid-template-columns:1fr}}
+  .bs-side h4{color:var(--wine);font-size:13px;margin-bottom:8px;display:flex;justify-content:space-between;padding-bottom:6px;border-bottom:1px solid var(--border)}
+  .bs-row{display:flex;justify-content:space-between;padding:6px 0;font-size:13px;border-bottom:1px dashed #EEE6D8}
+  .bs-total{display:flex;justify-content:space-between;padding:8px 0;font-weight:700;color:var(--wine-dark);border-top:2px solid var(--gold);margin-top:6px;font-size:14px}
+
+  .period-strip{background:linear-gradient(90deg,#FAF7F2 0%,#fff 100%);border:1px solid var(--border);border-left:4px solid var(--wine);padding:16px 20px;border-radius:8px;margin-bottom:20px}
+  .period-strip h2{font-size:16px;color:var(--wine);margin-bottom:6px}
+  .period-strip p{font-size:13px;color:var(--muted)}
+
+  .muted{color:var(--muted)}
+  .small{font-size:11px}
+  .center{text-align:center}
+  .nowrap{white-space:nowrap}
+
+  details summary{cursor:pointer;font-size:12px;color:var(--wine);padding:6px 0}
+  details summary:hover{color:var(--wine-dark)}
+
+  .table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:4px}
+  .table-scroll table{min-width:640px}
+  .table-scroll::-webkit-scrollbar{height:8px}
+  .table-scroll::-webkit-scrollbar-thumb{background:var(--gold);border-radius:4px}
+  .table-scroll::-webkit-scrollbar-track{background:transparent}
+
+  .section-title{flex-wrap:wrap}
+
+  @media (max-width:768px){
+    html,body{font-size:13px}
+    .topbar{padding:14px 16px}
+    .topbar-inner{gap:12px}
+    .brand{gap:10px}
+    .brand h1{font-size:15px;line-height:1.25}
+    .brand .sub{font-size:10px;letter-spacing:1px}
+    .logo{width:38px;height:38px;font-size:14px}
+    .report-meta{gap:14px;font-size:11px;width:100%;justify-content:space-between;flex-wrap:wrap}
+    .report-meta>div{flex:1 1 30%;min-width:90px}
+    .disclaim{font-size:9px}
+    .tabs-inner{padding:0 10px;gap:0}
+    .tab{padding:12px 10px;font-size:12px}
+    .tab .icon{margin-right:4px}
+    main{padding:14px}
+    .grid{gap:12px}
+    .card{padding:14px;border-radius:6px}
+    .kpi{padding:14px;border-radius:8px}
+    .kpi .value{font-size:20px}
+    .kpi.primary .value{font-size:22px}
+    .kpi .label{font-size:10px;letter-spacing:.5px}
+    .kpi .sub{font-size:11px}
+    .section-title{font-size:14px;gap:6px}
+    .section-title .en{font-size:11px}
+    .period-strip{padding:12px 14px;margin-bottom:14px}
+    .period-strip h2{font-size:14px}
+    .period-strip p{font-size:12px}
+    .filter-bar{padding:10px;gap:8px}
+    .filter-group{align-items:flex-start;gap:6px;flex-direction:column;width:100%}
+    .filter-group label{font-size:10px}
+    .filter-reset{margin-left:0;width:100%;padding:8px;text-align:center}
+    .pill{padding:8px 12px;font-size:12px;min-height:32px}
+    .chart-wrap{height:260px}
+    .chart-wrap.tall{height:320px}
+    .chart-wrap.short{height:200px}
+    th,td{padding:6px 8px;font-size:12px}
+    thead th{font-size:11px}
+    .bond-detail{padding:12px}
+    .bond-detail-grid .val{font-size:12px}
+    footer{padding:12px 14px;flex-direction:column;align-items:flex-start;text-align:left}
+    footer>div:last-child{text-align:left}
+  }
+
+  @media (max-width:480px){
+    .topbar{padding:12px 14px}
+    .topbar-inner{flex-direction:column;align-items:flex-start;gap:10px}
+    .brand h1{font-size:14px}
+    .report-meta{gap:8px;font-size:10px}
+    .report-meta .label{margin-bottom:1px}
+    .tab{padding:10px 8px;font-size:11px}
+    .tab .icon{margin-right:3px;font-size:12px}
+    main{padding:10px}
+    .card{padding:12px}
+    .kpi{padding:12px}
+    .kpi .value{font-size:18px}
+    .kpi.primary .value{font-size:20px}
+    .grid-4,.grid-3,.grid-2{grid-template-columns:1fr}
+    .chart-wrap{height:240px}
+    .chart-wrap.tall{height:280px}
+    .chart-wrap.short{height:180px}
+    .bond-detail-grid{grid-template-columns:1fr}
+    .pill{padding:8px 10px;font-size:11px}
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <div class="logo">P&amp;J</div>
+      <div>
+        <h1>投資月報 · Investment Monthly Report</h1>
+        <div class="sub">P&amp;J Capital Management Limited</div>
+      </div>
+    </div>
+    <div class="report-meta">
+      <div>
+        <div class="label">客戶 / Client</div>
+        <div class="val" id="meta-client">—</div>
+      </div>
+      <div>
+        <div class="label">報告期 / Period</div>
+        <div class="val" id="meta-period">—</div>
+      </div>
+      <div>
+        <div class="label">計價幣別 / Currency</div>
+        <div class="val" id="meta-ccy">—</div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<nav class="tabs">
+  <div class="tabs-inner" id="tab-nav">
+    <button class="tab active" data-tab="overview"><span class="icon">📊</span>總覽 Overview</button>
+    <button class="tab" data-tab="performance"><span class="icon">📈</span>績效 Performance</button>
+    <button class="tab" data-tab="allocation"><span class="icon">🥧</span>配置 Allocation</button>
+    <button class="tab" data-tab="income"><span class="icon">💰</span>損益表 Income</button>
+    <button class="tab" data-tab="bonds"><span class="icon">📋</span>債券持有 Bonds</button>
+    <button class="tab" data-tab="cashflow"><span class="icon">💵</span>現金流 Cash Flow</button>
+  </div>
+</nav>
+
+<main>
+
+<!-- OVERVIEW -->
+<section class="panel active" id="panel-overview">
+  <div class="period-strip">
+    <h2 id="ov-headline">投資組合表現摘要</h2>
+    <p id="ov-subline">Portfolio Executive Summary — this month highlights</p>
+  </div>
+
+  <div class="grid grid-4" style="margin-bottom:20px">
+    <div class="kpi primary">
+      <div class="label">期末淨值 · NAV</div>
+      <div class="value" id="kpi-nav">—</div>
+      <div class="sub">報告日 · As of <span id="kpi-asof">—</span></div>
+    </div>
+    <div class="kpi">
+      <div class="label">本月變動 · MTD Change</div>
+      <div class="value" id="kpi-change">—</div>
+      <div class="sub"><span id="kpi-change-pct"></span></div>
+    </div>
+    <div class="kpi">
+      <div class="label">本月損益 · MTD P/L</div>
+      <div class="value" id="kpi-mpl">—</div>
+      <div class="sub">已實現 + 未實現 Realized + Unrealized</div>
+    </div>
+    <div class="kpi">
+      <div class="label">累計損益 · Cumulative P/L</div>
+      <div class="value" id="kpi-cumpl">—</div>
+      <div class="sub"><span id="kpi-cumret"></span> 歷年累積報酬 Cumulative Return</div>
+    </div>
+  </div>
+
+  <div class="grid grid-2" style="margin-bottom:20px">
+    <div class="card">
+      <div class="section-title">資產負債表 <span class="en">Balance Sheet (USD)</span></div>
+      <div class="bs-grid">
+        <div class="bs-side">
+          <h4><span>資產 Assets</span><span id="bs-total-asset" class="muted small">—</span></h4>
+          <div id="bs-assets"></div>
+        </div>
+        <div class="bs-side">
+          <h4><span>負債 Liabilities</span><span id="bs-total-liab" class="muted small">—</span></h4>
+          <div id="bs-liab"></div>
+          <div style="margin-top:24px">
+            <h4 style="border-bottom-color:var(--gold);color:var(--wine-dark)"><span>淨值 NAV</span><span id="bs-nav-echo" class="muted small">—</span></h4>
+            <div class="bs-row" style="color:var(--muted);font-size:11px;padding-top:10px">
+              <span>投入資本 Paid-in Capital</span><span id="bs-paidin">—</span>
+            </div>
+            <div class="bs-row" style="color:var(--muted);font-size:11px">
+              <span>累計盈虧 Cumulative P/L</span><span id="bs-cumpl">—</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="section-title">淨值走勢 <span class="en">NAV Trajectory (last 12 months)</span></div>
+      <div class="chart-wrap"><canvas id="chart-nav-trend"></canvas></div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:20px">
+    <div class="section-title">本月重點 <span class="en">This Month Highlights</span></div>
+    <div class="grid grid-3">
+      <div>
+        <div class="card-title">績效對比 · vs Benchmarks</div>
+        <table>
+          <tbody id="ov-bench-mini"></tbody>
+        </table>
+      </div>
+      <div>
+        <div class="card-title">資產類別 · Asset Mix</div>
+        <div class="chart-wrap short"><canvas id="chart-asset-mix"></canvas></div>
+      </div>
+      <div>
+        <div class="card-title">幣別曝險 · Currency Exposure</div>
+        <div class="chart-wrap short"><canvas id="chart-ccy-mix"></canvas></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PERFORMANCE -->
+<section class="panel" id="panel-performance">
+  <div class="grid grid-2" style="margin-bottom:20px">
+    <div class="card">
+      <div class="section-title">各年度月報酬比較 <span class="en">Year-over-Year Monthly Return</span></div>
+      <div class="chart-wrap"><canvas id="chart-yearly"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="section-title">月度報酬 <span class="en">Monthly Return (2025-2026)</span></div>
+      <div class="chart-wrap"><canvas id="chart-monthly"></canvas></div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:20px">
+    <div class="section-title">各年度淨值明細 <span class="en">Yearly NAV Statement</span></div>
+    <div class="table-scroll">
+    <table>
+      <thead>
+        <tr>
+          <th>年度 Year</th>
+          <th>期初餘額 Begin</th>
+          <th>本期增加 Add</th>
+          <th>本期減少 Less</th>
+          <th>期末餘額 End</th>
+          <th>市值增減 MTM &Delta;</th>
+          <th>期末市值 Market Value</th>
+          <th>投入本金 Paid-in</th>
+          <th>本年報酬 YTD %</th>
+          <th>累計報酬 Cumul %</th>
+        </tr>
+      </thead>
+      <tbody id="tbl-yearly"></tbody>
+    </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="section-title">績效比較 <span class="en">Portfolio vs Benchmarks</span></div>
+    <div class="filter-bar">
+      <div class="filter-group">
+        <label>顯示欄位 Benchmarks</label>
+        <div class="pill-group" id="bench-toggle">
+          <button class="pill active" data-b="sp">S&amp;P 10Y Gov</button>
+          <button class="pill active" data-b="me">美林 IG</button>
+          <button class="pill active" data-b="e720">00720B</button>
+          <button class="pill active" data-b="e772">00772B</button>
+          <button class="pill active" data-b="e785">00785B</button>
+        </div>
+      </div>
+    </div>
+    <div style="overflow-x:auto">
+      <table id="tbl-bench">
+        <thead>
+          <tr>
+            <th>期間 Period</th>
+            <th>投資組合 Portfolio</th>
+            <th data-b="sp">S&amp;P 10Y Gov Total Return</th>
+            <th data-b="me">美林 IG Total Return</th>
+            <th data-b="e720">元大 00720B</th>
+            <th data-b="e772">中信 00772B</th>
+            <th data-b="e785">富邦 00785B</th>
+          </tr>
+        </thead>
+        <tbody id="tbl-bench-body"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ALLOCATION -->
+<section class="panel" id="panel-allocation">
+  <div class="grid grid-2" style="margin-bottom:20px">
+    <div class="card">
+      <div class="section-title">依資產類別 <span class="en">By Asset Class</span></div>
+      <div class="chart-wrap"><canvas id="chart-alloc-asset"></canvas></div>
+      <table style="margin-top:12px">
+        <thead><tr><th>類別 Class</th><th>金額 Value (USD)</th><th>占比 %</th></tr></thead>
+        <tbody id="tbl-alloc-asset"></tbody>
+      </table>
+    </div>
+    <div class="card">
+      <div class="section-title">依計價幣別 <span class="en">By Currency (USD equiv.)</span></div>
+      <div class="chart-wrap"><canvas id="chart-alloc-ccy"></canvas></div>
+      <table style="margin-top:12px">
+        <thead><tr><th>幣別 Ccy</th><th>淨部位 Net (USD)</th><th>占總淨值 %</th></tr></thead>
+        <tbody id="tbl-alloc-ccy"></tbody>
+      </table>
+      <div class="subtle" style="margin-top:10px">GBP&rarr;USD: 1.3604 | USD&rarr;HKD: 7.3843 | USD&rarr;TWD: 31.569</div>
+    </div>
+  </div>
+
+  <div class="grid grid-2" style="margin-bottom:20px">
+    <div class="card">
+      <div class="section-title">債券到期分布 <span class="en">Bond Maturity Distribution</span></div>
+      <div class="chart-wrap"><canvas id="chart-maturity"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="section-title">債券信評分布 <span class="en">Bond Rating Distribution</span></div>
+      <div class="chart-wrap"><canvas id="chart-rating"></canvas></div>
+    </div>
+  </div>
+</section>
+
+<!-- INCOME -->
+<section class="panel" id="panel-income">
+  <div class="grid grid-2" style="margin-bottom:20px">
+    <div class="kpi">
+      <div class="label">本月已實現 · Monthly Realized</div>
+      <div class="value" id="is-real">—</div>
+    </div>
+    <div class="kpi">
+      <div class="label">本月未實現 · Monthly Unrealized</div>
+      <div class="value" id="is-unreal">—</div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:20px">
+    <div class="section-title">當期損益 <span class="en">Current Period P/L by Asset Class</span></div>
+    <div class="table-scroll">
+    <table>
+      <thead>
+        <tr>
+          <th>項目 Item</th>
+          <th>期初餘額 Begin</th>
+          <th>期末市價 End MTM</th>
+          <th>未實現匯兌 FX Unreal</th>
+          <th>未實現資本 Cap Unreal</th>
+          <th>已實現利息 Int Realized</th>
+          <th>已實現資本 Cap Realized</th>
+          <th>已實現匯兌 FX Realized</th>
+          <th>合計 Total Real.</th>
+        </tr>
+      </thead>
+      <tbody id="tbl-is-current"></tbody>
+    </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="section-title">各月損益彙總 <span class="en">Accumulative P/L by Month</span></div>
+    <div class="filter-bar">
+      <div class="filter-group">
+        <label>年度 Year</label>
+        <div class="pill-group" id="is-year-toggle">
+          <button class="pill" data-y="2025">2025</button>
+          <button class="pill active" data-y="2026">2026</button>
+        </div>
+      </div>
+    </div>
+    <div style="overflow-x:auto">
+      <table id="tbl-is-monthly">
+        <thead>
+          <tr>
+            <th>月份</th>
+            <th>存款已實現</th><th>存款未實現</th>
+            <th>債券已實現</th><th>債券未實現</th>
+            <th>借款已實現</th><th>借款未實現</th>
+            <th>營運費用</th>
+            <th>合計已實現</th><th>合計未實現</th>
+          </tr>
+        </thead>
+        <tbody id="tbl-is-monthly-body"></tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- BONDS -->
+<section class="panel" id="panel-bonds">
+  <div class="grid grid-4" style="margin-bottom:16px">
+    <div class="kpi">
+      <div class="label">庫存債券檔數 · Holdings</div>
+      <div class="value" id="b-count">—</div>
+    </div>
+    <div class="kpi">
+      <div class="label">債券總市值 · Total MV (USD)</div>
+      <div class="value" id="b-mv">—</div>
+    </div>
+    <div class="kpi">
+      <div class="label">應收債息 · Accrued Interest</div>
+      <div class="value" id="b-accrued">—</div>
+    </div>
+    <div class="kpi">
+      <div class="label">占淨值比 · % of NAV</div>
+      <div class="value" id="b-pct">—</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="section-title">持有明細 <span class="en">Bond Holdings — click row for details</span></div>
+
+    <div class="filter-bar">
+      <div class="filter-group">
+        <label>幣別 Ccy</label>
+        <div class="pill-group" id="flt-ccy">
+          <button class="pill active" data-v="all">全部</button>
+          <button class="pill" data-v="USD">USD</button>
+          <button class="pill" data-v="GBP">GBP</button>
+        </div>
+      </div>
+      <div class="filter-group">
+        <label>信評 Rating</label>
+        <div class="pill-group" id="flt-rating">
+          <button class="pill active" data-v="all">全部</button>
+          <button class="pill" data-v="A">A-</button>
+          <button class="pill" data-v="BBB+">BBB+</button>
+          <button class="pill" data-v="BBB">BBB</button>
+          <button class="pill" data-v="BBB-">BBB-</button>
+        </div>
+      </div>
+      <div class="filter-group">
+        <label>到期 Maturity</label>
+        <div class="pill-group" id="flt-maturity">
+          <button class="pill active" data-v="all">全部</button>
+          <button class="pill" data-v="0-3">&lt;3Y</button>
+          <button class="pill" data-v="3-5">3–5Y</button>
+          <button class="pill" data-v="5-7">5–7Y</button>
+          <button class="pill" data-v="7-10">7–10Y</button>
+          <button class="pill" data-v="10+">永續 Perp</button>
+        </div>
+      </div>
+      <div class="filter-group">
+        <label>質押 Pledged</label>
+        <div class="pill-group" id="flt-pledge">
+          <button class="pill active" data-v="all">全部</button>
+          <button class="pill" data-v="yes">設質</button>
+          <button class="pill" data-v="no">未設質</button>
+        </div>
+      </div>
+      <button class="filter-reset" id="flt-reset">重設 Reset</button>
+    </div>
+
+    <div style="overflow-x:auto">
+      <table id="tbl-bonds">
+        <thead>
+          <tr>
+            <th>名稱 Name</th>
+            <th>幣別/評等</th>
+            <th class="nowrap">票息 / 付息</th>
+            <th>名目 Nominal</th>
+            <th>市價 Price</th>
+            <th>市值 MV (USD)</th>
+            <th>應收息 Accrued</th>
+            <th>本月 MTD%</th>
+            <th>累計 Cum%</th>
+            <th>到期/Call</th>
+          </tr>
+        </thead>
+        <tbody id="tbl-bonds-body"></tbody>
+      </table>
+    </div>
+    <div id="b-nomatch" style="display:none;text-align:center;padding:30px;color:var(--muted)">沒有符合條件的債券 · No bonds match the current filters.</div>
+  </div>
+</section>
+
+<!-- CASH FLOW -->
+<section class="panel" id="panel-cashflow">
+  <div class="grid grid-3" style="margin-bottom:20px">
+    <div class="kpi">
+      <div class="label">未來 USD 利息 · Future USD Int.</div>
+      <div class="value" id="cf-usd-int">—</div>
+      <div class="sub">2026-2033 已知</div>
+    </div>
+    <div class="kpi">
+      <div class="label">未來 USD 本金到期 · Principal</div>
+      <div class="value" id="cf-usd-prin">—</div>
+    </div>
+    <div class="kpi">
+      <div class="label">未來 GBP 收款（折 USD）</div>
+      <div class="value" id="cf-gbp-total">—</div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:20px">
+    <div class="section-title">各年度預估現金流 <span class="en">Projected Annual Cash Flow</span></div>
+    <div class="chart-wrap tall"><canvas id="chart-cashflow"></canvas></div>
+  </div>
+
+  <div class="card">
+    <div class="section-title">明細 <span class="en">Cash Flow Schedule (USD equiv.)</span></div>
+    <div class="table-scroll">
+    <table>
+      <thead>
+        <tr>
+          <th>年度 Year</th>
+          <th>USD 利息收入</th>
+          <th>USD 本金到期</th>
+          <th>USD 小計</th>
+          <th>GBP 利息收入</th>
+          <th>GBP 本金到期</th>
+          <th>GBP 小計</th>
+          <th>總計 Total</th>
+        </tr>
+      </thead>
+      <tbody id="tbl-cashflow"></tbody>
+      <tfoot>
+        <tr id="cf-total" style="background:#F5EFE5;font-weight:700;color:var(--wine-dark)"></tr>
+      </tfoot>
+    </table>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div>
+    <strong>For Information Purpose Only</strong> · 本報告僅供資訊參考，不構成投資建議<br>
+    Source: KGI 香港 monthly statement (A/C: 16899906069) + 國泰世華銀行當月份交易明細
+  </div>
+  <div style="text-align:right">
+    <div>P&amp;J Capital Management Limited</div>
+    <div class="subtle">Report generated from 投資組合_4月月報表.pdf</div>
+  </div>
+</footer>
+
+<script>
+// =================================================================
+// ============ REPORT DATA ========================================
+// =================================================================
+const REPORT_DATA = {
+  meta: {
+    client: "KS Capital Management Limited",
+    owner: "林** 董事長",
+    currency: "USD",
+    periodStart: "2026/4/1",
+    periodEnd: "2026/4/30",
+    reportDate: "2026/4/30",
+    sinceDate: "2023/5/1"
+  },
+  summary: {
+    nav: 3454615,
+    navChange: 52733,
+    navChangePct: 0.0194,
+    realizedMonth: 22476,
+    unrealizedMonth: 30257,
+    realizedCum: 684633,
+    unrealizedCum: 317968,
+    totalAssets: 4440332,
+    totalLiabilities: 985717,
+    paidInCapital: 2711492,
+    cumPL: 743123,
+    cumReturnPct: 0.3698
+  },
+  balanceSheet: {
+    assets: [
+      { name: "存款類",       en: "Deposit",            value: 70584 },
+      { name: "貨幣基金類",   en: "Money Market Fund",  value: 0 },
+      { name: "固定收益證券", en: "Fixed Income Bonds",  value: 4242208 },
+      { name: "應收利息",     en: "Accrued Interest",    value: 127540 },
+      { name: "其他資產",     en: "Other Assets",        value: 0 }
+    ],
+    liabilities: [
+      { name: "抵押借款",   en: "RP / Mortgage Loan",  value: 985460 },
+      { name: "應付利息",   en: "Interest Payable",    value: 256 },
+      { name: "應付交割款", en: "Settlement Payable",  value: 0 }
+    ]
+  },
+  allocByCurrency: [
+    { code: "USD", value: 3160865,  pctOfNav:  0.915 },
+    { code: "GBP", value: 1260133,  pctOfNav:  0.365 },
+    { code: "HKD", value: 0,        pctOfNav:  0 },
+    { code: "TWD", value: -966383,  pctOfNav: -0.280 }
+  ],
+  maturityBuckets: [
+    { label: "<1Y",   call: 274502,   maturity: 0 },
+    { label: "1-3Y",  call: 1346850,  maturity: 274502 },
+    { label: "3-5Y",  call: 866588,   maturity: 631187 },
+    { label: "5-7Y",  call: 1166869,  maturity: 947199 },
+    { label: "7-10Y", call: 587400,   maturity: 1509025 },
+    { label: ">10Y",  call: 0,        maturity: 880296 }
+  ],
+  ratingBuckets: [
+    { label: ">A (A-)", pct: 0.64 },
+    { label: "BBB",     pct: 0.36 },
+    { label: "BB",      pct: 0 },
+    { label: "B",       pct: 0 }
+  ],
+  yearly: [
+    { year:"2023", begin:0,         add:6758093, less:4062998, end:2695095, mtm:194784,  mv:2889879, paidIn:2690981, ytd:0.1151, cumRet:0.1151 },
+    { year:"2024", begin:2889879,   add:3887761, less:3696917, end:3080724, mtm:11716,   mv:3092439, paidIn:2703039, ytd:0.0910, cumRet:0.2057 },
+    { year:"2025", begin:3092439,   add:2838949, less:2634542, end:3296846, mtm:155607,  mv:3452453, paidIn:2708562, ytd:0.1558, cumRet:0.3602 },
+    { year:"2026", begin:3452453,   add:30955,   less:9381,    end:3474028, mtm:30524,   mv:3504552, paidIn:2711492, ytd:0.0099, cumRet:0.3698 }
+  ],
+  monthlyReturns: [
+    { m:"2025/05", nav:3226733, ret:-0.0177 },
+    { m:"2025/06", nav:3172502, ret: 0.0226 },
+    { m:"2025/07", nav:3232559, ret: 0.0148 },
+    { m:"2025/08", nav:3271552, ret: 0.0331 },
+    { m:"2025/09", nav:3360167, ret: 0.0191 },
+    { m:"2025/10", nav:3380800, ret: 0.0059 },
+    { m:"2025/11", nav:3395753, ret: 0.0168 },
+    { m:"2025/12", nav:3427265, ret: 0.0127 },
+    { m:"2026/01", nav:3452453, ret: 0.0123 },
+    { m:"2026/02", nav:3485145, ret: 0.0077 },
+    { m:"2026/03", nav:3402516, ret:-0.0295 },
+    { m:"2026/04", nav:3454615, ret: 0.0194 }
+  ],
+  benchmarks: [
+    { period:"2026_APR", p: 0.0194, sp:-0.0022, me: 0.0056, e720:-0.0082, e772:-0.0081, e785:-0.0069 },
+    { period:"2026_MAR", p:-0.0295, sp:-0.0294, me:-0.0202, e720:-0.0127, e772:-0.0130, e785:-0.0184 },
+    { period:"2026_FEB", p: 0.0077, sp: 0.0277, me: 0.0127, e720: 0.0021, e772: 0.0025, e785:-0.0006 },
+    { period:"2026_JAN", p: 0.0123, sp:-0.0041, me: 0.0036, e720: 0.0026, e772: 0.0003, e785:-0.0019 },
+    { period:"2025_DEC", p: 0.0127, sp:-0.0081, me:-0.0029, e720:-0.0085, e772:-0.0074, e785:-0.0050 },
+    { period:"2025_NOV", p: 0.0168, sp: 0.0105, me: 0.0061, e720: 0.0228, e772: 0.0252, e785: 0.0299 },
+    { period:"2025_OCT", p: 0.0239, sp: 0.0077, me: 0.0045, e720: 0.0141, e772: 0.0175, e785: 0.0190 },
+    { period:"2025_Q3",  p: 0.0550, sp: 0.0185, me: 0.0265, e720: 0.0814, e772: 0.0797, e785: 0.0832 },
+    { period:"2025_Q2",  p:-0.0012, sp: 0.0101, me: 0.0179, e720:-0.1207, e772:-0.1237, e785:-0.1098 },
+    { period:"2025_Q1",  p: 0.0361, sp: 0.0396, me: 0.0236, e720: 0.0271, e772: 0.0355, e785: 0.0315 },
+    { period:"2024_Q4",  p:-0.0130, sp:-0.0513, me:-0.0284, e720:-0.0274, e772:-0.0377, e785:-0.0317 },
+    { period:"2024_Q3",  p: 0.0624, sp: 0.0575, me: 0.0575, e720: 0.0548, e772: 0.0558, e785: 0.0615 },
+    { period:"2024_Q2",  p: 0.0272, sp:-0.0027, me: 0.0009, e720: 0.0051, e772: 0.0034, e785: 0.0139 },
+    { period:"2024_Q1",  p: 0.0181, sp:-0.0172, me:-0.0008, e720:-0.0008, e772:-0.0061, e785: 0.0180 },
+    { period:"2023_Q4",  p: 0.0803, sp: 0.0679, me: 0.0791, e720: 0.0444, e772: 0.0257, e785: 0.0256 },
+    { period:"累計 Since 2023/5/1", p:0.3698, sp:0.0580, me:0.1647, e720:0.1299, e772:0.0793, e785:0.1726, isTotal:true }
+  ],
+  bonds: [
+    { ccy:"USD", nominal:650000,  name:"BACR 7.385 22/28",      isin:"US06738ECD58", coupon:0.07385, price:103.99,  mv:675935,  accrued:23867.91, rating:"A-",   type:"Sen. Unsec.", matY:3.50, callY:2.50, pledged:true,  buyPrice:104.765, buyDate:"2023/6/1",   freq:"S/A",    mtd:-0.0013, ytd:-0.0163, cum:-0.0074, pctNav:0.2026 },
+    { ccy:"USD", nominal:400000,  name:"BNP 7 PERP",            isin:"USF1R15XK854", coupon:0.0700,  price:102.31,  mv:409240,  accrued:5677.78,  rating:"BBB-", type:"AT1",         matY:null, callY:2.25, pledged:true,  buyPrice:92.10,   buyDate:"2023/7/11",  freq:"S/A",    mtd: 0.0133, ytd:-0.0022, cum: 0.1109, pctNav:0.1201 },
+    { ccy:"USD", nominal:300000,  name:"LLOYDS 7.953 11/15/33", isin:"US539439AW91", coupon:0.07953, price:114.06,  mv:342180,  accrued:11001.65, rating:"BBB+", type:"Sub. T2",     matY:7.25, callY:6.25, pledged:true,  buyPrice:109.20,  buyDate:"2023/7/5",   freq:"S/A",    mtd: 0.0015, ytd:-0.0228, cum: 0.0445, pctNav:0.1022 },
+    { ccy:"USD", nominal:250000,  name:"Citigroup 6.27 22/33",  isin:"US172967PA33", coupon:0.06270, price:106.62,  mv:266550,  accrued:7140.83,  rating:"A-",   type:"Sen. Unsec.", matY:7.50, callY:6.50, pledged:true,  buyPrice:98.208,  buyDate:"2023/10/11", freq:"S/A",    mtd: 0.0003, ytd:-0.0245, cum: 0.0857, pctNav:0.0792 },
+    { ccy:"USD", nominal:250000,  name:"HSBC 8.113 22/33",      isin:"US404280DS59", coupon:0.08113, price:114.75,  mv:286875,  accrued:10028.57, rating:"BBB+", type:"Sub. T2",     matY:7.50, callY:6.50, pledged:true,  buyPrice:104.587, buyDate:"2023/10/12", freq:"S/A",    mtd: 0.0040, ytd:-0.0237, cum: 0.0972, pctNav:0.0859 },
+    { ccy:"USD", nominal:250000,  name:"STANLN 7.767 11/16/28", isin:"USG84228FL77", coupon:0.07767, price:104.67,  mv:261675,  accrued:8899.69,  rating:"A-",   type:"Sen. Unsec.", matY:2.50, callY:1.50, pledged:true,  buyPrice:105.750, buyDate:"2023/11/20", freq:"S/A",    mtd:-0.0010, ytd:-0.0179, cum:-0.0102, pctNav:0.0783 },
+    { ccy:"USD", nominal:250000,  name:"UBS 6.301 09/22/34",    isin:"USH42097EQ69", coupon:0.06301, price:106.26,  mv:265650,  accrued:1706.52,  rating:"A-",   type:"Sen. Unsec.", matY:8.33, callY:7.33, pledged:true,  buyPrice:106.100, buyDate:"2024/1/25",  freq:"S/A",    mtd: 0.0003, ytd:-0.0296, cum: 0.0015, pctNav:0.0774 },
+    { ccy:"USD", nominal:300000,  name:"JPM 6.254 23/34",       isin:"US46647PDY97", coupon:0.06254, price:107.25,  mv:321750,  accrued:364.82,   rating:"A-",   type:"Sen. Unsec.", matY:7.42, callY:7.42, pledged:true,  buyPrice:105.300, buyDate:"2024/4/16",  freq:"S/A",    mtd: 0.0021, ytd:-0.0269, cum: 0.0185, pctNav:0.0932 },
+    { ccy:"USD", nominal:200000,  name:"HSBC PLC 7.05",         isin:"US404280FA24", coupon:0.07050, price:102.703, mv:205406,  accrued:5718.33,  rating:"BBB",  type:"AT1",         matY:null, callY:4.58, pledged:false, buyPrice:100.650, buyDate:"2025/6/10",  freq:"S/A",    mtd: 0.0272, ytd:-0.0119, cum: 0.0204, pctNav:0.0611 },
+    { ccy:"GBP", nominal:200000,  name:"UBS 7% 22/27",          isin:"CH1211713180", coupon:0.07000, price:100.89,  mv:274502,  accrued:11215.73, rating:"A-",   type:"Sen. Unsec.", matY:1.42, callY:0.42, pledged:false, buyPrice:103.300, buyDate:"2024/11/19", freq:"Annual", mtd: 0.0244, ytd:-0.0016, cum: 0.0396, pctNav:0.0827 },
+    { ccy:"GBP", nominal:200000,  name:"HSBC 8.201 22/34",      isin:"XS2553549903", coupon:0.08201, price:107.20,  mv:291670,  accrued:10226.92, rating:"BBB+", type:"Sub. T2",     matY:8.25, callY:3.25, pledged:false, buyPrice:109.650, buyDate:"2024/11/20", freq:"Annual", mtd: 0.0210, ytd:-0.0205, cum: 0.0407, pctNav:0.0874 },
+    { ccy:"GBP", nominal:270000,  name:"HSBC 5.813 05/22/33",   isin:"XS3077192071", coupon:0.05813, price:100.60,  mv:369512,  accrued:20343.34, rating:"A-",   type:"Sen. Unsec.", matY:4.00, callY:3.00, pledged:false, buyPrice:100.750, buyDate:"2025/6/3",   freq:"Annual", mtd: 0.0276, ytd:-0.0251, cum: 0.0041, pctNav:0.1129 },
+    { ccy:"GBP", nominal:200000,  name:"ACAFP 5.5 07/31/32",    isin:"FR001400WK79", coupon:0.05500, price:99.70,   mv:271264,  accrued:11348.01, rating:"A-",   type:"Sub.",        matY:6.25, callY:5.25, pledged:false, buyPrice:103.600, buyDate:"2025/12/17", freq:"Annual", mtd: 0.0271, ytd:-0.0200, cum:-0.0283, pctNav:0.0818 }
+  ],
+  cashFlow: [
+    { year:2023, usdInt:152097, usdPrin:600000,  gbpInt:0,     gbpPrin:0 },
+    { year:2024, usdInt:260689, usdPrin:300000,  gbpInt:0,     gbpPrin:0 },
+    { year:2025, usdInt:256426, usdPrin:600000,  gbpInt:30402, gbpPrin:0 },
+    { year:2026, usdInt:238101, usdPrin:0,       gbpInt:57097, gbpPrin:200000 },
+    { year:2027, usdInt:229101, usdPrin:300000,  gbpInt:43097, gbpPrin:0 },
+    { year:2028, usdInt:211976, usdPrin:1550000, gbpInt:43097, gbpPrin:0 },
+    { year:2029, usdInt:108431, usdPrin:0,       gbpInt:43097, gbpPrin:200000 },
+    { year:2030, usdInt:108431, usdPrin:200000,  gbpInt:26695, gbpPrin:0 },
+    { year:2031, usdInt:94331,  usdPrin:0,       gbpInt:26695, gbpPrin:0 },
+    { year:2032, usdInt:94331,  usdPrin:300000,  gbpInt:26695, gbpPrin:200000 },
+    { year:2033, usdInt:70472,  usdPrin:1050000, gbpInt:15695, gbpPrin:270000 }
+  ],
+  incomeCurrent: [
+    { item:"存款類 Deposits",        begin:62770.58,   end:70583.72,   fxUnreal:1.34,      capUnreal:null,     intReal:null,     capReal:null, fxReal:272.13,   total:272.13 },
+    { item:"貨幣基金 MMF",           begin:0,          end:0,          fxUnreal:null,       capUnreal:null,     intReal:null,     capReal:null, fxReal:null,     total:0 },
+    { item:"債券 (USD)",             begin:3023151.20, end:3035261.00, fxUnreal:null,       capUnreal:12109.80, intReal:16883.37, capReal:0,    fxReal:null,     total:16883.37 },
+    { item:"債券 (GBP)",             begin:1177330.31, end:1206946.88, fxUnreal:32101.21,   capUnreal:-1291.02, intReal:6472.89,  capReal:null, fxReal:null,     total:6472.89 },
+    { item:"抵押借款 Mortgage Loan", begin:972795.50,  end:985460.42,  fxUnreal:-12664.92,  capUnreal:null,     intReal:1781.94,  capReal:null, fxReal:-4.06,    total:1777.88 }
+  ],
+  incomeMonthly: {
+    "2025": [
+      { m:"Jan", depR:102.59,   depU:-0.86,   bondR:24601.33,  bondU:-32595.57,  loanR:1779.54, loanU:-2874.78,  exp:-2650,    tR:23833.46,  tU:-35471.21 },
+      { m:"Feb", depR:26.84,    depU:1.26,    bondR:17998.14,  bondU:84458.85,   loanR:1598.47, loanU:4002.51,   exp:-2566,    tR:17057.46,  tU:88462.62 },
+      { m:"Mar", depR:-61.40,   depU:2.20,    bondR:32031.62,  bondU:-29224.73,  loanR:1750.38, loanU:10341.12,  exp:-2566,    tR:31154.61,  tU:-18881.42 },
+      { m:"Apr", depR:554.35,   depU:2.84,    bondR:-2011.35,  bondU:61755.25,   loanR:1768.06, loanU:-34175.49, exp:-2566,    tR:-2254.95,  tU:27582.59 },
+      { m:"May", depR:785.17,   depU:0.93,    bondR:23688.91,  bondU:-3775.68,   loanR:1924.84, loanU:-67867,    exp:-2797,    tR:23601.93,  tU:-71641.75 },
+      { m:"Jun", depR:556.72,   depU:7364.85, bondR:22134.42,  bondU:54467.64,   loanR:1913.37, loanU:-22538.25, exp:-2797,    tR:21807.51,  tU:39294.24 },
+      { m:"Jul", depR:-162.31,  depU:-18.34,  bondR:23571.73,  bondU:-3081.43,   loanR:1951.43, loanU:20624.02,  exp:-2797,    tR:22563.85,  tU:17524.25 },
+      { m:"Aug", depR:-151.88,  depU:10.39,   bondR:23586.04,  bondU:41999.06,   loanR:1907.34, loanU:25012.65,  exp:-2725,    tR:22616.49,  tU:67022.10 },
+      { m:"Sep", depR:23.74,    depU:-2.15,   bondR:22051.18,  bondU:35983.90,   loanR:1846.01, loanU:-5342.10,  exp:-2725,    tR:21195.94,  tU:30639.65 },
+      { m:"Oct", depR:-23.47,   depU:-10.25,  bondR:22362.05,  bondU:-15590.60,  loanR:1893.06, loanU:10102.45,  exp:-2725,    tR:21506.64,  tU:-5498.40 },
+      { m:"Nov", depR:-12.20,   depU:136.34,  bondR:20360.44,  bondU:4856.45,    loanR:1797.87, loanU:21228.25,  exp:-2957,    tR:19189.11,  tU:26221.04 },
+      { m:"Dec", depR:680.72,   depU:698.12,  bondR:23360.74,  bondU:9914.98,    loanR:1849.25, loanU:945.21,    exp:-2957,    tR:22933.72,  tU:11558.30 }
+    ],
+    "2026": [
+      { m:"Jan", depR:-25.39,   depU:0.83,    bondR:24280.94,  bondU:9339.37,    loanR:1847.54, loanU:943.40,    exp:-2955.82, tR:23147.28,  tU:10283.60 },
+      { m:"Feb", depR:-246.92,  depU:-1.05,   bondR:21502.07,  bondU:-9069.99,   loanR:1655.01, loanU:9859.80,   exp:-2930,    tR:19980.16,  tU:788.76 },
+      { m:"Mar", depR:-138.31,  depU:-0.62,   bondR:24027.63,  bondU:-108783.64, loanR:1818.50, loanU:5968.07,   exp:-2930,    tR:22777.82,  tU:-102816.19 },
+      { m:"Apr", depR:272.13,   depU:1.34,    bondR:23356.26,  bondU:42919.99,   loanR:1777.88, loanU:-12664.92, exp:-2930,    tR:22476.28,  tU:30256.41 }
+    ]
+  },
+  yearOverYear: {
+    months: ["1月","2月","3月","4月","5月","6月","7月","8月","9月","10月","11月","12月"],
+    "2024": [ 0.61,  0.61,  0.58,  0.91,  0.91,  0.88,  2.02,  2.02,  2.02,  0.25,  0.25, -1.79],
+    "2025": [ 1.19,  1.19,  1.22,  0.94, -1.77,  2.26,  1.48,  3.31,  1.91,  0.59,  1.68,  1.27],
+    "2026": [ 1.23,  0.77, -2.95,  1.94,  null,  null,  null,  null,  null,  null,  null,  null]
+  }
+};
+
+// =================================================================
+// ============ Utils ==============================================
+// =================================================================
+const fmt = {
+  money: (v, d=0) => v==null || isNaN(v) ? "—" : new Intl.NumberFormat("en-US", {minimumFractionDigits:d, maximumFractionDigits:d}).format(v),
+  moneyColored: (v, d=0) => {
+    if (v==null || isNaN(v)) return '<span class="muted">—</span>';
+    const cls = v>0 ? "num-pos" : v<0 ? "num-neg" : "";
+    return `<span class="${cls}">${fmt.money(v,d)}</span>`;
+  },
+  pct: (v, d=2) => v==null || isNaN(v) ? "—" : (v*100).toFixed(d)+"%",
+  pctColored: (v, d=2) => {
+    if (v==null || isNaN(v)) return '<span class="muted">—</span>';
+    const cls = v>0 ? "num-pos" : v<0 ? "num-neg" : "";
+    return `<span class="${cls}">${fmt.pct(v,d)}</span>`;
+  },
+  signed: (v, d=0) => {
+    if (v==null || isNaN(v)) return "—";
+    const s = v>=0 ? "+" : "";
+    return s+fmt.money(v,d);
+  },
+  years: (v) => v==null ? '<span class="tag tag-at1">永續 Perp</span>' : v.toFixed(2)+"Y"
+};
+
+const PAL = {
+  wine:"#6B1E2C", wineDark:"#4A1420", wineLight:"#8B3244",
+  gold:"#C9A961", goldDark:"#A88740", goldLight:"#E0C787",
+  pos:"#15803D", neg:"#B91C1C", muted:"#9A9590",
+  usd:"#1E40AF", gbp:"#9D174D", hkd:"#B45309", twd:"#4D7C0F",
+  series:["#6B1E2C","#C9A961","#1E40AF","#15803D","#B45309","#9D174D","#4D7C0F"]
+};
+
+Chart.defaults.font.family = "'Segoe UI','Helvetica Neue','PingFang TC','Microsoft JhengHei',system-ui,sans-serif";
+Chart.defaults.font.size = 11;
+Chart.defaults.color = "#1C1917";
+Chart.defaults.plugins.legend.labels.boxWidth = 12;
+Chart.defaults.plugins.legend.labels.boxHeight = 12;
+
+// =================================================================
+// ============ Tabs ===============================================
+// =================================================================
+document.getElementById("tab-nav").addEventListener("click", (e)=>{
+  const btn = e.target.closest(".tab");
+  if (!btn) return;
+  document.querySelectorAll(".tab").forEach(t=>t.classList.remove("active"));
+  document.querySelectorAll(".panel").forEach(p=>p.classList.remove("active"));
+  btn.classList.add("active");
+  document.getElementById("panel-"+btn.dataset.tab).classList.add("active");
+});
+
+// =================================================================
+// ============ Render: Meta =======================================
+// =================================================================
+function renderMeta(){
+  const m = REPORT_DATA.meta;
+  document.getElementById("meta-client").textContent = m.client;
+  document.getElementById("meta-period").textContent = m.periodStart+" – "+m.periodEnd;
+  document.getElementById("meta-ccy").textContent = m.currency;
+}
+
+// =================================================================
+// ============ Render: Overview ===================================
+// =================================================================
+function renderOverview(){
+  const s = REPORT_DATA.summary, m = REPORT_DATA.meta;
+  document.getElementById("ov-headline").textContent = `${m.periodEnd} 投資組合表現摘要`;
+  document.getElementById("ov-subline").textContent = `Portfolio Executive Summary for ${m.periodStart} – ${m.periodEnd}`;
+
+  document.getElementById("kpi-nav").textContent = fmt.money(s.nav);
+  document.getElementById("kpi-asof").textContent = m.reportDate;
+
+  const changeEl = document.getElementById("kpi-change");
+  changeEl.innerHTML = fmt.pctColored(s.navChangePct);
+  changeEl.className = "value " + (s.navChangePct>=0?"change-up":"change-down");
+  document.getElementById("kpi-change-pct").innerHTML =
+    `<span class="chip ${s.navChangePct>=0?'up':'down'}">${fmt.pct(s.navChangePct)}</span> 本月淨值變動率`;
+
+  const mpl = s.realizedMonth + s.unrealizedMonth;
+  const mplEl = document.getElementById("kpi-mpl");
+  mplEl.innerHTML = fmt.signed(mpl);
+  mplEl.className = "value " + (mpl>=0?"change-up":"change-down");
+
+  document.getElementById("kpi-cumpl").textContent = fmt.money(s.cumPL);
+  document.getElementById("kpi-cumret").innerHTML = `<span class="chip ${s.cumReturnPct>=0?'up':'down'}">${fmt.pct(s.cumReturnPct)}</span>`;
+
+  const bs = REPORT_DATA.balanceSheet;
+  const assetHtml = bs.assets.map(a =>
+    `<div class="bs-row"><span>${a.name} <span class="subtle">· ${a.en}</span></span><span>${fmt.money(a.value)}</span></div>`
+  ).join("");
+  document.getElementById("bs-assets").innerHTML = assetHtml +
+    `<div class="bs-total"><span>資產總額 Total Assets</span><span>${fmt.money(s.totalAssets)}</span></div>`;
+
+  const liabHtml = bs.liabilities.map(l =>
+    `<div class="bs-row"><span>${l.name} <span class="subtle">· ${l.en}</span></span><span>${fmt.money(l.value)}</span></div>`
+  ).join("");
+  document.getElementById("bs-liab").innerHTML = liabHtml +
+    `<div class="bs-total"><span>負債總額 Total Liab.</span><span>${fmt.money(s.totalLiabilities)}</span></div>`;
+
+  document.getElementById("bs-total-asset").textContent = fmt.money(s.totalAssets);
+  document.getElementById("bs-total-liab").textContent = fmt.money(s.totalLiabilities);
+  document.getElementById("bs-nav-echo").textContent = fmt.money(s.nav);
+  document.getElementById("bs-paidin").textContent = fmt.money(s.paidInCapital);
+  document.getElementById("bs-cumpl").textContent = fmt.money(s.cumPL);
+
+  const latest = REPORT_DATA.benchmarks[0];
+  const benchMini = [
+    {k:"組合 Portfolio", v:latest.p, bold:true},
+    {k:"S&P 10Y Gov",   v:latest.sp},
+    {k:"美林 IG",        v:latest.me},
+    {k:"元大 00720B",    v:latest.e720},
+    {k:"中信 00772B",    v:latest.e772},
+    {k:"富邦 00785B",    v:latest.e785}
+  ];
+  document.getElementById("ov-bench-mini").innerHTML = benchMini.map(r =>
+    `<tr><td style="${r.bold?'font-weight:700;color:var(--wine);':''}">${r.k}</td><td>${fmt.pctColored(r.v)}</td></tr>`
+  ).join("");
+
+  const mr = REPORT_DATA.monthlyReturns;
+  new Chart(document.getElementById("chart-nav-trend"), {
+    type: "line",
+    data: {
+      labels: mr.map(x=>x.m),
+      datasets: [{
+        label: "期末淨值 NAV (USD)",
+        data: mr.map(x=>x.nav),
+        borderColor: PAL.wine,
+        backgroundColor: "rgba(107,30,44,0.08)",
+        tension: 0.3,
+        fill: true,
+        pointRadius: 3,
+        pointBackgroundColor: PAL.gold,
+        pointBorderColor: PAL.wine,
+        pointBorderWidth: 2
+      }]
+    },
+    options: {
+      maintainAspectRatio:false,
+      plugins:{ legend:{display:false}, tooltip:{callbacks:{label:c=>"NAV: "+fmt.money(c.parsed.y)}} },
+      scales: {
+        y: { ticks:{ callback: v=>fmt.money(v/1000)+"K" }, grid:{color:"#F3EFE7"} },
+        x: { grid:{display:false}, ticks:{maxRotation:0,autoSkip:true,maxTicksLimit:8} }
+      }
+    }
+  });
+
+  const assetsNonZero = bs.assets.filter(a => a.value>0);
+  new Chart(document.getElementById("chart-asset-mix"), {
+    type: "doughnut",
+    data: {
+      labels: assetsNonZero.map(a => a.name),
+      datasets: [{ data: assetsNonZero.map(a => a.value), backgroundColor: PAL.series, borderColor: "#fff", borderWidth: 2 }]
+    },
+    options: {
+      maintainAspectRatio:false,
+      plugins:{
+        legend:{position:"right", labels:{font:{size:10}, boxWidth:10}},
+        tooltip:{callbacks:{label:c=>c.label+": "+fmt.money(c.parsed)}}
+      },
+      cutout:"55%"
+    }
+  });
+
+  const ccy = REPORT_DATA.allocByCurrency;
+  new Chart(document.getElementById("chart-ccy-mix"), {
+    type: "bar",
+    data: {
+      labels: ccy.map(c => c.code),
+      datasets: [{
+        label: "USD Equivalent",
+        data: ccy.map(c => c.value),
+        backgroundColor: ccy.map(c => c.value>=0 ? PAL.wine : PAL.neg),
+        borderRadius: 4
+      }]
+    },
+    options: {
+      indexAxis:"y",
+      maintainAspectRatio:false,
+      plugins:{ legend:{display:false}, tooltip:{callbacks:{label:c=>fmt.money(c.parsed.x)+" USD"}}},
+      scales:{ x:{ ticks:{ callback: v=>fmt.money(v/1000)+"K" }, grid:{color:"#F3EFE7"} }, y:{grid:{display:false}} }
+    }
+  });
+}
+
+// =================================================================
+// ============ Render: Performance ================================
+// =================================================================
+function renderPerformance(){
+  const yr = REPORT_DATA.yearly;
+  document.getElementById("tbl-yearly").innerHTML = yr.map(y =>
+    `<tr>
+      <td><strong>${y.year}</strong></td>
+      <td>${fmt.money(y.begin)}</td>
+      <td>${fmt.money(y.add)}</td>
+      <td>${fmt.money(y.less)}</td>
+      <td>${fmt.money(y.end)}</td>
+      <td>${fmt.moneyColored(y.mtm)}</td>
+      <td><strong>${fmt.money(y.mv)}</strong></td>
+      <td>${fmt.money(y.paidIn)}</td>
+      <td>${fmt.pctColored(y.ytd)}</td>
+      <td>${fmt.pctColored(y.cumRet)}</td>
+    </tr>`
+  ).join("");
+
+  const yoy = REPORT_DATA.yearOverYear;
+  new Chart(document.getElementById("chart-yearly"), {
+    type: "line",
+    data: {
+      labels: yoy.months,
+      datasets: [
+        { label:"2024", data:yoy["2024"], borderColor:PAL.wine,      backgroundColor:"rgba(107,30,44,0.07)",  tension:0.3, fill:false, pointRadius:4, pointBackgroundColor:PAL.wine,      borderWidth:2, spanGaps:false },
+        { label:"2025", data:yoy["2025"], borderColor:PAL.gold,      backgroundColor:"rgba(201,169,97,0.07)", tension:0.3, fill:false, pointRadius:4, pointBackgroundColor:PAL.gold,      borderWidth:2, spanGaps:false },
+        { label:"2026", data:yoy["2026"], borderColor:PAL.wineLight, backgroundColor:"rgba(139,50,68,0.07)",  tension:0.3, fill:false, pointRadius:4, pointBackgroundColor:PAL.wineLight, borderWidth:2, borderDash:[6,3], spanGaps:false }
+      ]
+    },
+    options: {
+      maintainAspectRatio:false,
+      plugins:{
+        legend:{position:"top", labels:{font:{size:11}, boxWidth:12, padding:16}},
+        tooltip:{callbacks:{label:c=>`${c.dataset.label}: ${c.parsed.y!=null?c.parsed.y.toFixed(2)+"%":"—"}`}}
+      },
+      scales:{
+        y:{ ticks:{callback:v=>v+"%"}, grid:{color:"#F3EFE7"}, suggestedMin:-4, suggestedMax:4 },
+        x:{ grid:{display:false} }
+      }
+    }
+  });
+
+  const mr = REPORT_DATA.monthlyReturns.filter(x => x.ret!=null);
+  new Chart(document.getElementById("chart-monthly"), {
+    type: "bar",
+    data: {
+      labels: mr.map(x => x.m),
+      datasets: [{ label:"月報酬率", data:mr.map(x=>x.ret*100), backgroundColor:mr.map(x=>x.ret>=0?PAL.wine:PAL.neg), borderRadius:3 }]
+    },
+    options: {
+      maintainAspectRatio:false,
+      plugins:{ legend:{display:false}, tooltip:{callbacks:{label:c=>fmt.pct(c.parsed.y/100)}} },
+      scales:{ y:{ ticks:{callback:v=>v+"%"}, grid:{color:"#F3EFE7"} }, x:{grid:{display:false},ticks:{maxRotation:45,minRotation:45}} }
+    }
+  });
+
+  renderBenchmarkTable();
+}
+
+let benchActive = new Set(["sp","me","e720","e772","e785"]);
+function renderBenchmarkTable(){
+  const b = REPORT_DATA.benchmarks;
+  document.querySelectorAll('#tbl-bench th[data-b]').forEach(th => {
+    th.style.display = benchActive.has(th.dataset.b) ? "" : "none";
+  });
+  const rows = b.map(r => {
+    const cells = [
+      `<td>${r.period}${r.isTotal?' <span class="chip" style="background:var(--gold);color:var(--wine-dark)">全期</span>':''}</td>`,
+      `<td style="font-weight:600;${r.isTotal?'background:#F5EFE5;':''}">${fmt.pctColored(r.p)}</td>`
+    ];
+    ["sp","me","e720","e772","e785"].forEach(k => {
+      const show = benchActive.has(k);
+      cells.push(`<td style="display:${show?'':'none'};${r.isTotal?'background:#F5EFE5;':''}">${fmt.pctColored(r[k])}</td>`);
+    });
+    return `<tr style="${r.isTotal?'font-weight:600;':''}">${cells.join("")}</tr>`;
+  });
+  document.getElementById("tbl-bench-body").innerHTML = rows.join("");
+}
+
+document.getElementById("bench-toggle").addEventListener("click", (e)=>{
+  const btn = e.target.closest(".pill");
+  if (!btn) return;
+  const k = btn.dataset.b;
+  if (benchActive.has(k)) { benchActive.delete(k); btn.classList.remove("active"); }
+  else { benchActive.add(k); btn.classList.add("active"); }
+  renderBenchmarkTable();
+});
+
+// =================================================================
+// ============ Render: Allocation =================================
+// =================================================================
+function renderAllocation(){
+  const bs = REPORT_DATA.balanceSheet;
+  const total = REPORT_DATA.summary.totalAssets;
+  const assets = bs.assets.filter(a => a.value>0);
+
+  document.getElementById("tbl-alloc-asset").innerHTML = assets.map(a =>
+    `<tr><td>${a.name} <span class="subtle">${a.en}</span></td><td>${fmt.money(a.value)}</td><td>${fmt.pct(a.value/total,1)}</td></tr>`
+  ).join("") + `<tr style="font-weight:700;background:#F5EFE5"><td>合計 Total</td><td>${fmt.money(total)}</td><td>100.0%</td></tr>`;
+
+  new Chart(document.getElementById("chart-alloc-asset"), {
+    type: "doughnut",
+    data: {
+      labels: assets.map(a => a.name+" "+a.en),
+      datasets: [{ data:assets.map(a=>a.value), backgroundColor:PAL.series, borderColor:"#fff", borderWidth:2 }]
+    },
+    options: {
+      maintainAspectRatio:false,
+      plugins:{
+        legend:{position:"bottom",labels:{font:{size:11},boxWidth:11}},
+        tooltip:{callbacks:{label:c=>c.label+": "+fmt.money(c.parsed)+" ("+fmt.pct(c.parsed/total,1)+")"}}
+      },
+      cutout:"55%"
+    }
+  });
+
+  const ccy = REPORT_DATA.allocByCurrency;
+  document.getElementById("tbl-alloc-ccy").innerHTML = ccy.map(c =>
+    `<tr><td><span class="tag tag-${c.code.toLowerCase()==='usd'?'usd':c.code.toLowerCase()==='gbp'?'gbp':''}" style="${c.code==='HKD'?'background:#FEF3C7;color:#78350F':c.code==='TWD'?'background:#DBEAFE;color:#1E3A8A':''}">${c.code}</span></td><td>${fmt.moneyColored(c.value)}</td><td>${fmt.pctColored(c.pctOfNav,1)}</td></tr>`
+  ).join("");
+
+  new Chart(document.getElementById("chart-alloc-ccy"), {
+    type: "bar",
+    data: {
+      labels: ccy.map(c=>c.code),
+      datasets: [{ label:"Net (USD)", data:ccy.map(c=>c.value), backgroundColor:ccy.map(c=>c.value>=0?PAL.wine:PAL.neg), borderRadius:4 }]
+    },
+    options: {
+      indexAxis:"y",
+      maintainAspectRatio:false,
+      plugins:{ legend:{display:false}, tooltip:{callbacks:{label:c=>fmt.money(c.parsed.x)+" USD"}} },
+      scales:{ x:{ ticks:{callback:v=>fmt.money(v/1000)+"K"}, grid:{color:"#F3EFE7"} }, y:{grid:{display:false}} }
+    }
+  });
+
+  const mb = REPORT_DATA.maturityBuckets;
+  new Chart(document.getElementById("chart-maturity"), {
+    type: "bar",
+    data: {
+      labels: mb.map(x=>x.label),
+      datasets: [
+        { label:"依到期日 By Maturity",          data:mb.map(x=>x.maturity), backgroundColor:PAL.wine, borderRadius:4 },
+        { label:"依下次贖回日 By Next Call Date", data:mb.map(x=>x.call),    backgroundColor:PAL.gold, borderRadius:4 }
+      ]
+    },
+    options: {
+      maintainAspectRatio:false,
+      plugins:{ legend:{position:"bottom"}, tooltip:{callbacks:{label:c=>c.dataset.label+": "+fmt.money(c.parsed.y)}} },
+      scales:{ y:{ ticks:{callback:v=>fmt.money(v/1000)+"K"}, grid:{color:"#F3EFE7"} }, x:{grid:{display:false}} }
+    }
+  });
+
+  const rb = REPORT_DATA.ratingBuckets;
+  new Chart(document.getElementById("chart-rating"), {
+    type: "bar",
+    data: {
+      labels: rb.map(x=>x.label),
+      datasets: [{ label:"占比 %", data:rb.map(x=>x.pct*100), backgroundColor:["#15803D","#C9A961","#F59E0B","#B91C1C"], borderRadius:4 }]
+    },
+    options: {
+      indexAxis:"y",
+      maintainAspectRatio:false,
+      plugins:{ legend:{display:false}, tooltip:{callbacks:{label:c=>c.parsed.x.toFixed(1)+"%"}} },
+      scales:{ x:{ticks:{callback:v=>v+"%"}, grid:{color:"#F3EFE7"}}, y:{grid:{display:false}} }
+    }
+  });
+}
+
+// =================================================================
+// ============ Render: Income Statement ===========================
+// =================================================================
+function renderIncome(){
+  const s = REPORT_DATA.summary;
+  const re = document.getElementById("is-real");
+  re.innerHTML = fmt.signed(s.realizedMonth);
+  re.className = "value " + (s.realizedMonth>=0?"change-up":"change-down");
+
+  const un = document.getElementById("is-unreal");
+  un.innerHTML = fmt.signed(s.unrealizedMonth);
+  un.className = "value " + (s.unrealizedMonth>=0?"change-up":"change-down");
+
+  const c = REPORT_DATA.incomeCurrent;
+  document.getElementById("tbl-is-current").innerHTML = c.map(r =>
+    `<tr>
+      <td><strong>${r.item}</strong></td>
+      <td>${fmt.money(r.begin,2)}</td>
+      <td>${fmt.money(r.end,2)}</td>
+      <td>${fmt.moneyColored(r.fxUnreal,2)}</td>
+      <td>${fmt.moneyColored(r.capUnreal,2)}</td>
+      <td>${fmt.moneyColored(r.intReal,2)}</td>
+      <td>${fmt.moneyColored(r.capReal,2)}</td>
+      <td>${fmt.moneyColored(r.fxReal,2)}</td>
+      <td><strong>${fmt.moneyColored(r.total,2)}</strong></td>
+    </tr>`
+  ).join("");
+
+  renderIncomeMonthly("2026");
+}
+
+function renderIncomeMonthly(year){
+  const rows = REPORT_DATA.incomeMonthly[year];
+  document.getElementById("tbl-is-monthly-body").innerHTML = rows.map(r =>
+    `<tr>
+      <td><strong>${r.m}</strong></td>
+      <td>${fmt.moneyColored(r.depR,2)}</td>
+      <td>${fmt.moneyColored(r.depU,2)}</td>
+      <td>${fmt.moneyColored(r.bondR,2)}</td>
+      <td>${fmt.moneyColored(r.bondU,2)}</td>
+      <td>${fmt.moneyColored(r.loanR,2)}</td>
+      <td>${fmt.moneyColored(r.loanU,2)}</td>
+      <td>${fmt.moneyColored(r.exp,2)}</td>
+      <td><strong>${fmt.moneyColored(r.tR,2)}</strong></td>
+      <td><strong>${fmt.moneyColored(r.tU,2)}</strong></td>
+    </tr>`
+  ).join("");
+}
+
+document.getElementById("is-year-toggle").addEventListener("click", (e)=>{
+  const btn = e.target.closest(".pill");
+  if (!btn) return;
+  document.querySelectorAll("#is-year-toggle .pill").forEach(p=>p.classList.remove("active"));
+  btn.classList.add("active");
+  renderIncomeMonthly(btn.dataset.y);
+});
+
+// =================================================================
+// ============ Render: Bonds ======================================
+// =================================================================
+let bondFilters = { ccy:"all", rating:"all", maturity:"all", pledge:"all" };
+let expandedBond = null;
+
+function renderBondKPIs(filteredList) {
+  const all = filteredList || REPORT_DATA.bonds;
+  const nav = REPORT_DATA.summary.nav;
+  const totalMV = all.reduce((s,b)=>s+b.mv, 0);
+  const totalAcc = all.reduce((s,b)=>s+b.accrued, 0);
+  document.getElementById("b-count").textContent = all.length;
+  document.getElementById("b-mv").textContent = fmt.money(totalMV);
+  document.getElementById("b-accrued").textContent = fmt.money(totalAcc);
+  document.getElementById("b-pct").textContent = fmt.pct(totalMV/nav, 1);
+}
+
+function bondMaturityBucket(b) {
+  if (b.matY == null) return "10+";
+  if (b.matY < 3) return "0-3";
+  if (b.matY < 5) return "3-5";
+  if (b.matY < 7) return "5-7";
+  if (b.matY <= 10) return "7-10";
+  return "10+";
+}
+
+function filterBonds() {
+  return REPORT_DATA.bonds.filter(b => {
+    if (bondFilters.ccy !== "all" && b.ccy !== bondFilters.ccy) return false;
+    if (bondFilters.rating !== "all") {
+      if (bondFilters.rating === "A" && !b.rating.startsWith("A")) return false;
+      if (bondFilters.rating !== "A" && b.rating !== bondFilters.rating) return false;
+    }
+    if (bondFilters.maturity !== "all" && bondMaturityBucket(b) !== bondFilters.maturity) return false;
+    if (bondFilters.pledge === "yes" && !b.pledged) return false;
+    if (bondFilters.pledge === "no" && b.pledged) return false;
+    return true;
+  });
+}
+
+function ratingTag(r) {
+  const base = r.startsWith("A") ? "tag-rating-a" : r.startsWith("BBB") ? "tag-rating-bbb" : "tag-rating-bb";
+  return `<span class="tag ${base}">${r}</span>`;
+}
+function typeTag(t) {
+  const cls = t.includes("AT1") || t.includes("AT") ? "tag-at1" : t.includes("Sub") ? "tag-sub" : "tag-sen";
+  return `<span class="tag ${cls}">${t}</span>`;
+}
+
+function renderBondTable() {
+  const list = filterBonds();
+  renderBondKPIs(list);
+  const body = document.getElementById("tbl-bonds-body");
+  const nomatch = document.getElementById("b-nomatch");
+
+  if (list.length === 0) {
+    body.innerHTML = "";
+    nomatch.style.display = "block";
+    return;
+  }
+  nomatch.style.display = "none";
+
+  body.innerHTML = list.map((b, idx) => {
+    const ccyTag = `<span class="tag tag-${b.ccy.toLowerCase()}">${b.ccy}</span>`;
+    const pledgeTag = b.pledged ? '<span class="tag tag-pledged">設質</span>' : '';
+    const matStr = b.matY==null ? '<span class="muted">Perp</span>' : b.matY.toFixed(2)+"Y";
+    const callStr = b.callY==null ? '-' : b.callY.toFixed(2)+"Y";
+    const row = `<tr class="expandable" data-idx="${idx}">
+      <td>
+        <div style="font-weight:600">${b.name}</div>
+        <div class="subtle">${b.isin} ${pledgeTag}</div>
+      </td>
+      <td>${ccyTag} ${ratingTag(b.rating)}<br><span class="subtle">${typeTag(b.type)}</span></td>
+      <td>${(b.coupon*100).toFixed(3)}%<br><span class="subtle">${b.freq}</span></td>
+      <td>${fmt.money(b.nominal)}</td>
+      <td>${b.price.toFixed(2)}<br><span class="subtle">買入 ${b.buyPrice}</span></td>
+      <td><strong>${fmt.money(b.mv)}</strong><br><span class="subtle">${fmt.pct(b.pctNav,2)} of NAV</span></td>
+      <td>${fmt.money(b.accrued,2)}</td>
+      <td>${fmt.pctColored(b.mtd)}</td>
+      <td>${fmt.pctColored(b.cum)}</td>
+      <td>${matStr}<br><span class="subtle">Call: ${callStr}</span></td>
+    </tr>`;
+
+    const detail = expandedBond === b.isin ? `
+      <tr><td colspan="10" style="padding:0">
+        <div class="bond-detail">
+          <div class="bond-detail-grid">
+            <div><div class="label">ISIN</div><div class="val">${b.isin}</div></div>
+            <div><div class="label">計價幣別 Currency</div><div class="val">${b.ccy}</div></div>
+            <div><div class="label">名目本金 Nominal</div><div class="val">${fmt.money(b.nominal)} ${b.ccy}</div></div>
+            <div><div class="label">票息 Coupon</div><div class="val">${(b.coupon*100).toFixed(3)}% (${b.freq})</div></div>
+            <div><div class="label">買入每單位成本 Buy Price</div><div class="val">${b.buyPrice}</div></div>
+            <div><div class="label">報告日市價 Mark Price</div><div class="val">${b.price}</div></div>
+            <div><div class="label">買入日期 Buy Date</div><div class="val">${b.buyDate}</div></div>
+            <div><div class="label">到期 Maturity Years</div><div class="val">${matStr}</div></div>
+            <div><div class="label">下次贖回 Next Call</div><div class="val">${callStr}</div></div>
+            <div><div class="label">信評 Rating</div><div class="val">${b.rating} (${b.type})</div></div>
+            <div><div class="label">質押狀態 Pledged</div><div class="val">${b.pledged?'是 Yes (Cathay)':'否 No'}</div></div>
+            <div><div class="label">應收債息 Accrued</div><div class="val">${fmt.money(b.accrued,2)} USD</div></div>
+            <div><div class="label">本月損益 % MTD P/L</div><div class="val">${fmt.pctColored(b.mtd)}</div></div>
+            <div><div class="label">年度損益 % YTD P/L</div><div class="val">${fmt.pctColored(b.ytd)}</div></div>
+            <div><div class="label">累計損益 % Cumulative</div><div class="val">${fmt.pctColored(b.cum)}</div></div>
+            <div><div class="label">報告日變現價值 Realizable</div><div class="val">${fmt.money(b.mv+b.accrued,2)} USD</div></div>
+          </div>
+        </div>
+      </td></tr>
+    ` : "";
+
+    return row + detail;
+  }).join("");
+
+  body.querySelectorAll("tr.expandable").forEach(tr => {
+    tr.addEventListener("click", ()=>{
+      const idx = parseInt(tr.dataset.idx);
+      const b = list[idx];
+      expandedBond = expandedBond === b.isin ? null : b.isin;
+      renderBondTable();
+    });
+  });
+}
+
+function bindBondFilter(ctrlId, key) {
+  document.getElementById(ctrlId).addEventListener("click", (e)=>{
+    const btn = e.target.closest(".pill");
+    if (!btn) return;
+    document.querySelectorAll(`#${ctrlId} .pill`).forEach(p=>p.classList.remove("active"));
+    btn.classList.add("active");
+    bondFilters[key] = btn.dataset.v;
+    expandedBond = null;
+    renderBondTable();
+  });
+}
+bindBondFilter("flt-ccy", "ccy");
+bindBondFilter("flt-rating", "rating");
+bindBondFilter("flt-maturity", "maturity");
+bindBondFilter("flt-pledge", "pledge");
+document.getElementById("flt-reset").addEventListener("click", ()=>{
+  bondFilters = { ccy:"all", rating:"all", maturity:"all", pledge:"all" };
+  document.querySelectorAll(".filter-bar .pill").forEach(p => {
+    p.classList.toggle("active", p.dataset.v === "all");
+  });
+  expandedBond = null;
+  renderBondTable();
+});
+
+// =================================================================
+// ============ Render: Cash Flow ==================================
+// =================================================================
+function renderCashflow(){
+  const cf = REPORT_DATA.cashFlow;
+  const now = 2026;
+  const future = cf.filter(x => x.year >= now);
+
+  const fUsdInt  = future.reduce((s,x)=>s+x.usdInt, 0);
+  const fUsdPrin = future.reduce((s,x)=>s+x.usdPrin, 0);
+  const fGbpInt  = future.reduce((s,x)=>s+x.gbpInt, 0);
+  const fGbpPrin = future.reduce((s,x)=>s+x.gbpPrin, 0);
+  const fGbp = fGbpInt + fGbpPrin;
+
+  document.getElementById("cf-usd-int").textContent  = fmt.money(fUsdInt);
+  document.getElementById("cf-usd-prin").textContent = fmt.money(fUsdPrin);
+  document.getElementById("cf-gbp-total").textContent = fmt.money(fGbp);
+
+  new Chart(document.getElementById("chart-cashflow"), {
+    type: "bar",
+    data: {
+      labels: cf.map(x=>x.year),
+      datasets: [
+        { label:"USD 利息 Int.",  data:cf.map(x=>x.usdInt),  backgroundColor:PAL.wine,      stack:"s1" },
+        { label:"USD 本金 Prin.", data:cf.map(x=>x.usdPrin), backgroundColor:PAL.wineLight, stack:"s1" },
+        { label:"GBP 利息 Int.",  data:cf.map(x=>x.gbpInt),  backgroundColor:PAL.gold,      stack:"s1" },
+        { label:"GBP 本金 Prin.", data:cf.map(x=>x.gbpPrin), backgroundColor:PAL.goldLight, stack:"s1" }
+      ]
+    },
+    options: {
+      maintainAspectRatio:false,
+      plugins:{ legend:{position:"bottom"}, tooltip:{callbacks:{label:c=>c.dataset.label+": "+fmt.money(c.parsed.y)}} },
+      scales:{
+        x:{ stacked:true, grid:{display:false} },
+        y:{ stacked:true, ticks:{callback:v=>fmt.money(v/1000)+"K"}, grid:{color:"#F3EFE7"} }
+      }
+    }
+  });
+
+  document.getElementById("tbl-cashflow").innerHTML = cf.map(x => {
+    const usdSum = x.usdInt + x.usdPrin;
+    const gbpSum = x.gbpInt + x.gbpPrin;
+    const total  = usdSum + gbpSum;
+    const isFuture = x.year >= now;
+    return `<tr style="${isFuture?'background:#FAF7F2':'opacity:0.6'}">
+      <td><strong>${x.year}</strong>${isFuture?'':' <span class="subtle small">(已過)</span>'}</td>
+      <td>${fmt.money(x.usdInt)}</td>
+      <td>${fmt.money(x.usdPrin)}</td>
+      <td><strong>${fmt.money(usdSum)}</strong></td>
+      <td>${fmt.money(x.gbpInt)}</td>
+      <td>${fmt.money(x.gbpPrin)}</td>
+      <td><strong>${fmt.money(gbpSum)}</strong></td>
+      <td style="color:var(--wine);font-weight:700">${fmt.money(total)}</td>
+    </tr>`;
+  }).join("");
+
+  const totUsdInt  = cf.reduce((s,x)=>s+x.usdInt,0);
+  const totUsdPrin = cf.reduce((s,x)=>s+x.usdPrin,0);
+  const totGbpInt  = cf.reduce((s,x)=>s+x.gbpInt,0);
+  const totGbpPrin = cf.reduce((s,x)=>s+x.gbpPrin,0);
+  const grandTotal = totUsdInt + totUsdPrin + totGbpInt + totGbpPrin;
+
+  document.getElementById("cf-total").innerHTML = `
+    <td>合計 Total</td>
+    <td>${fmt.money(totUsdInt)}</td>
+    <td>${fmt.money(totUsdPrin)}</td>
+    <td>${fmt.money(totUsdInt+totUsdPrin)}</td>
+    <td>${fmt.money(totGbpInt)}</td>
+    <td>${fmt.money(totGbpPrin)}</td>
+    <td>${fmt.money(totGbpInt+totGbpPrin)}</td>
+    <td>${fmt.money(grandTotal)}</td>
+  `;
+}
+
+// =================================================================
+// ============ Init ===============================================
+// =================================================================
+renderMeta();
+renderOverview();
+renderPerformance();
+renderAllocation();
+renderIncome();
+renderBondTable();
+renderCashflow();
+</script>
+
+</body>
+</html>
