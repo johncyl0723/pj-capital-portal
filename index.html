@@ -374,6 +374,145 @@
     border-radius: 12px; font-size: 11px; font-weight: 600;
     letter-spacing: .5px; margin-bottom: 16px;
   }
+
+  /* ── Category Overview Panels ── */
+  .category-overview {
+    position: absolute; inset: 0;
+    display: none;
+    overflow-y: auto;
+    padding: 48px 56px 64px;
+    background: linear-gradient(135deg, #0a1628 0%, #061a2c 100%);
+  }
+  .category-overview.visible { display: block; }
+  .category-overview::-webkit-scrollbar { width: 5px; }
+  .category-overview::-webkit-scrollbar-thumb { background: rgba(239,126,27,.3); border-radius: 3px; }
+  .category-overview::-webkit-scrollbar-track { background: transparent; }
+
+  .cat-header { margin-bottom: 36px; }
+  .cat-header-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 4px 14px;
+    background: rgba(239,126,27,0.12);
+    border: 1px solid rgba(239,126,27,0.35);
+    border-radius: 100px;
+    font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 14px;
+  }
+  .cat-header h1 {
+    font-size: 28px; font-weight: 700; color: #fff;
+    margin-bottom: 0;
+  }
+  .cat-divider {
+    width: 48px; height: 2px;
+    background: linear-gradient(90deg, #EF7E1B, #C9A961);
+    border-radius: 1px;
+    margin: 14px 0 16px;
+  }
+  .cat-header p {
+    font-size: 14px; color: rgba(255,255,255,0.5);
+    line-height: 1.8; max-width: 540px;
+  }
+
+  /* Timeline (Monthly Reports) */
+  .timeline {
+    position: relative;
+    padding-left: 36px;
+    max-width: 560px;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute; left: 8px; top: 10px; bottom: 10px;
+    width: 2px;
+    background: linear-gradient(180deg, rgba(239,126,27,0.85), rgba(239,126,27,0.15));
+    border-radius: 1px;
+  }
+  .timeline-item {
+    position: relative;
+    margin-bottom: 16px;
+  }
+  .timeline-dot {
+    position: absolute;
+    left: -32px; top: 50%;
+    transform: translateY(-50%);
+    width: 14px; height: 14px;
+    background: var(--gold);
+    border: 2px solid #061a2c;
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(239,126,27,0.55);
+    transition: transform .2s;
+  }
+  .timeline-item:hover .timeline-dot { transform: translateY(-50%) scale(1.35); }
+  .timeline-card {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 24px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background .15s, border-color .15s, transform .15s;
+  }
+  .timeline-card:hover {
+    background: rgba(239,126,27,0.1);
+    border-color: rgba(239,126,27,0.35);
+    transform: translateX(5px);
+  }
+  .timeline-card-label { font-size: 17px; font-weight: 700; color: #fff; }
+  .timeline-card-sub { font-size: 12px; color: rgba(255,255,255,0.38); margin-top: 4px; }
+  .timeline-card-action {
+    font-size: 13px; color: var(--gold); font-weight: 600;
+    opacity: 0.75; white-space: nowrap; margin-left: 16px;
+    transition: opacity .15s;
+  }
+  .timeline-card:hover .timeline-card-action { opacity: 1; }
+
+  /* Topics Card Grid */
+  .topics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+  }
+  .topic-overview-card {
+    display: flex; flex-direction: column; gap: 12px;
+    padding: 26px 24px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 14px;
+    cursor: pointer;
+    transition: background .15s, border-color .15s, transform .15s;
+  }
+  .topic-overview-card:hover {
+    background: rgba(239,126,27,0.1);
+    border-color: rgba(239,126,27,0.35);
+    transform: translateY(-3px);
+  }
+  .topic-card-icon { font-size: 26px; line-height: 1; }
+  .topic-card-title { font-size: 16px; font-weight: 700; color: #fff; line-height: 1.45; }
+  .topic-card-body {
+    font-size: 13px; color: rgba(255,255,255,0.45);
+    line-height: 1.75;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .topic-card-footer { margin-top: auto; padding-top: 4px; }
+  .topic-card-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 7px 16px;
+    background: rgba(239,126,27,0.14);
+    border: 1px solid rgba(239,126,27,0.32);
+    border-radius: 100px;
+    font-size: 12px; font-weight: 600; color: var(--gold);
+    transition: background .15s;
+  }
+  .topic-card-btn.inactive {
+    color: rgba(255,255,255,0.3);
+    border-color: rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.04);
+    cursor: default;
+  }
+  .topic-overview-card:hover .topic-card-btn:not(.inactive) { background: rgba(239,126,27,0.28); }
 </style>
 </head>
 <body>
@@ -495,11 +634,32 @@
       <p style="font-size:12px;color:var(--muted);">Content coming soon — please check back later.</p>
     </div>
 
+    <!-- Monthly Reports Overview (timeline) -->
+    <div class="category-overview" id="monthly-overview">
+      <div class="cat-header">
+        <div class="cat-header-badge">📅 每月報表</div>
+        <h1>Monthly Reports</h1>
+        <div class="cat-divider"></div>
+        <p>每月投資組合績效摘要，涵蓋資產配置、損益分析及市場評論，完整記錄您的投資歷程。</p>
+      </div>
+      <div class="timeline" id="monthly-timeline"></div>
+    </div>
+
+    <!-- Topics Overview (card grid) -->
+    <div class="category-overview" id="topics-overview">
+      <div class="cat-header">
+        <div class="cat-header-badge">📌 重要財經專題</div>
+        <h1>Financial Topics</h1>
+        <div class="cat-divider"></div>
+        <p>深度財經研究與市場洞察，由 P&amp;J Capital 研究團隊精選，協助您掌握重要金融趨勢與投資機遇。</p>
+      </div>
+      <div class="topics-grid" id="topics-grid"></div>
+    </div>
+
   </div><!-- /.main-frame -->
 
 </div><!-- /.body-wrap -->
 
-<script src="./portal-config.js"></script>
 <script>
   /* ── Config (shared with admin.html via localStorage) ── */
   const STORAGE_KEY = 'pj_portal_config';
@@ -678,13 +838,17 @@
       </div>`).join('');
   }
 
-  /* ── Toggle accordion group ── */
+  /* ── Toggle accordion group + show category overview ── */
   function toggleGroup(id) {
-    const header  = document.getElementById('grp-' + id);
-    const sub     = document.getElementById('sub-' + id);
-    const isOpen  = header.classList.contains('open');
+    const header = document.getElementById('grp-' + id);
+    const sub    = document.getElementById('sub-' + id);
+    const isOpen = header.classList.contains('open');
     header.classList.toggle('open', !isOpen);
     sub.classList.toggle('open', !isOpen);
+
+    if (isAuthenticated) {
+      showCategoryOverview(id);
+    }
   }
 
   /* ── Load content on nav-item click ── */
@@ -702,6 +866,7 @@
     const type = el.dataset.type;
     hideWelcome();
     hideTopic();
+    hideCategoryOverviews();
     document.getElementById('logged-in-idle').classList.remove('visible');
 
     if (type === 'report') {
@@ -747,6 +912,73 @@
   }
   function hideTopic() {
     document.getElementById('topic-panel').style.display = 'none';
+  }
+  function hideCategoryOverviews() {
+    document.getElementById('monthly-overview').classList.remove('visible');
+    document.getElementById('topics-overview').classList.remove('visible');
+  }
+
+  /* ── Category overview ── */
+  function showCategoryOverview(id) {
+    document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+    hideWelcome();
+    hideTopic();
+    hideCategoryOverviews();
+    document.getElementById('logged-in-idle').classList.remove('visible');
+    const iframe = document.getElementById('content-iframe');
+    iframe.style.display = 'none';
+    iframe.src = '';
+
+    if (id === 'monthly') {
+      renderMonthlyTimeline();
+      document.getElementById('monthly-overview').classList.add('visible');
+    } else if (id === 'topics') {
+      renderTopicsCards();
+      document.getElementById('topics-overview').classList.add('visible');
+    }
+  }
+
+  function renderMonthlyTimeline() {
+    const cfg = loadConfig();
+    document.getElementById('monthly-timeline').innerHTML = cfg.monthlyReports.map(r => `
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-card" onclick="loadReportFromOverview('${r.src}', '${r.label}')">
+          <div>
+            <div class="timeline-card-label">${r.label}</div>
+            <div class="timeline-card-sub">月度投資組合報告</div>
+          </div>
+          <div class="timeline-card-action">查看報表 →</div>
+        </div>
+      </div>`).join('');
+  }
+
+  function renderTopicsCards() {
+    const cfg = loadConfig();
+    document.getElementById('topics-grid').innerHTML = cfg.topics.map(t => {
+      const hasSrc = t.src && t.src.trim();
+      return `
+      <div class="topic-overview-card" onclick="loadTopicFromOverview('${t.key}', '${t.title}')">
+        <div class="topic-card-icon">📌</div>
+        <div class="topic-card-title">${t.title}</div>
+        ${t.body ? `<div class="topic-card-body">${t.body}</div>` : ''}
+        <div class="topic-card-footer">
+          <span class="topic-card-btn${hasSrc ? '' : ' inactive'}">${hasSrc ? '閱讀報告 →' : '內容準備中'}</span>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  function loadReportFromOverview(src, label) {
+    document.querySelectorAll('.nav-item[data-type="report"]').forEach(item => {
+      if (item.dataset.src === src) loadContent(item);
+    });
+  }
+
+  function loadTopicFromOverview(topicKey, label) {
+    document.querySelectorAll('.nav-item[data-type="topic"]').forEach(item => {
+      if (item.dataset.topic === topicKey) loadContent(item);
+    });
   }
 
   /* ── Init ── */
