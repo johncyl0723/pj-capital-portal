@@ -282,8 +282,11 @@
     text-align: center;
   }
   .logged-in-idle.visible { display: flex; }
-  .idle-logo { opacity: .22; }
-  .idle-logo img { width: 260px; height: 260px; display: block; }
+  .idle-logo { opacity: .92; }
+  .idle-logo img {
+    width: 260px; height: 260px; display: block;
+    filter: brightness(2.2) drop-shadow(0 0 18px rgba(239,126,27,0.30));
+  }
   .idle-company {
     font-size: 20px; font-weight: 700;
     letter-spacing: 3px; text-transform: uppercase;
