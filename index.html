@@ -325,17 +325,17 @@
 <header class="banner">
   <a class="banner-home-btn" onclick="goHome()" title="返回首頁">
     <div class="banner-logo">
-      <svg xmlns="http://www.w3.org/2000/svg" width="40" height="36" viewBox="0 0 100 88">
-        <!-- Blue arms + arch + legs -->
-        <path d="M 36 32 Q 27 35 17 41" fill="none" stroke="#1D5096" stroke-width="10" stroke-linecap="round"/>
-        <path d="M 36 32 Q 50 23 64 32" fill="none" stroke="#1D5096" stroke-width="10" stroke-linecap="round"/>
-        <path d="M 64 32 Q 73 35 83 41" fill="none" stroke="#1D5096" stroke-width="10" stroke-linecap="round"/>
-        <path d="M 36 32 L 36 78" fill="none" stroke="#1D5096" stroke-width="10" stroke-linecap="round"/>
-        <path d="M 64 32 L 64 68 Q 64 79 52 79" fill="none" stroke="#1D5096" stroke-width="10" stroke-linecap="round"/>
-        <!-- Left head: solid orange circle -->
-        <circle cx="36" cy="19" r="9.5" fill="#E87A1E"/>
-        <!-- Right head: C-shape (large arc clockwise, opening at lower-left) -->
-        <path d="M 64 10 A 9.5 9.5 0 1 1 56 24" fill="none" stroke="#E87A1E" stroke-width="9" stroke-linecap="round"/>
+      <svg xmlns="http://www.w3.org/2000/svg" width="40" height="36" viewBox="0 0 100 90">
+        <!-- Blue: arch, arms, legs -->
+        <path d="M 35 34 Q 49 25 63 34" fill="none" stroke="#1D5096" stroke-width="10" stroke-linecap="round"/>
+        <path d="M 35 34 Q 24 27 16 28" fill="none" stroke="#1D5096" stroke-width="10" stroke-linecap="round"/>
+        <path d="M 63 34 Q 74 27 82 28" fill="none" stroke="#1D5096" stroke-width="10" stroke-linecap="round"/>
+        <path d="M 35 34 L 35 81"       fill="none" stroke="#1D5096" stroke-width="10" stroke-linecap="round"/>
+        <path d="M 63 34 L 63 68 Q 63 81 52 81" fill="none" stroke="#1D5096" stroke-width="10" stroke-linecap="round"/>
+        <!-- Orange left head: solid circle -->
+        <circle cx="35" cy="21" r="9" fill="#E87A1E"/>
+        <!-- Orange right head: C-arc (270° CW, opening lower-left) -->
+        <path d="M 59 18.5 A 5 5 0 1 1 60.5 25" fill="none" stroke="#E87A1E" stroke-width="8" stroke-linecap="round"/>
       </svg>
     </div>
     <div class="banner-title">P&amp;J Capital Limited</div>
@@ -387,17 +387,14 @@
     <div class="welcome" id="welcome-screen">
       <div class="welcome-card">
         <div class="welcome-logo">
-          <svg xmlns="http://www.w3.org/2000/svg" width="90" height="80" viewBox="0 0 100 88">
-            <!-- Blue arms + arch + legs -->
-            <path d="M 36 32 Q 27 35 17 41" fill="none" stroke="#1D5096" stroke-width="10" stroke-linecap="round"/>
-            <path d="M 36 32 Q 50 23 64 32" fill="none" stroke="#1D5096" stroke-width="10" stroke-linecap="round"/>
-            <path d="M 64 32 Q 73 35 83 41" fill="none" stroke="#1D5096" stroke-width="10" stroke-linecap="round"/>
-            <path d="M 36 32 L 36 78" fill="none" stroke="#1D5096" stroke-width="10" stroke-linecap="round"/>
-            <path d="M 64 32 L 64 68 Q 64 79 52 79" fill="none" stroke="#1D5096" stroke-width="10" stroke-linecap="round"/>
-            <!-- Left head: solid orange circle -->
-            <circle cx="36" cy="19" r="9.5" fill="#E87A1E"/>
-            <!-- Right head: C-shape -->
-            <path d="M 64 10 A 9.5 9.5 0 1 1 56 24" fill="none" stroke="#E87A1E" stroke-width="9" stroke-linecap="round"/>
+          <svg xmlns="http://www.w3.org/2000/svg" width="90" height="81" viewBox="0 0 100 90">
+            <path d="M 35 34 Q 49 25 63 34" fill="none" stroke="#1D5096" stroke-width="10" stroke-linecap="round"/>
+            <path d="M 35 34 Q 24 27 16 28" fill="none" stroke="#1D5096" stroke-width="10" stroke-linecap="round"/>
+            <path d="M 63 34 Q 74 27 82 28" fill="none" stroke="#1D5096" stroke-width="10" stroke-linecap="round"/>
+            <path d="M 35 34 L 35 81"       fill="none" stroke="#1D5096" stroke-width="10" stroke-linecap="round"/>
+            <path d="M 63 34 L 63 68 Q 63 81 52 81" fill="none" stroke="#1D5096" stroke-width="10" stroke-linecap="round"/>
+            <circle cx="35" cy="21" r="9" fill="#E87A1E"/>
+            <path d="M 59 18.5 A 5 5 0 1 1 60.5 25" fill="none" stroke="#E87A1E" stroke-width="8" stroke-linecap="round"/>
           </svg>
         </div>
         <div class="welcome-company">P&amp;J Capital Limited</div>
@@ -422,17 +419,14 @@
     <!-- Post-login idle (shows after login, before any sidebar click) -->
     <div class="logged-in-idle" id="logged-in-idle">
       <div class="idle-logo">
-        <svg xmlns="http://www.w3.org/2000/svg" width="136" height="120" viewBox="0 0 100 88">
-          <!-- Blue arms + arch + legs -->
-          <path d="M 36 32 Q 27 35 17 41" fill="none" stroke="#1D5096" stroke-width="10" stroke-linecap="round"/>
-          <path d="M 36 32 Q 50 23 64 32" fill="none" stroke="#1D5096" stroke-width="10" stroke-linecap="round"/>
-          <path d="M 64 32 Q 73 35 83 41" fill="none" stroke="#1D5096" stroke-width="10" stroke-linecap="round"/>
-          <path d="M 36 32 L 36 78" fill="none" stroke="#1D5096" stroke-width="10" stroke-linecap="round"/>
-          <path d="M 64 32 L 64 68 Q 64 79 52 79" fill="none" stroke="#1D5096" stroke-width="10" stroke-linecap="round"/>
-          <!-- Left head: solid orange circle -->
-          <circle cx="36" cy="19" r="9.5" fill="#E87A1E"/>
-          <!-- Right head: C-shape -->
-          <path d="M 64 10 A 9.5 9.5 0 1 1 56 24" fill="none" stroke="#E87A1E" stroke-width="9" stroke-linecap="round"/>
+        <svg xmlns="http://www.w3.org/2000/svg" width="133" height="120" viewBox="0 0 100 90">
+          <path d="M 35 34 Q 49 25 63 34" fill="none" stroke="#1D5096" stroke-width="10" stroke-linecap="round"/>
+          <path d="M 35 34 Q 24 27 16 28" fill="none" stroke="#1D5096" stroke-width="10" stroke-linecap="round"/>
+          <path d="M 63 34 Q 74 27 82 28" fill="none" stroke="#1D5096" stroke-width="10" stroke-linecap="round"/>
+          <path d="M 35 34 L 35 81"       fill="none" stroke="#1D5096" stroke-width="10" stroke-linecap="round"/>
+          <path d="M 63 34 L 63 68 Q 63 81 52 81" fill="none" stroke="#1D5096" stroke-width="10" stroke-linecap="round"/>
+          <circle cx="35" cy="21" r="9" fill="#E87A1E"/>
+          <path d="M 59 18.5 A 5 5 0 1 1 60.5 25" fill="none" stroke="#E87A1E" stroke-width="8" stroke-linecap="round"/>
         </svg>
       </div>
       <div class="idle-arrow">←</div>
