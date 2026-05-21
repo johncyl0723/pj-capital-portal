@@ -7,16 +7,16 @@ localStorage.setItem('pj_portal_config', JSON.stringify({
   ],
   "topics": [
     {
-      "key": "topic-1",
-      "title": "2026 Q2 利率展望",
-      "body": "本專題將涵蓋 2026 年第二季主要央行政策方向分析、殖利率曲線變化，以及對固定收益投資組合的潛在影響評估。內容準備中，敬請期待。",
-      "src": ""
+      "key": "topic-slr",
+      "title": "SLR改革_財政主導的金融新時代",
+      "body": "",
+      "src": "./SLR改革_財政主導的金融新時代.pdf"
     },
     {
-      "key": "topic-2",
-      "title": "信用市場觀察",
-      "body": "本專題聚焦投資等級及高收益債券信用利差走勢、企業財務健康度監測，以及當前持倉的信用風險評估。內容準備中，敬請期待。",
-      "src": ""
+      "key": "topic-rmp",
+      "title": "新貨幣時代的序幕解碼RMP",
+      "body": "",
+      "src": "./新貨幣時代的序幕解碼RMP.pdf"
     }
   ]
 }));
