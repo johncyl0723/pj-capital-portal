@@ -42,7 +42,11 @@
     box-shadow: 0 2px 10px rgba(0,0,0,.25);
   }
   .banner-logo {
-    width: 40px; height: 40px; flex-shrink: 0;
+    height: 48px; flex-shrink: 0; display: flex; align-items: center;
+  }
+  .banner-logo img {
+    height: 48px; width: auto;
+    mix-blend-mode: screen;
   }
   .banner-title { font-size: 17px; font-weight: 600; letter-spacing: .4px; line-height: 1.2; }
   .banner-divider { width: 1px; height: 32px; background: rgba(255,255,255,.2); margin: 0 6px; }
@@ -180,7 +184,7 @@
     align-items: center; gap: 18px;
     max-width: 500px; width: 100%;
   }
-  .welcome-logo svg { display: block; }
+  .welcome-logo img { display: block; height: 110px; width: auto; mix-blend-mode: screen; }
   .welcome-company {
     font-size: 11px; font-weight: 700; letter-spacing: 3px;
     color: rgba(255,255,255,0.55); text-transform: uppercase;
@@ -263,7 +267,8 @@
     text-align: center;
   }
   .logged-in-idle.visible { display: flex; }
-  .idle-logo { opacity: .18; }
+  .idle-logo { opacity: .22; }
+  .idle-logo img { height: 160px; width: auto; mix-blend-mode: screen; display: block; }
   .idle-hint {
     font-size: 14px;
     color: rgba(255,255,255,.45);
@@ -325,18 +330,7 @@
 <header class="banner">
   <a class="banner-home-btn" onclick="goHome()" title="返回首頁">
     <div class="banner-logo">
-      <svg xmlns="http://www.w3.org/2000/svg" width="40" height="36" viewBox="0 0 100 90">
-        <!-- Blue: arch, arms, legs -->
-        <path d="M 35 34 Q 49 25 63 34" fill="none" stroke="#1D5096" stroke-width="10" stroke-linecap="round"/>
-        <path d="M 35 34 Q 24 27 16 28" fill="none" stroke="#1D5096" stroke-width="10" stroke-linecap="round"/>
-        <path d="M 63 34 Q 74 27 82 28" fill="none" stroke="#1D5096" stroke-width="10" stroke-linecap="round"/>
-        <path d="M 35 34 L 35 81"       fill="none" stroke="#1D5096" stroke-width="10" stroke-linecap="round"/>
-        <path d="M 63 34 L 63 68 Q 63 81 52 81" fill="none" stroke="#1D5096" stroke-width="10" stroke-linecap="round"/>
-        <!-- Orange left head: solid circle -->
-        <circle cx="35" cy="21" r="9" fill="#E87A1E"/>
-        <!-- Orange right head: C-arc (270° CW, opening lower-left) -->
-        <path d="M 59 18.5 A 5 5 0 1 1 60.5 25" fill="none" stroke="#E87A1E" stroke-width="8" stroke-linecap="round"/>
-      </svg>
+      <img src="logo.png" alt="P&amp;J Capital Logo">
     </div>
     <div class="banner-title">P&amp;J Capital Limited</div>
   </a>
@@ -387,15 +381,7 @@
     <div class="welcome" id="welcome-screen">
       <div class="welcome-card">
         <div class="welcome-logo">
-          <svg xmlns="http://www.w3.org/2000/svg" width="90" height="81" viewBox="0 0 100 90">
-            <path d="M 35 34 Q 49 25 63 34" fill="none" stroke="#1D5096" stroke-width="10" stroke-linecap="round"/>
-            <path d="M 35 34 Q 24 27 16 28" fill="none" stroke="#1D5096" stroke-width="10" stroke-linecap="round"/>
-            <path d="M 63 34 Q 74 27 82 28" fill="none" stroke="#1D5096" stroke-width="10" stroke-linecap="round"/>
-            <path d="M 35 34 L 35 81"       fill="none" stroke="#1D5096" stroke-width="10" stroke-linecap="round"/>
-            <path d="M 63 34 L 63 68 Q 63 81 52 81" fill="none" stroke="#1D5096" stroke-width="10" stroke-linecap="round"/>
-            <circle cx="35" cy="21" r="9" fill="#E87A1E"/>
-            <path d="M 59 18.5 A 5 5 0 1 1 60.5 25" fill="none" stroke="#E87A1E" stroke-width="8" stroke-linecap="round"/>
-          </svg>
+          <img src="logo.png" alt="P&amp;J Capital Logo">
         </div>
         <div class="welcome-company">P&amp;J Capital Limited</div>
         <div class="welcome-divider"></div>
@@ -419,15 +405,7 @@
     <!-- Post-login idle (shows after login, before any sidebar click) -->
     <div class="logged-in-idle" id="logged-in-idle">
       <div class="idle-logo">
-        <svg xmlns="http://www.w3.org/2000/svg" width="133" height="120" viewBox="0 0 100 90">
-          <path d="M 35 34 Q 49 25 63 34" fill="none" stroke="#1D5096" stroke-width="10" stroke-linecap="round"/>
-          <path d="M 35 34 Q 24 27 16 28" fill="none" stroke="#1D5096" stroke-width="10" stroke-linecap="round"/>
-          <path d="M 63 34 Q 74 27 82 28" fill="none" stroke="#1D5096" stroke-width="10" stroke-linecap="round"/>
-          <path d="M 35 34 L 35 81"       fill="none" stroke="#1D5096" stroke-width="10" stroke-linecap="round"/>
-          <path d="M 63 34 L 63 68 Q 63 81 52 81" fill="none" stroke="#1D5096" stroke-width="10" stroke-linecap="round"/>
-          <circle cx="35" cy="21" r="9" fill="#E87A1E"/>
-          <path d="M 59 18.5 A 5 5 0 1 1 60.5 25" fill="none" stroke="#E87A1E" stroke-width="8" stroke-linecap="round"/>
-        </svg>
+        <img src="logo.png" alt="P&amp;J Capital Logo">
       </div>
       <div class="idle-arrow">←</div>
       <div class="idle-hint">請點選左側選單進行瀏覽</div>
