@@ -282,10 +282,16 @@
     text-align: center;
   }
   .logged-in-idle.visible { display: flex; }
-  .idle-logo { opacity: .92; }
+  .idle-logo {
+    /* Crop window — same transparent-PNG approach as .welcome-logo */
+    width: 330px; height: 210px;
+    overflow: hidden; margin: 0 auto;
+    opacity: .90;
+  }
   .idle-logo img {
-    width: 260px; height: 260px; display: block;
-    filter: brightness(2.2) drop-shadow(0 0 18px rgba(239,126,27,0.30));
+    width: 720px; height: 720px;
+    margin-top: -172px; margin-left: -195px;
+    display: block;
   }
   .idle-company {
     font-size: 20px; font-weight: 700;
