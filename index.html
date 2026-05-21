@@ -46,27 +46,23 @@
   }
   .banner-title { font-size: 17px; font-weight: 600; letter-spacing: .4px; line-height: 1.2; }
   .banner-divider { width: 1px; height: 32px; background: rgba(255,255,255,.2); margin: 0 6px; }
-  .banner-client-label { font-size: 11px; opacity: .7; letter-spacing: .5px; margin-right: 8px; white-space: nowrap; }
-  .banner-client-select {
-    padding: 6px 28px 6px 12px;
-    font-size: 13px; font-family: inherit;
-    background: rgba(255,255,255,.15);
-    border: 1px solid rgba(239,126,27,.5);
-    border-radius: 6px;
-    color: var(--gold);
-    font-weight: 600;
-    cursor: pointer;
-    appearance: none;
-    -webkit-appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23EF7E1B'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 10px center;
-    transition: background .15s, border-color .15s;
-    min-width: 140px;
+  .banner-client-badge {
+    display: none;
+    align-items: center; gap: 8px;
+    padding: 5px 14px;
+    background: rgba(255,255,255,.1);
+    border: 1px solid rgba(239,126,27,.4);
+    border-radius: 20px;
+    font-size: 13px; font-weight: 600; color: var(--gold);
+    letter-spacing: .3px;
   }
-  .banner-client-select:hover { background-color: rgba(255,255,255,.22); border-color: var(--gold); }
-  .banner-client-select:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 2px rgba(239,126,27,.3); }
-  .banner-client-select option { background: var(--wine-dark); color: #fff; }
+  .banner-client-badge.visible { display: flex; }
+  .banner-home-btn {
+    display: flex; align-items: center; gap: 12px;
+    cursor: pointer; text-decoration: none;
+    transition: opacity .15s;
+  }
+  .banner-home-btn:hover { opacity: .8; }
 
   /* ── Body layout ── */
   .body-wrap {
@@ -206,6 +202,83 @@
     cursor: default;
   }
 
+  /* Welcome login form */
+  .welcome-form { width: 100%; display: flex; flex-direction: column; gap: 12px; }
+  .welcome-select, .welcome-input {
+    width: 100%;
+    padding: 10px 16px;
+    font-size: 14px; font-family: inherit;
+    background: rgba(255,255,255,.08);
+    border: 1px solid rgba(255,255,255,.2);
+    border-radius: 8px;
+    color: #fff;
+    transition: border-color .15s, background .15s;
+    appearance: none; -webkit-appearance: none;
+  }
+  .welcome-select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23EF7E1B'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 36px;
+    cursor: pointer;
+  }
+  .welcome-select option { background: #0a1628; color: #fff; }
+  .welcome-select:focus, .welcome-input:focus {
+    outline: none;
+    border-color: var(--gold);
+    background: rgba(255,255,255,.12);
+  }
+  .welcome-input::placeholder { color: rgba(255,255,255,.35); }
+  .welcome-login-btn {
+    width: 100%;
+    padding: 11px 0;
+    background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+    border: none; border-radius: 8px;
+    color: #fff; font-size: 14px; font-weight: 700;
+    font-family: inherit; letter-spacing: .5px;
+    cursor: pointer;
+    transition: opacity .15s, transform .1s;
+  }
+  .welcome-login-btn:hover { opacity: .9; transform: translateY(-1px); }
+  .welcome-login-btn:active { transform: translateY(0); }
+  .welcome-error {
+    font-size: 12px; color: #ff7b7b;
+    text-align: center; min-height: 18px;
+    transition: opacity .2s;
+  }
+  .welcome-field-label {
+    font-size: 11px; color: rgba(255,255,255,.45);
+    letter-spacing: .5px; text-transform: uppercase;
+    margin-bottom: -6px;
+  }
+
+  /* Post-login idle screen */
+  .logged-in-idle {
+    position: absolute; inset: 0;
+    display: none;
+    flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 20px;
+    background: linear-gradient(135deg, #0a1628 0%, #061a2c 100%);
+    text-align: center;
+  }
+  .logged-in-idle.visible { display: flex; }
+  .idle-logo { opacity: .18; }
+  .idle-hint {
+    font-size: 14px;
+    color: rgba(255,255,255,.45);
+    letter-spacing: .5px;
+  }
+  .idle-arrow {
+    font-size: 20px;
+    color: rgba(239,126,27,.5);
+    animation: nudge 1.8s ease-in-out infinite;
+  }
+  @keyframes nudge {
+    0%, 100% { transform: translateX(0); }
+    50%       { transform: translateX(-8px); }
+  }
+
   /* Loading overlay */
   .loading-overlay {
     position: absolute; inset: 0;
@@ -250,21 +323,22 @@
 
 <!-- ══════════ Banner ══════════ -->
 <header class="banner">
-  <div class="banner-logo">
-    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40">
-      <circle cx="20" cy="20" r="18" fill="none" stroke="#185690" stroke-width="2"/>
-      <circle cx="16" cy="17" r="4" fill="#EF7E1B"/>
-      <circle cx="24" cy="17" r="4" fill="#EF7E1B"/>
-      <path d="M13 26 Q20 31 27 26" stroke="#185690" stroke-width="2" fill="none" stroke-linecap="round"/>
-    </svg>
-  </div>
-  <div class="banner-title">P&amp;J Capital Limited</div>
+  <a class="banner-home-btn" onclick="goHome()" title="返回首頁">
+    <div class="banner-logo">
+      <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40">
+        <circle cx="20" cy="20" r="18" fill="none" stroke="#185690" stroke-width="2"/>
+        <circle cx="16" cy="17" r="4" fill="#EF7E1B"/>
+        <circle cx="24" cy="17" r="4" fill="#EF7E1B"/>
+        <path d="M13 26 Q20 31 27 26" stroke="#185690" stroke-width="2" fill="none" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div class="banner-title">P&amp;J Capital Limited</div>
+  </a>
   <div class="banner-divider"></div>
-  <span class="banner-client-label">客戶 / Client</span>
-  <select class="banner-client-select" id="client-selector" onchange="onClientChange(this.value)">
-    <option value="sophia">Sophia</option>
-    <option value="placeholder1">— 未來客戶 —</option>
-  </select>
+  <div class="banner-client-badge" id="banner-client-badge">
+    <span style="font-size:11px;opacity:.6;font-weight:400;">客戶</span>
+    <span id="banner-client-name">—</span>
+  </div>
 </header>
 
 <!-- ══════════ Body ══════════ -->
@@ -318,9 +392,35 @@
         <div class="welcome-company">P&amp;J Capital Limited</div>
         <div class="welcome-divider"></div>
         <h2>歡迎使用投資組合入口</h2>
-        <p>請從左側導覽選擇月報或財經專題，內容將在此處顯示。</p>
-        <div class="welcome-hint">← 點擊左側選單項目開始瀏覽</div>
+        <div class="welcome-form">
+          <div class="welcome-field-label">客戶 / Client</div>
+          <select class="welcome-select" id="client-selector">
+            <option value="sophia">Sophia</option>
+            <option value="placeholder1">— 未來客戶 —</option>
+          </select>
+          <div class="welcome-field-label">進入密碼 / Password</div>
+          <input class="welcome-input" type="password" id="client-password"
+            placeholder="請輸入客戶專屬密碼"
+            onkeydown="if(event.key==='Enter') attemptLogin()" />
+          <div class="welcome-error" id="login-error"></div>
+          <button class="welcome-login-btn" onclick="attemptLogin()">進入 →</button>
+        </div>
       </div>
+    </div>
+
+    <!-- Post-login idle (shows after login, before any sidebar click) -->
+    <div class="logged-in-idle" id="logged-in-idle">
+      <div class="idle-logo">
+        <svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 80 80">
+          <circle cx="40" cy="40" r="36" fill="none" stroke="#185690" stroke-width="2.5"/>
+          <circle cx="40" cy="40" r="28" fill="none" stroke="rgba(24,86,144,0.4)" stroke-width="1"/>
+          <circle cx="32" cy="34" r="7" fill="#EF7E1B"/>
+          <circle cx="48" cy="34" r="7" fill="#EF7E1B"/>
+          <path d="M26 50 Q40 60 54 50" stroke="#185690" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="idle-arrow">←</div>
+      <div class="idle-hint">請點選左側選單進行瀏覽</div>
     </div>
 
     <!-- Loading spinner -->
@@ -358,6 +458,20 @@
     ]
   };
 
+  /* ── Client password hashes (SHA-256 hex — never store plaintext here) ── */
+  const CLIENT_PASSWORD_HASHES = {
+    sophia: 'dc954b6a5976d8487f5c949e106fb8e6feeee16abb4afbd89d7c527b700ebbe1'
+  };
+
+  async function sha256hex(str) {
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+  }
+
+  const CLIENT_LABELS = {
+    sophia: 'Sophia'
+  };
+
   function loadConfig() {
     try {
       const s = localStorage.getItem(STORAGE_KEY);
@@ -365,7 +479,71 @@
     } catch { return DEFAULT_CONFIG; }
   }
 
+  /* ── Auth state ── */
+  let isAuthenticated = false;
   let topicData = {};
+
+  /* ── Login ── */
+  async function attemptLogin() {
+    const clientKey = document.getElementById('client-selector').value;
+    const password  = document.getElementById('client-password').value;
+    const errorEl   = document.getElementById('login-error');
+    const btn       = document.querySelector('.welcome-login-btn');
+
+    const expectedHash = CLIENT_PASSWORD_HASHES[clientKey];
+    if (!expectedHash) {
+      errorEl.textContent = '此客戶帳號尚未開通，請聯絡管理員。';
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = '驗證中…';
+
+    const inputHash = await sha256hex(password);
+
+    btn.disabled = false;
+    btn.textContent = '進入 →';
+
+    if (inputHash !== expectedHash) {
+      errorEl.textContent = '密碼錯誤，請再試一次。';
+      document.getElementById('client-password').value = '';
+      document.getElementById('client-password').focus();
+      return;
+    }
+
+    // Authenticated
+    isAuthenticated = true;
+    errorEl.textContent = '';
+
+    // Show client badge in banner
+    document.getElementById('banner-client-name').textContent = CLIENT_LABELS[clientKey] || clientKey;
+    document.getElementById('banner-client-badge').classList.add('visible');
+
+    // Hide welcome screen, show idle
+    document.getElementById('welcome-screen').classList.add('hidden');
+    document.getElementById('logged-in-idle').classList.add('visible');
+  }
+
+  /* ── Go home (logo click) ── */
+  function goHome() {
+    isAuthenticated = false;
+
+    // Clear content
+    document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+    const iframe = document.getElementById('content-iframe');
+    iframe.style.display = 'none';
+    iframe.src = '';
+    hideTopic();
+
+    // Hide client badge and idle screen
+    document.getElementById('banner-client-badge').classList.remove('visible');
+    document.getElementById('logged-in-idle').classList.remove('visible');
+
+    // Reset form and show welcome
+    document.getElementById('client-password').value = '';
+    document.getElementById('login-error').textContent = '';
+    document.getElementById('welcome-screen').classList.remove('hidden');
+  }
 
   function renderSidebar() {
     const cfg = loadConfig();
@@ -396,14 +574,20 @@
 
   /* ── Load content on nav-item click ── */
   function loadContent(el) {
-    // Remove active from all items
+    if (!isAuthenticated) {
+      // Not logged in — bounce back to welcome
+      document.getElementById('welcome-screen').classList.remove('hidden');
+      document.getElementById('client-password').focus();
+      return;
+    }
+
     document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
     el.classList.add('active');
 
     const type = el.dataset.type;
-
     hideWelcome();
     hideTopic();
+    document.getElementById('logged-in-idle').classList.remove('visible');
 
     if (type === 'report') {
       showReport(el.dataset.src);
@@ -416,7 +600,6 @@
   function showReport(src) {
     const iframe  = document.getElementById('content-iframe');
     const loading = document.getElementById('loading-overlay');
-
     iframe.style.display = 'none';
     loading.classList.add('show');
     iframe.src = src;
@@ -432,32 +615,15 @@
   /* ── Topic placeholder ── */
   function showTopic(topicId, label) {
     const data = topicData[topicId] || { title: label, body: '內容準備中。', src: '' };
-
     if (data.src) {
-      // Has a linked file (PDF or HTML) → display in the main iframe
       showReport(data.src);
     } else {
-      // No src → show text placeholder
       const panel = document.getElementById('topic-panel');
       document.getElementById('topic-tag').textContent   = '重要財經專題';
       document.getElementById('topic-title').textContent = data.title;
       document.getElementById('topic-body').textContent  = data.body;
       panel.style.display = 'block';
     }
-  }
-
-  /* ── Client selector ── */
-  function onClientChange(value) {
-    // Placeholder — wire up per-client data when additional clients are added
-    resetToWelcome();
-  }
-
-  function resetToWelcome() {
-    document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-    document.getElementById('content-iframe').style.display = 'none';
-    document.getElementById('content-iframe').src = '';
-    hideTopic();
-    document.getElementById('welcome-screen').classList.remove('hidden');
   }
 
   /* ── Hide helpers ── */
