@@ -6,20 +6,20 @@
 <title>P&amp;J Capital Limited</title>
 <style>
   :root {
-    --wine: #6B1E2C;
-    --wine-dark: #4A1420;
-    --wine-light: #8B3244;
-    --gold: #C9A961;
-    --gold-dark: #A88740;
+    --wine: #0B1F3A;
+    --wine-dark: #061a2c;
+    --wine-light: #185690;
+    --gold: #EF7E1B;
+    --gold-dark: #d06a15;
     --cream: #FAF7F2;
     --ink: #1C1917;
     --muted: #6B6560;
     --border: #E8E2D8;
-    --sidebar-bg: #2D0F18;
-    --sidebar-hover: rgba(201,169,97,0.12);
-    --sidebar-active: rgba(201,169,97,0.22);
+    --sidebar-bg: #061a2c;
+    --sidebar-hover: rgba(239,126,27,0.12);
+    --sidebar-active: rgba(239,126,27,0.22);
     --sidebar-text: #E8D8BE;
-    --sidebar-muted: rgba(232,216,190,0.55);
+    --sidebar-muted: rgba(255,220,180,0.55);
     --sidebar-width: 260px;
     --banner-height: 64px;
   }
@@ -43,10 +43,6 @@
   }
   .banner-logo {
     width: 40px; height: 40px; flex-shrink: 0;
-    border: 2px solid var(--gold); border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-weight: 700; font-size: 14px; color: var(--gold);
-    letter-spacing: 1px; background: rgba(0,0,0,.15);
   }
   .banner-title { font-size: 17px; font-weight: 600; letter-spacing: .4px; line-height: 1.2; }
   .banner-divider { width: 1px; height: 32px; background: rgba(255,255,255,.2); margin: 0 6px; }
@@ -55,21 +51,21 @@
     padding: 6px 28px 6px 12px;
     font-size: 13px; font-family: inherit;
     background: rgba(255,255,255,.15);
-    border: 1px solid rgba(201,169,97,.5);
+    border: 1px solid rgba(239,126,27,.5);
     border-radius: 6px;
     color: var(--gold);
     font-weight: 600;
     cursor: pointer;
     appearance: none;
     -webkit-appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23C9A961'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23EF7E1B'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right 10px center;
     transition: background .15s, border-color .15s;
     min-width: 140px;
   }
   .banner-client-select:hover { background-color: rgba(255,255,255,.22); border-color: var(--gold); }
-  .banner-client-select:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 2px rgba(201,169,97,.3); }
+  .banner-client-select:focus { outline: none; border-color: var(--gold); box-shadow: 0 0 0 2px rgba(239,126,27,.3); }
   .banner-client-select option { background: var(--wine-dark); color: #fff; }
 
   /* ── Body layout ── */
@@ -87,10 +83,10 @@
     overflow-y: auto;
     display: flex;
     flex-direction: column;
-    border-right: 1px solid rgba(201,169,97,.2);
+    border-right: 1px solid rgba(239,126,27,.2);
   }
   .sidebar::-webkit-scrollbar { width: 4px; }
-  .sidebar::-webkit-scrollbar-thumb { background: rgba(201,169,97,.3); border-radius: 2px; }
+  .sidebar::-webkit-scrollbar-thumb { background: rgba(239,126,27,.3); border-radius: 2px; }
   .sidebar::-webkit-scrollbar-track { background: transparent; }
 
   .sidebar-section { padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,.06); }
@@ -254,7 +250,14 @@
 
 <!-- ══════════ Banner ══════════ -->
 <header class="banner">
-  <div class="banner-logo">P&amp;J</div>
+  <div class="banner-logo">
+    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40">
+      <circle cx="20" cy="20" r="18" fill="none" stroke="#185690" stroke-width="2"/>
+      <circle cx="16" cy="17" r="4" fill="#EF7E1B"/>
+      <circle cx="24" cy="17" r="4" fill="#EF7E1B"/>
+      <path d="M13 26 Q20 31 27 26" stroke="#185690" stroke-width="2" fill="none" stroke-linecap="round"/>
+    </svg>
+  </div>
   <div class="banner-title">P&amp;J Capital Limited</div>
   <div class="banner-divider"></div>
   <span class="banner-client-label">客戶 / Client</span>
