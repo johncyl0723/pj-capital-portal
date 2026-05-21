@@ -282,16 +282,24 @@
     text-align: center;
   }
   .logged-in-idle.visible { display: flex; }
-  .idle-logo { opacity: .15; }
+  .idle-logo { opacity: .22; }
   .idle-logo img { width: 260px; height: 260px; display: block; }
+  .idle-company {
+    font-size: 20px; font-weight: 700;
+    letter-spacing: 3px; text-transform: uppercase;
+    color: rgba(255,255,255,.75);
+    text-shadow: 0 2px 12px rgba(0,0,0,.4);
+    margin-top: -8px;
+  }
   .idle-hint {
-    font-size: 14px;
-    color: rgba(255,255,255,.45);
-    letter-spacing: .5px;
+    font-size: 18px; font-weight: 500;
+    color: rgba(255,255,255,.65);
+    letter-spacing: 1px;
+    text-shadow: 0 1px 8px rgba(0,0,0,.3);
   }
   .idle-arrow {
-    font-size: 20px;
-    color: rgba(239,126,27,.5);
+    font-size: 26px;
+    color: rgba(239,126,27,.8);
     animation: nudge 1.8s ease-in-out infinite;
   }
   @keyframes nudge {
@@ -422,6 +430,7 @@
       <div class="idle-logo">
         <img src="logo.png" alt="P&amp;J Capital Logo">
       </div>
+      <div class="idle-company">P&amp;J Capital Limited</div>
       <div class="idle-arrow">←</div>
       <div class="idle-hint">請點選左側選單進行瀏覽</div>
     </div>
