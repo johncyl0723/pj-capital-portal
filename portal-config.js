@@ -28,13 +28,18 @@ localStorage.setItem('pj_portal_config', JSON.stringify({
                        "key":  "topic-slr",
                        "title":  "SLR改革_財政主導的金融新時代",
                        "body":  "",
-                       "src":  "./SLR改革_財政主導的金融新時代.pdf"
+                       "src":  "./SLR改革_財政主導的金融新時代.pdf",
+                       "categoryKey":  ""
                    },
                    {
                        "key":  "topic-rmp",
                        "title":  "新貨幣時代的序幕解碼RMP",
                        "body":  "",
-                       "src":  "./新貨幣時代的序幕解碼RMP.pdf"
+                       "src":  "./新貨幣時代的序幕解碼RMP.pdf",
+                       "categoryKey":  ""
                    }
-               ]
+               ],
+    "categories":  [
+
+                   ]
 }));

@@ -145,6 +145,27 @@
   .nav-item .dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; margin-right: 10px; flex-shrink: 0; opacity: .6; }
   .nav-item.active .dot { opacity: 1; }
 
+  /* ── Level-2 category sub-headers ── */
+  .nav-cat-header {
+    display: flex; align-items: center;
+    padding: 6px 18px 6px 26px;
+    cursor: pointer;
+    color: rgba(255,220,180,.65);
+    font-size: 11px; font-weight: 700; letter-spacing: .7px; text-transform: uppercase;
+    border-radius: 4px; margin: 2px 4px;
+    transition: background .15s, color .15s;
+    user-select: none;
+  }
+  .nav-cat-header:hover { background: var(--sidebar-hover); color: var(--sidebar-text); }
+  .nav-cat-header .cat-chevron {
+    font-size: 9px; transition: transform .2s; opacity: .55;
+    margin-left: auto;
+  }
+  .nav-cat-header.open .cat-chevron { transform: rotate(90deg); }
+  .nav-cat-items { display: none; }
+  .nav-cat-items.open { display: block; }
+  .nav-cat-items .nav-item { padding-left: 50px; }
+
   /* Sidebar footer */
   .sidebar-footer {
     margin-top: auto;
@@ -830,13 +851,53 @@
         <span class="dot"></span>${r.label}
       </div>`).join('');
 
-    // Topics
+    // Topics — group by category with nested accordion
     topicData = {};
     cfg.topics.forEach(t => { topicData[t.key] = { title: t.title, body: t.body, src: t.src || '' }; });
-    document.getElementById('sub-topics').innerHTML = cfg.topics.map(t => `
+
+    const cats = cfg.categories || [];
+    const topicItem = t => `
       <div class="nav-item" data-type="topic" data-topic="${t.key}" data-label="${t.title}" onclick="loadContent(this)">
         <span class="dot"></span>${t.title}
-      </div>`).join('');
+      </div>`;
+
+    let topicsHTML = '';
+    if (cats.length === 0) {
+      // No categories — flat list (backward compatible)
+      topicsHTML = cfg.topics.map(topicItem).join('');
+    } else {
+      // Group topics under their category
+      cats.forEach(c => {
+        const inCat = cfg.topics.filter(t => t.categoryKey === c.key);
+        if (inCat.length === 0) return;
+        const catId = 'cat-' + c.key;
+        topicsHTML += `
+          <div class="nav-cat-header" id="hdr-${catId}" onclick="toggleCat('${catId}')">
+            <span>${c.name}</span><span class="cat-chevron">▶</span>
+          </div>
+          <div class="nav-cat-items" id="${catId}">${inCat.map(topicItem).join('')}</div>`;
+      });
+      // Uncategorized topics
+      const uncat = cfg.topics.filter(t => !t.categoryKey || !cats.some(c => c.key === t.categoryKey));
+      if (uncat.length > 0) {
+        topicsHTML += `
+          <div class="nav-cat-header" id="hdr-cat-uncat" onclick="toggleCat('cat-uncat')">
+            <span>未分類</span><span class="cat-chevron">▶</span>
+          </div>
+          <div class="nav-cat-items" id="cat-uncat">${uncat.map(topicItem).join('')}</div>`;
+      }
+    }
+    document.getElementById('sub-topics').innerHTML = topicsHTML;
+  }
+
+  /* ── Toggle level-2 category sub-accordion ── */
+  function toggleCat(catId) {
+    const hdr   = document.getElementById('hdr-' + catId);
+    const items = document.getElementById(catId);
+    if (!hdr || !items) return;
+    const isOpen = hdr.classList.contains('open');
+    hdr.classList.toggle('open', !isOpen);
+    items.classList.toggle('open', !isOpen);
   }
 
   /* ── Toggle accordion group + show category overview ── */
