@@ -294,6 +294,18 @@
   }
   .btn-export:hover { background: var(--gold); color: #fff; }
 
+  /* ── Topic order input ── */
+  .order-input {
+    width: 46px; padding: 5px 4px; border: 1px solid var(--border);
+    border-radius: 6px; font-size: 12px; font-weight: 700;
+    text-align: center; color: var(--wine);
+    background: rgba(107,30,44,.06); font-family: inherit;
+    flex-shrink: 0; margin-right: 8px;
+    transition: border-color .15s, box-shadow .15s;
+  }
+  .order-input:focus { outline: none; border-color: var(--wine); box-shadow: 0 0 0 2px rgba(107,30,44,.1); }
+  .order-input::-webkit-inner-spin-button { opacity: .4; }
+
   /* ── Category management ── */
   .cat-manage { padding-top: 14px; margin-bottom: 4px; border-top: 1px solid var(--border); }
   .btn-cat-add {
@@ -466,9 +478,14 @@
         <div class="add-form" style="border-top:1px solid var(--border);margin-top:16px">
           <div class="add-form-title">＋ 新增專題</div>
           <div class="form-row">
+            <div class="form-group" style="flex:0 0 90px;min-width:90px">
+              <label>排序編號</label>
+              <input type="number" id="t-order" min="1" value="1"
+                style="text-align:center;font-weight:700;color:var(--wine)" />
+            </div>
             <div class="form-group">
               <label>所屬分類</label>
-              <select id="t-category">
+              <select id="t-category" onchange="suggestTopicOrder()">
                 <option value="">— 未分類 —</option>
               </select>
             </div>
@@ -570,8 +587,8 @@
     ],
     categories: [],
     topics: [
-      { key: 'topic-slr', title: 'SLR改革_財政主導的金融新時代', body: '', src: './SLR改革_財政主導的金融新時代.pdf', categoryKey: '' },
-      { key: 'topic-rmp', title: '新貨幣時代的序幕解碼RMP',      body: '', src: './新貨幣時代的序幕解碼RMP.pdf',      categoryKey: '' }
+      { key: 'topic-slr', title: 'SLR改革_財政主導的金融新時代', body: '', src: './SLR改革_財政主導的金融新時代.pdf', categoryKey: '', order: 1 },
+      { key: 'topic-rmp', title: '新貨幣時代的序幕解碼RMP',      body: '', src: './新貨幣時代的序幕解碼RMP.pdf',      categoryKey: '', order: 2 }
     ]
   };
 
@@ -609,7 +626,7 @@
       draft = s ? JSON.parse(s) : clone(DEFAULT_CONFIG);
       // Migrate: ensure new fields exist on old data
       if (!draft.categories) draft.categories = [];
-      draft.topics = draft.topics.map(t => ({ src: '', categoryKey: '', ...t }));
+      draft.topics = draft.topics.map((t, i) => ({ src: '', categoryKey: '', order: i + 1, ...t }));
     } catch { draft = clone(DEFAULT_CONFIG); }
     renderLists();
     updateReportPreview();
@@ -652,18 +669,34 @@
     if (draft.topics.length === 0) {
       el.innerHTML = '<div class="empty-hint">尚無專題項目</div>'; return;
     }
-    el.innerHTML = draft.topics.map((t, i) => {
+    // Display sorted by category name then order, but preserve original index for mutations
+    const sorted = draft.topics
+      .map((t, i) => ({ ...t, _idx: i }))
+      .sort((a, b) => {
+        const catA = (draft.categories.find(c => c.key === a.categoryKey) || {}).name || '　';
+        const catB = (draft.categories.find(c => c.key === b.categoryKey) || {}).name || '　';
+        if (catA !== catB) return catA.localeCompare(catB, 'zh-Hant');
+        return (a.order || 999) - (b.order || 999);
+      });
+    el.innerHTML = sorted.map(t => {
       const cat = draft.categories.find(c => c.key === t.categoryKey);
       const catLabel = cat ? cat.name : '未分類';
       return `
         <div class="item-row">
+          <input type="number" class="order-input" value="${t.order || 1}" min="1"
+            title="排序編號" onchange="updateTopicOrder(${t._idx}, this.value)" />
           <div class="item-row-info">
             <div class="item-row-title">${t.title}<span class="cat-badge">${catLabel}</span></div>
             <div class="item-row-sub">${t.src ? '🔗 ' + t.src : (t.body ? t.body.slice(0,50)+'…' : '（無說明）')}</div>
           </div>
-          <button class="btn-delete" title="刪除" onclick="deleteTopic(${i})">✕</button>
+          <button class="btn-delete" title="刪除" onclick="deleteTopic(${t._idx})">✕</button>
         </div>`;
     }).join('');
+  }
+
+  function updateTopicOrder(i, val) {
+    draft.topics[i].order = Math.max(1, parseInt(val) || 1);
+    setStatusDirty();
   }
 
   /* ── Render categories + populate select ── */
@@ -759,18 +792,28 @@
     setStatusDirty();
   }
 
+  /* ── Suggest next order number for the selected category ── */
+  function suggestTopicOrder() {
+    const catKey = document.getElementById('t-category').value;
+    const inCat  = draft.topics.filter(t => t.categoryKey === catKey);
+    const maxOrd = inCat.length > 0 ? Math.max(...inCat.map(t => t.order || 1)) : 0;
+    document.getElementById('t-order').value = maxOrd + 1;
+  }
+
   /* ── Add topic ── */
   function addTopic() {
     const title       = document.getElementById('t-title').value.trim();
     const body        = document.getElementById('t-body').value.trim();
     const src         = document.getElementById('t-src').value.trim();
     const categoryKey = document.getElementById('t-category').value;
+    const order       = Math.max(1, parseInt(document.getElementById('t-order').value) || 1);
     if (!title) { showToast('請輸入專題標題', true); return; }
-    draft.topics.push({ key: 'topic-' + Date.now(), title, body, src, categoryKey });
+    draft.topics.push({ key: 'topic-' + Date.now(), title, body, src, categoryKey, order });
     renderTopics();
     document.getElementById('t-title').value = '';
     document.getElementById('t-body').value  = '';
     document.getElementById('t-src').value   = '';
+    suggestTopicOrder();   // auto-advance to next number
     setStatusDirty();
     showToast('✓ 專題已新增，記得儲存！');
   }

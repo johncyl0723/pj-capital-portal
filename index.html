@@ -868,7 +868,9 @@
     } else {
       // Group topics under their category
       cats.forEach(c => {
-        const inCat = cfg.topics.filter(t => t.categoryKey === c.key);
+        const inCat = cfg.topics
+          .filter(t => t.categoryKey === c.key)
+          .sort((a, b) => (a.order || 999) - (b.order || 999));
         if (inCat.length === 0) return;
         const catId = 'cat-' + c.key;
         topicsHTML += `
@@ -878,7 +880,9 @@
           <div class="nav-cat-items" id="${catId}">${inCat.map(topicItem).join('')}</div>`;
       });
       // Uncategorized topics
-      const uncat = cfg.topics.filter(t => !t.categoryKey || !cats.some(c => c.key === t.categoryKey));
+      const uncat = cfg.topics
+        .filter(t => !t.categoryKey || !cats.some(c => c.key === t.categoryKey))
+        .sort((a, b) => (a.order || 999) - (b.order || 999));
       if (uncat.length > 0) {
         topicsHTML += `
           <div class="nav-cat-header" id="hdr-cat-uncat" onclick="toggleCat('cat-uncat')">
