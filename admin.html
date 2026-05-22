@@ -110,24 +110,6 @@
     border-radius: 8px; background: rgba(0,0,0,.01);
   }
 
-  /* ── Mode tabs ── */
-  .mode-tabs {
-    display: flex; gap: 4px; margin-bottom: 14px;
-    background: var(--cream); border-radius: 8px; padding: 3px;
-    border: 1px solid var(--border);
-  }
-  .mode-tab {
-    flex: 1; padding: 6px 10px; border: none; border-radius: 6px;
-    font-size: 12px; font-weight: 600; font-family: inherit;
-    cursor: pointer; color: var(--muted); background: transparent;
-    transition: background .15s, color .15s, box-shadow .15s;
-  }
-  .mode-tab:hover { color: var(--wine); }
-  .mode-tab.active {
-    background: #fff; color: var(--wine);
-    box-shadow: 0 1px 4px rgba(0,0,0,.1);
-  }
-
   /* ── Add form ── */
   .add-form { border-top: 1px solid var(--border); padding-top: 16px; }
   .add-form-title {
@@ -381,55 +363,45 @@
         <div class="add-form">
           <div class="add-form-title">＋ 新增月報</div>
 
-          <!-- Mode tabs -->
-          <div class="mode-tabs">
-            <button class="mode-tab active" onclick="setReportMode('auto')">🗓 自動生成路徑</button>
-            <button class="mode-tab" onclick="setReportMode('custom')">✏️ 自訂路徑 / 選取檔案</button>
-          </div>
-
-          <!-- Auto mode -->
-          <div id="r-mode-auto">
-            <div class="form-row">
-              <div class="form-group" style="flex:1.2">
-                <label>年份 Year</label>
-                <input type="number" id="r-year" min="2020" max="2099" value="2026"
-                  placeholder="2026" oninput="updateReportPreview()" />
-              </div>
-              <div class="form-group" style="flex:1">
-                <label>月份 Month</label>
-                <select id="r-month" onchange="updateReportPreview()">
-                  <option value="01">01 月</option><option value="02">02 月</option>
-                  <option value="03">03 月</option><option value="04">04 月</option>
-                  <option value="05">05 月</option><option value="06">06 月</option>
-                  <option value="07">07 月</option><option value="08">08 月</option>
-                  <option value="09">09 月</option><option value="10">10 月</option>
-                  <option value="11">11 月</option><option value="12">12 月</option>
-                </select>
-              </div>
+          <!-- Unified path form -->
+          <div class="form-row">
+            <div class="form-group" style="flex:1.2">
+              <label>年份 Year</label>
+              <select id="r-year" onchange="updateReportPreview()">
+                <option value="2022">2022</option>
+                <option value="2023">2023</option>
+                <option value="2024">2024</option>
+                <option value="2025">2025</option>
+                <option value="2026" selected>2026</option>
+                <option value="2027">2027</option>
+                <option value="2028">2028</option>
+                <option value="2029">2029</option>
+                <option value="2030">2030</option>
+              </select>
             </div>
-            <div class="form-preview" id="r-preview">路徑：—</div>
-          </div>
-
-          <!-- Custom mode -->
-          <div id="r-mode-custom" style="display:none">
-            <div class="form-row">
-              <div class="form-group">
-                <label>顯示標籤</label>
-                <input type="text" id="r-custom-label" placeholder="例：2026 年 05 月特刊" />
-              </div>
+            <div class="form-group" style="flex:1">
+              <label>月份 Month</label>
+              <select id="r-month" onchange="updateReportPreview()">
+                <option value="01">01 月</option><option value="02">02 月</option>
+                <option value="03">03 月</option><option value="04">04 月</option>
+                <option value="05">05 月</option><option value="06">06 月</option>
+                <option value="07">07 月</option><option value="08">08 月</option>
+                <option value="09">09 月</option><option value="10">10 月</option>
+                <option value="11">11 月</option><option value="12">12 月</option>
+              </select>
             </div>
-            <div class="form-row">
-              <div class="form-group">
-                <label>HTML 檔案路徑
-                  <span class="form-label-optional">（手動填寫或點「選取檔案」自動帶入）</span>
-                </label>
-                <div class="input-with-btn">
-                  <input type="text" id="r-custom-src"
-                    placeholder="./2026_05/202605_Monthly Report_index.html" />
-                  <label class="btn-browse-label" for="r-file-input">📂 選取檔案</label>
-                  <input type="file" class="file-input-hidden" id="r-file-input"
-                    accept=".html,.htm" onchange="fillReportPath(event)" />
-                </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>檔案路徑
+                <span class="form-label-optional">（自動生成，可手動修改或貼上路徑）</span>
+              </label>
+              <div class="input-with-btn">
+                <input type="text" id="r-path"
+                  placeholder="./2026_05/202605_Monthly Report_index.html" />
+                <label class="btn-browse-label" for="r-file-input">📂 選取檔案</label>
+                <input type="file" class="file-input-hidden" id="r-file-input"
+                  accept=".html,.htm" onchange="fillReportPath(event)" />
               </div>
             </div>
           </div>
@@ -563,18 +535,6 @@
   function clone(o) { return JSON.parse(JSON.stringify(o)); }
   let draft = clone(DEFAULT_CONFIG);
 
-  /* ── Report mode ── */
-  let reportMode = 'auto';
-
-  function setReportMode(mode) {
-    reportMode = mode;
-    document.getElementById('r-mode-auto').style.display   = mode === 'auto'   ? '' : 'none';
-    document.getElementById('r-mode-custom').style.display = mode === 'custom' ? '' : 'none';
-    const tabs = document.querySelectorAll('.mode-tab');
-    tabs[0].classList.toggle('active', mode === 'auto');
-    tabs[1].classList.toggle('active', mode === 'custom');
-  }
-
   /* ── Fill path from file picker ── */
   function fillReportPath(event) {
     const file = event.target.files[0];
@@ -583,12 +543,11 @@
     const match = name.match(/^(\d{4})(\d{2})/);
     if (match) {
       const y = match[1], m = match[2];
-      document.getElementById('r-custom-label').value = `${y} 年 ${m} 月`;
-      document.getElementById('r-custom-src').value   = `./${y}_${m}/${name}`;
+      document.getElementById('r-year').value  = y;
+      document.getElementById('r-month').value = m;
+      document.getElementById('r-path').value  = `./${y}_${m}/${name}`;
     } else {
-      if (!document.getElementById('r-custom-src').value) {
-        document.getElementById('r-custom-src').value = `./${name}`;
-      }
+      document.getElementById('r-path').value = `./${name}`;
     }
   }
 
@@ -659,44 +618,32 @@
       </div>`).join('');
   }
 
-  /* ── Report: preview path as user types ── */
+  /* ── Report: auto-fill path when year/month changes ── */
   function updateReportPreview() {
-    const y = document.getElementById('r-year').value.trim();
+    const y = document.getElementById('r-year').value;
     const m = document.getElementById('r-month').value;
-    if (!y || y.length !== 4) {
-      document.getElementById('r-preview').innerHTML = '路徑：<span>—</span>'; return;
-    }
-    const folder = `${y}_${m}`;
-    const file   = `${y}${m}_Monthly Report_index.html`;
-    document.getElementById('r-preview').innerHTML = `路徑：<span>./${folder}/${file}</span>`;
+    document.getElementById('r-path').value = `./${y}_${m}/${y}${m}_Monthly Report_index.html`;
   }
 
   /* ── Add report ── */
   function addReport() {
-    let key, label, src;
-    if (reportMode === 'auto') {
-      const y = document.getElementById('r-year').value.trim();
-      const m = document.getElementById('r-month').value;
-      if (!y || y.length !== 4) { showToast('請輸入正確的年份（4 位數）', true); return; }
-      key   = `${y}${m}`;
-      label = `${y} 年 ${m} 月`;
-      src   = `./${y}_${m}/${y}${m}_Monthly Report_index.html`;
-    } else {
-      label = document.getElementById('r-custom-label').value.trim();
-      src   = document.getElementById('r-custom-src').value.trim();
-      if (!label) { showToast('請輸入顯示標籤', true); return; }
-      if (!src)   { showToast('請輸入或選取檔案路徑', true); return; }
-      key = label.replace(/\s+/g, '-').replace(/[^\w\-]/g, '') + '-' + Date.now();
-    }
+    const y   = document.getElementById('r-year').value;
+    const m   = document.getElementById('r-month').value;
+    const src = document.getElementById('r-path').value.trim();
+    if (!src) { showToast('請輸入或選取檔案路徑', true); return; }
+    const key   = `${y}${m}`;
+    const label = `${y} 年 ${m} 月`;
     if (draft.monthlyReports.some(r => r.key === key)) {
       showToast('此月報已存在，請勿重複新增', true); return;
     }
     draft.monthlyReports.unshift({ key, label, src });
     renderReports();
-    if (reportMode === 'custom') {
-      document.getElementById('r-custom-label').value = '';
-      document.getElementById('r-custom-src').value   = '';
-    }
+    // advance selector to next logical month
+    const nextM = parseInt(m) === 12 ? 1 : parseInt(m) + 1;
+    const nextY = parseInt(m) === 12 ? String(parseInt(y) + 1) : y;
+    document.getElementById('r-year').value  = nextY;
+    document.getElementById('r-month').value = String(nextM).padStart(2, '0');
+    updateReportPreview();
     setStatusDirty();
     showToast('✓ 月報已新增，記得儲存！');
   }
