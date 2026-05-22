@@ -39,7 +39,7 @@ localStorage.setItem('pj_portal_config_published', JSON.stringify({
       "key": "topic-1779443032479",
       "title": "RMP制度_新貨幣時代的序幕解碼",
       "body": "",
-      "src": "./新貨幣時代的序幕解碼RMP.pdf",
+      "src": "./RMP制度_新貨幣時代的序幕解碼.pdf",
       "categoryKey": "cat-1779442954583",
       "order": 2
     }
