@@ -3,6 +3,11 @@
 localStorage.setItem('pj_portal_config', JSON.stringify({
     "monthlyReports":  [
                            {
+                               "key":  "202601",
+                               "label":  "2026 年 01 月",
+                               "src":  "./2026_01/202601_Monthly Report_index.html"
+                           },
+                           {
                                "key":  "202602",
                                "label":  "2026 年 02 月",
                                "src":  "./2026_02/202602_Monthly Report_index.html"
