@@ -1,4 +1,4 @@
-// P&J Capital Portal — Content Configuration (Published Snapshot)
+﻿// P&J Capital Portal — Content Configuration (Published Snapshot)
 // Generated: 2026-05-22T09:43:59.851Z
 // Workflow: admin.html → 儲存並套用 → 匯出 portal-config.js → replace this file → git push
 // Writes to 'pj_portal_config_published' (fallback for new visitors).
@@ -39,7 +39,7 @@ localStorage.setItem('pj_portal_config_published', JSON.stringify({
       "key": "topic-1779443032479",
       "title": "RMP制度_新貨幣時代的序幕解碼",
       "body": "",
-      "src": "./RMP制度_新貨幣時代的序幕解碼.pdf",
+      "src": "./新貨幣時代的序幕解碼RMP.pdf",
       "categoryKey": "cat-1779442954583",
       "order": 2
     }
