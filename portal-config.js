@@ -1,6 +1,8 @@
-﻿// P&J Capital Portal — Content Configuration
-// Workflow: open admin.html locally → edit → click "匯出 portal-config.js" → replace this file → git push
-localStorage.setItem('pj_portal_config', JSON.stringify({
+﻿// P&J Capital Portal — Content Configuration (Published Snapshot)
+// Workflow: admin.html → 儲存並套用 → 匯出 portal-config.js → replace this file → git push
+// This file writes to 'pj_portal_config_published' (fallback for new visitors).
+// It does NOT overwrite 'pj_portal_config' (admin key), so admin changes persist.
+localStorage.setItem('pj_portal_config_published', JSON.stringify({
     "monthlyReports":  [
                            {
                                "key":  "202601",

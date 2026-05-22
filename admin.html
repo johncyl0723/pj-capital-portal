@@ -873,10 +873,12 @@
   /* ── Export portal-config.js ── */
   function exportConfig() {
     const json = JSON.stringify(draft, null, 2);
-    const content = `// P&J Capital Portal — Content Configuration
+    const content = `// P&J Capital Portal — Content Configuration (Published Snapshot)
 // Generated: ${new Date().toISOString()}
-// Workflow: edit in admin.html → click "匯出 portal-config.js" → replace this file in the repo → git push
-localStorage.setItem('pj_portal_config', ${JSON.stringify(json)});
+// Workflow: admin.html → 儲存並套用 → 匯出 portal-config.js → replace this file → git push
+// Writes to 'pj_portal_config_published' (fallback for new visitors).
+// Does NOT overwrite 'pj_portal_config' (admin key), so admin changes persist.
+localStorage.setItem('pj_portal_config_published', JSON.stringify(${json}));
 `;
     const blob = new Blob([content], { type: 'text/javascript' });
     const url = URL.createObjectURL(blob);

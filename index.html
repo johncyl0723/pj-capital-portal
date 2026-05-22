@@ -683,8 +683,12 @@
 
 <script src="./portal-config.js"></script>
 <script>
-  /* ── Config (shared with admin.html via localStorage) ── */
-  const STORAGE_KEY = 'pj_portal_config';
+  /* ── Config keys ──
+     ADMIN_KEY  : written by admin.html "儲存並套用", takes priority
+     PUB_KEY    : written by portal-config.js (GitHub-published snapshot)
+     portal-config.js NO LONGER overwrites ADMIN_KEY, so admin changes persist ── */
+  const STORAGE_KEY = 'pj_portal_config';        // admin key (priority)
+  const PUB_KEY     = 'pj_portal_config_published'; // published key (fallback)
 
   const DEFAULT_CONFIG = {
     monthlyReports: [
@@ -760,9 +764,14 @@
 
   function loadConfig() {
     try {
-      const s = localStorage.getItem(STORAGE_KEY);
-      return s ? JSON.parse(s) : DEFAULT_CONFIG;
-    } catch { return DEFAULT_CONFIG; }
+      // Admin key (saved by 後臺 admin.html) takes priority
+      const admin = localStorage.getItem(STORAGE_KEY);
+      if (admin) return JSON.parse(admin);
+      // Fall back to published snapshot (written by portal-config.js)
+      const pub = localStorage.getItem(PUB_KEY);
+      if (pub) return JSON.parse(pub);
+    } catch {}
+    return DEFAULT_CONFIG;
   }
 
   /* ── Auth state ── */
