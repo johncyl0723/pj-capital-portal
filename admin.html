@@ -306,6 +306,25 @@
   .order-input:focus { outline: none; border-color: var(--wine); box-shadow: 0 0 0 2px rgba(107,30,44,.1); }
   .order-input::-webkit-inner-spin-button { opacity: .4; }
 
+  /* ── Drag handle ── */
+  .drag-handle {
+    flex-shrink: 0; width: 20px; cursor: grab;
+    color: var(--muted); font-size: 18px; line-height: 1;
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0.35; transition: opacity .15s, color .15s;
+    user-select: none;
+  }
+  .drag-handle:active { cursor: grabbing; }
+  .item-row:hover .drag-handle { opacity: 0.75; color: var(--wine); }
+  .item-row.dragging {
+    opacity: 0.45; border: 2px dashed var(--gold);
+    background: #FFF9F0; transform: none !important; box-shadow: none !important;
+  }
+  .item-row.drag-over {
+    border-color: var(--wine); box-shadow: 0 0 0 2px rgba(107,30,44,.2);
+    background: #FDF0F2;
+  }
+
   /* ── Category management ── */
   .cat-manage { padding-top: 14px; margin-bottom: 4px; border-top: 1px solid var(--border); }
   .btn-cat-add {
@@ -654,13 +673,15 @@
       el.innerHTML = '<div class="empty-hint">尚無月報項目</div>'; return;
     }
     el.innerHTML = draft.monthlyReports.map((r, i) => `
-      <div class="item-row">
+      <div class="item-row" draggable="true" data-idx="${i}">
+        <div class="drag-handle" title="拖曳以調整順序">⠿</div>
         <div class="item-row-info">
           <div class="item-row-title">${r.label}</div>
           <div class="item-row-sub">${r.src}</div>
         </div>
         <button class="btn-delete" title="刪除" onclick="deleteReport(${i})">✕</button>
       </div>`).join('');
+    initReportDrag();
   }
 
   function renderTopics() {
@@ -790,6 +811,42 @@
     draft.monthlyReports.splice(i, 1);
     renderReports();
     setStatusDirty();
+  }
+
+  /* ── Report drag-and-drop reorder ── */
+  let _dragSrcIdx = null;
+
+  function initReportDrag() {
+    const list = document.getElementById('list-reports');
+    list.querySelectorAll('.item-row[draggable]').forEach(row => {
+      row.addEventListener('dragstart', e => {
+        _dragSrcIdx = parseInt(row.dataset.idx);
+        setTimeout(() => row.classList.add('dragging'), 0);
+        e.dataTransfer.effectAllowed = 'move';
+      });
+      row.addEventListener('dragend', () => {
+        row.classList.remove('dragging');
+        list.querySelectorAll('.item-row').forEach(r => r.classList.remove('drag-over'));
+      });
+      row.addEventListener('dragover', e => {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        list.querySelectorAll('.item-row').forEach(r => r.classList.remove('drag-over'));
+        row.classList.add('drag-over');
+      });
+      row.addEventListener('dragleave', () => row.classList.remove('drag-over'));
+      row.addEventListener('drop', e => {
+        e.preventDefault();
+        const targetIdx = parseInt(row.dataset.idx);
+        if (_dragSrcIdx === null || _dragSrcIdx === targetIdx) return;
+        const [moved] = draft.monthlyReports.splice(_dragSrcIdx, 1);
+        draft.monthlyReports.splice(targetIdx, 0, moved);
+        _dragSrcIdx = null;
+        renderReports();
+        setStatusDirty();
+        showToast('✓ 順序已更新，記得儲存！');
+      });
+    });
   }
 
   /* ── Suggest next order number for the selected category ── */
