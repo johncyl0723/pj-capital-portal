@@ -537,6 +537,10 @@ body {
 .footer-cta:hover { background: var(--gold); color: var(--bg); }
 
 /* ── Floating Login Button ── */
+@keyframes login-pulse {
+  0%, 100% { box-shadow: -3px 0 18px rgba(201,169,110,0.18), 0 0 0 0 rgba(201,169,110,0.22); }
+  50%       { box-shadow: -3px 0 28px rgba(201,169,110,0.38), 0 0 0 6px rgba(201,169,110,0.0); }
+}
 .float-login {
   position: fixed;
   right: 0;
@@ -545,26 +549,126 @@ body {
   z-index: 9999;
   writing-mode: vertical-lr;
   text-orientation: mixed;
-  padding: 20px 13px;
-  background: rgba(8,8,8,0.88);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(201,169,110,0.55);
+  padding: 28px 16px;
+  background: rgba(201,169,110,0.12);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(201,169,110,0.75);
   border-right: none;
-  border-radius: 6px 0 0 6px;
+  border-radius: 8px 0 0 8px;
   color: var(--gold);
   font-family: 'JetBrains Mono', monospace;
   font-size: 11px;
-  letter-spacing: 3.5px;
+  letter-spacing: 3px;
   text-transform: uppercase;
   text-decoration: none;
   cursor: pointer;
-  transition: background 0.25s ease, border-color 0.25s ease;
+  transition: background 0.28s ease, border-color 0.28s ease, padding 0.2s ease;
   user-select: none;
+  animation: login-pulse 3s ease-in-out infinite;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
 }
 .float-login:hover {
-  background: rgba(201,169,110,0.14);
+  background: rgba(201,169,110,0.26);
   border-color: var(--gold);
+  padding: 28px 20px;
+  animation: none;
+  box-shadow: -4px 0 32px rgba(201,169,110,0.35);
+}
+.float-login-zh {
+  font-family: 'Source Serif 4', serif;
+  font-style: normal;
+  writing-mode: vertical-lr;
+  font-size: 13px;
+  letter-spacing: 4px;
+  color: var(--gold);
+  font-weight: 400;
+}
+.float-login-en {
+  font-family: 'JetBrains Mono', monospace;
+  writing-mode: vertical-lr;
+  font-size: 9px;
+  letter-spacing: 2.5px;
+  color: rgba(201,169,110,0.55);
+  text-transform: uppercase;
+}
+.float-login-arrow {
+  font-size: 14px;
+  color: rgba(201,169,110,0.7);
+  writing-mode: horizontal-tb;
+  transform: rotate(90deg);
+  margin-top: 4px;
+}
+
+/* ── Footer Login CTA ── */
+.footer-login-cta {
+  width: 100%;
+  max-width: 860px;
+  margin-top: 40px;
+  padding: 40px 48px;
+  background: rgba(201,169,110,0.05);
+  border: 1px solid rgba(201,169,110,0.22);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  text-align: center;
+}
+.footer-login-cta-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--gold);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  opacity: 0.7;
+}
+.footer-login-cta-title {
+  font-family: 'Libre Baskerville', serif;
+  font-size: clamp(20px, 2.8vw, 26px);
+  color: var(--text);
+  line-height: 1.4;
+}
+.footer-login-cta-sub {
+  font-family: 'Source Serif 4', serif;
+  font-style: italic;
+  font-size: 14px;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+.footer-login-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 40px;
+  background: linear-gradient(135deg, rgba(201,169,110,0.18), rgba(201,169,110,0.08));
+  border: 1px solid var(--gold);
+  border-radius: 4px;
+  color: var(--gold);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.28s ease, color 0.28s ease, transform 0.2s ease;
+}
+.footer-login-btn:hover {
+  background: var(--gold);
+  color: var(--bg);
+  transform: translateY(-2px);
+}
+.footer-login-btn-zh {
+  font-family: 'Source Serif 4', serif;
+  font-size: 15px;
+  letter-spacing: 2px;
+  font-style: normal;
+}
+@media (max-width: 600px) {
+  .footer-login-cta { padding: 32px 24px; }
 }
 
 .footer-legal {
@@ -583,7 +687,11 @@ body {
 <body>
 
 <!-- Floating Login Button -->
-<a class="float-login" href="./portal.html" aria-label="Client Login">Login</a>
+<a class="float-login" href="./portal.html" aria-label="Client Login">
+  <span class="float-login-zh">客戶登入</span>
+  <span class="float-login-en">Login</span>
+  <span class="float-login-arrow">→</span>
+</a>
 
 <!-- ═══ S0: Hero ═══ -->
 <section class="section" id="hero">
@@ -710,6 +818,17 @@ body {
       <button class="footer-cta">安排會談 / Schedule a Meeting</button>
     </div>
   </div>
+  <!-- Client Login CTA -->
+  <div class="footer-login-cta reveal">
+    <div class="footer-login-cta-label">Client Portal · 客戶專區</div>
+    <div class="footer-login-cta-title">準備好了？進入您的投資組合</div>
+    <div class="footer-login-cta-sub">Ready to view your portfolio? Access your personalised reports and insights.</div>
+    <a class="footer-login-btn" href="./portal.html">
+      <span class="footer-login-btn-zh">客戶登入</span>
+      <span>/ Login →</span>
+    </a>
+  </div>
+
   <div class="footer-legal">
     © 2026 Compound Company Limited &nbsp;&middot;&nbsp; All rights reserved &nbsp;&middot;&nbsp;
     本頁面僅供參閱，不構成任何投資建議 &nbsp;&middot;&nbsp;
