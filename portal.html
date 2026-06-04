@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>P&amp;J Capital Limited</title>
+<style>
+  :root {
+    --wine: #0B1F3A;
+    --wine-dark: #061a2c;
+    --wine-light: #185690;
+    --gold: #EF7E1B;
+    --gold-dark: #d06a15;
+    --cream: #FAF7F2;
+    --ink: #1C1917;
+    --muted: #6B6560;
+    --border: #E8E2D8;
+    --sidebar-bg: #061a2c;
+    --sidebar-hover: rgba(239,126,27,0.12);
+    --sidebar-active: rgba(239,126,27,0.22);
+    --sidebar-text: #E8D8BE;
+    --sidebar-muted: rgba(255,220,180,0.55);
+    --sidebar-width: 260px;
+    --banner-height: 64px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; overflow: hidden;
+    font-family: 'Segoe UI','Helvetica Neue','PingFang TC','Microsoft JhengHei',system-ui,sans-serif;
+    font-size: 14px; background: var(--cream); color: var(--ink); }
+
+  /* ── Banner ── */
+  .banner {
+    position: fixed; top: 0; left: 0; right: 0;
+    height: var(--banner-height);
+    background: linear-gradient(135deg, var(--wine-dark) 0%, var(--wine) 55%, var(--wine-light) 100%);
+    color: #fff;
+    display: flex; align-items: center;
+    padding: 0 28px;
+    gap: 18px;
+    z-index: 100;
+    box-shadow: 0 2px 10px rgba(0,0,0,.25);
+  }
+  .banner-logo {
+    /* Show only the icon symbol, crop out whitespace & text */
+    width: 44px; height: 44px;
+    flex-shrink: 0; overflow: hidden;
+  }
+  .banner-logo img {
+    /* Scale image up so icon fills the 44px crop window */
+    width: 126px; height: 126px;
+    margin-top: -28px; margin-left: -41px;
+    display: block;
+  }
+  .banner-title { font-size: 17px; font-weight: 600; letter-spacing: .4px; line-height: 1.2; }
+  .banner-divider { width: 1px; height: 32px; background: rgba(255,255,255,.2); margin: 0 6px; }
+  .banner-client-badge {
+    display: none;
+    align-items: center; gap: 8px;
+    padding: 5px 14px;
+    background: rgba(255,255,255,.1);
+    border: 1px solid rgba(239,126,27,.4);
+    border-radius: 20px;
+    font-size: 13px; font-weight: 600; color: var(--gold);
+    letter-spacing: .3px;
+  }
+  .banner-client-badge.visible { display: flex; }
+  .banner-home-btn {
+    display: flex; align-items: center; gap: 12px;
+    cursor: pointer; text-decoration: none;
+    transition: opacity .15s;
+  }
+  .banner-home-btn:hover { opacity: .8; }
+
+  /* ── Body layout ── */
+  .body-wrap {
+    position: fixed;
+    top: var(--banner-height); left: 0; right: 0; bottom: 0;
+    display: flex;
+  }
+
+  /* ── Sidebar ── */
+  .sidebar {
+    width: var(--sidebar-width);
+    flex-shrink: 0;
+    background: var(--sidebar-bg);
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    border-right: 1px solid rgba(239,126,27,.2);
+  }
+  .sidebar::-webkit-scrollbar { width: 4px; }
+  .sidebar::-webkit-scrollbar-thumb { background: rgba(239,126,27,.3); border-radius: 2px; }
+  .sidebar::-webkit-scrollbar-track { background: transparent; }
+
+  .sidebar-section { padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,.06); }
+  .sidebar-section:last-child { border-bottom: none; }
+
+  /* Section header (level 1) */
+  .nav-group-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 11px 18px;
+    cursor: pointer;
+    color: var(--gold);
+    font-size: 12px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase;
+    user-select: none;
+    transition: background .15s;
+    border-radius: 4px;
+    margin: 0 4px;
+  }
+  .nav-group-header:hover { background: var(--sidebar-hover); }
+  .nav-group-header .icon { font-size: 14px; margin-right: 8px; }
+  .nav-group-header .chevron {
+    font-size: 10px; transition: transform .2s;
+    opacity: .7; margin-left: auto;
+  }
+  .nav-group-header.open .chevron { transform: rotate(90deg); }
+
+  /* Sub-items (level 2) */
+  .nav-sub {
+    display: none;
+    padding: 2px 0 6px;
+  }
+  .nav-sub.open { display: block; }
+
+  .nav-item {
+    display: flex; align-items: center;
+    padding: 9px 18px 9px 38px;
+    cursor: pointer;
+    color: var(--sidebar-text);
+    font-size: 13px;
+    border-radius: 4px;
+    margin: 1px 4px;
+    transition: background .15s, color .15s;
+    user-select: none;
+  }
+  .nav-item:hover { background: var(--sidebar-hover); color: #fff; }
+  .nav-item.active {
+    background: var(--sidebar-active);
+    color: var(--gold);
+    font-weight: 600;
+    border-left: 3px solid var(--gold);
+    padding-left: 35px;
+  }
+  .nav-item .dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; margin-right: 10px; flex-shrink: 0; opacity: .6; }
+  .nav-item.active .dot { opacity: 1; }
+
+  /* ── Level-2 category sub-headers ── */
+  .nav-cat-header {
+    display: flex; align-items: center;
+    padding: 6px 18px 6px 26px;
+    cursor: pointer;
+    color: rgba(255,220,180,.65);
+    font-size: 11px; font-weight: 700; letter-spacing: .7px; text-transform: uppercase;
+    border-radius: 4px; margin: 2px 4px;
+    transition: background .15s, color .15s;
+    user-select: none;
+  }
+  .nav-cat-header:hover { background: var(--sidebar-hover); color: var(--sidebar-text); }
+  .nav-cat-header .cat-chevron {
+    font-size: 9px; transition: transform .2s; opacity: .55;
+    margin-left: auto;
+  }
+  .nav-cat-header.open .cat-chevron { transform: rotate(90deg); }
+  .nav-cat-items { display: none; }
+  .nav-cat-items.open { display: block; }
+  .nav-cat-items .nav-item { padding-left: 50px; }
+
+  /* Sidebar footer */
+  .sidebar-footer {
+    margin-top: auto;
+    padding: 14px 16px;
+    font-size: 10px;
+    color: var(--sidebar-muted);
+    border-top: 1px solid rgba(255,255,255,.06);
+    line-height: 1.6;
+  }
+
+  /* ── Main content / iframe ── */
+  .main-frame {
+    flex: 1;
+    overflow: hidden;
+    position: relative;
+    background: linear-gradient(135deg, #0a1628 0%, #061a2c 100%);
+  }
+  #content-iframe {
+    width: 100%; height: 100%;
+    border: none;
+    display: block;
+    background: #fff;
+  }
+
+  /* Welcome / placeholder screen */
+  .welcome {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    padding: 40px;
+    text-align: center;
+    background: linear-gradient(135deg, #0a1628 0%, #061a2c 100%);
+  }
+  .welcome.hidden { display: none; }
+  .welcome-card {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 24px;
+    padding: 52px 64px;
+    display: flex; flex-direction: column;
+    align-items: center; gap: 18px;
+    max-width: 500px; width: 100%;
+  }
+  .welcome-logo {
+    /* Crop to show icon + text at correct proportions */
+    width: 220px; height: 140px;
+    overflow: hidden; margin: 0 auto;
+  }
+  .welcome-logo img {
+    /* Scale so logo design appears at full readable size */
+    width: 480px; height: 480px;
+    margin-top: -115px; margin-left: -130px;
+    display: block;
+  }
+  .welcome-company {
+    font-size: 15px; font-weight: 700; letter-spacing: 2px;
+    color: #ffffff; text-transform: uppercase;
+    text-shadow: 0 1px 8px rgba(0,0,0,0.5);
+  }
+  .welcome-divider {
+    width: 48px; height: 2px;
+    background: linear-gradient(90deg, #EF7E1B, #C9A961);
+    border-radius: 1px;
+  }
+  .welcome h2 { font-size: 26px; color: #fff; font-weight: 700; line-height: 1.3; }
+  .welcome p { font-size: 14px; color: rgba(255,255,255,0.5); max-width: 340px; line-height: 1.7; }
+  .welcome-hint {
+    margin-top: 8px;
+    padding: 11px 28px;
+    background: rgba(239,126,27,0.15);
+    border: 1px solid rgba(239,126,27,0.4);
+    border-radius: 100px;
+    font-size: 13px; font-weight: 500; color: #EF7E1B;
+    cursor: default;
+  }
+
+  /* Welcome login form */
+  .welcome-form { width: 100%; display: flex; flex-direction: column; gap: 12px; }
+  .welcome-select, .welcome-input {
+    width: 100%;
+    padding: 10px 16px;
+    font-size: 14px; font-family: inherit;
+    background: rgba(255,255,255,.08);
+    border: 1px solid rgba(255,255,255,.2);
+    border-radius: 8px;
+    color: #fff;
+    transition: border-color .15s, background .15s;
+    appearance: none; -webkit-appearance: none;
+  }
+  .welcome-select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23EF7E1B'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 36px;
+    cursor: pointer;
+  }
+  .welcome-select option { background: #0a1628; color: #fff; }
+  .welcome-select:focus, .welcome-input:focus {
+    outline: none;
+    border-color: var(--gold);
+    background: rgba(255,255,255,.12);
+  }
+  .welcome-input::placeholder { color: rgba(255,255,255,.35); }
+  .welcome-input-wrap {
+    position: relative;
+    width: 100%;
+  }
+  .welcome-input-wrap .welcome-input {
+    width: 100%;
+    padding-right: 44px;
+  }
+  .pw-toggle {
+    position: absolute;
+    right: 12px; top: 50%;
+    transform: translateY(-50%);
+    background: none; border: none; padding: 0;
+    cursor: pointer;
+    color: rgba(255,255,255,.4);
+    display: flex; align-items: center;
+    transition: color .15s;
+  }
+  .pw-toggle:hover { color: rgba(255,255,255,.8); }
+  .pw-toggle svg { display: block; pointer-events: none; }
+  .welcome-login-btn {
+    width: 100%;
+    padding: 11px 0;
+    background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+    border: none; border-radius: 8px;
+    color: #fff; font-size: 14px; font-weight: 700;
+    font-family: inherit; letter-spacing: .5px;
+    cursor: pointer;
+    transition: opacity .15s, transform .1s;
+  }
+  .welcome-login-btn:hover { opacity: .9; transform: translateY(-1px); }
+  .welcome-login-btn:active { transform: translateY(0); }
+  .welcome-error {
+    font-size: 12px; color: #ff7b7b;
+    text-align: center; min-height: 18px;
+    transition: opacity .2s;
+  }
+  .welcome-field-label {
+    font-size: 11px; color: rgba(255,255,255,.45);
+    letter-spacing: .5px; text-transform: uppercase;
+    margin-bottom: -6px;
+  }
+
+  /* Post-login idle screen */
+  .logged-in-idle {
+    position: absolute; inset: 0;
+    display: none;
+    flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 20px;
+    background: linear-gradient(135deg, #0a1628 0%, #061a2c 100%);
+    text-align: center;
+  }
+  .logged-in-idle.visible { display: flex; }
+  .idle-logo {
+    /* Crop window — same transparent-PNG approach as .welcome-logo */
+    width: 330px; height: 210px;
+    overflow: hidden; margin: 0 auto;
+    opacity: .90;
+  }
+  .idle-logo img {
+    width: 720px; height: 720px;
+    margin-top: -172px; margin-left: -195px;
+    display: block;
+  }
+  .idle-company {
+    font-size: 20px; font-weight: 700;
+    letter-spacing: 3px; text-transform: uppercase;
+    color: rgba(255,255,255,.75);
+    text-shadow: 0 2px 12px rgba(0,0,0,.4);
+    margin-top: -8px;
+  }
+  .idle-hint {
+    font-size: 18px; font-weight: 500;
+    color: rgba(255,255,255,.65);
+    letter-spacing: 1px;
+    text-shadow: 0 1px 8px rgba(0,0,0,.3);
+  }
+  .idle-arrow {
+    font-size: 26px;
+    color: rgba(239,126,27,.8);
+    animation: nudge 1.8s ease-in-out infinite;
+  }
+  @keyframes nudge {
+    0%, 100% { transform: translateX(0); }
+    50%       { transform: translateX(-8px); }
+  }
+
+  /* Loading overlay */
+  .loading-overlay {
+    position: absolute; inset: 0;
+    background: rgba(6,26,44,0.85);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; color: var(--muted);
+    z-index: 10;
+    opacity: 0; pointer-events: none;
+    transition: opacity .2s;
+  }
+  .loading-overlay.show { opacity: 1; pointer-events: auto; }
+  .spinner {
+    width: 28px; height: 28px;
+    border: 3px solid var(--border);
+    border-top-color: var(--wine);
+    border-radius: 50%;
+    animation: spin .7s linear infinite;
+    margin-right: 12px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Placeholder content panel */
+  .placeholder-panel {
+    padding: 48px 56px;
+    max-width: 700px;
+  }
+  .placeholder-panel h2 {
+    font-size: 22px; color: var(--wine);
+    border-bottom: 2px solid var(--gold);
+    padding-bottom: 10px; margin-bottom: 20px;
+  }
+  .placeholder-panel p { color: var(--muted); line-height: 1.8; margin-bottom: 12px; }
+  .placeholder-tag {
+    display: inline-block; padding: 4px 12px;
+    background: rgba(107,30,44,.08); color: var(--wine);
+    border-radius: 12px; font-size: 11px; font-weight: 600;
+    letter-spacing: .5px; margin-bottom: 16px;
+  }
+
+  /* ── Category Overview Panels ── */
+  .category-overview {
+    position: absolute; inset: 0;
+    display: none;
+    overflow-y: auto;
+    padding: 48px 56px 64px;
+    background: linear-gradient(135deg, #0a1628 0%, #061a2c 100%);
+  }
+  .category-overview.visible { display: block; }
+  .category-overview::-webkit-scrollbar { width: 5px; }
+  .category-overview::-webkit-scrollbar-thumb { background: rgba(239,126,27,.3); border-radius: 3px; }
+  .category-overview::-webkit-scrollbar-track { background: transparent; }
+
+  .cat-header { margin-bottom: 36px; }
+  .cat-header-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 4px 14px;
+    background: rgba(239,126,27,0.12);
+    border: 1px solid rgba(239,126,27,0.35);
+    border-radius: 100px;
+    font-size: 11px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 14px;
+  }
+  .cat-header h1 {
+    font-size: 28px; font-weight: 700; color: #fff;
+    margin-bottom: 0;
+  }
+  .cat-divider {
+    width: 48px; height: 2px;
+    background: linear-gradient(90deg, #EF7E1B, #C9A961);
+    border-radius: 1px;
+    margin: 14px 0 16px;
+  }
+  .cat-header p {
+    font-size: 14px; color: rgba(255,255,255,0.5);
+    line-height: 1.8; max-width: 540px;
+  }
+
+  /* Timeline (Monthly Reports) */
+  .timeline {
+    position: relative;
+    padding-left: 36px;
+    max-width: 560px;
+  }
+  .timeline::before {
+    content: '';
+    position: absolute; left: 8px; top: 10px; bottom: 10px;
+    width: 2px;
+    background: linear-gradient(180deg, rgba(239,126,27,0.85), rgba(239,126,27,0.15));
+    border-radius: 1px;
+  }
+  .timeline-item {
+    position: relative;
+    margin-bottom: 16px;
+  }
+  .timeline-dot {
+    position: absolute;
+    left: -32px; top: 50%;
+    transform: translateY(-50%);
+    width: 14px; height: 14px;
+    background: var(--gold);
+    border: 2px solid #061a2c;
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(239,126,27,0.55);
+    transition: transform .2s;
+  }
+  .timeline-item:hover .timeline-dot { transform: translateY(-50%) scale(1.35); }
+  .timeline-card {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 24px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background .15s, border-color .15s, transform .15s;
+  }
+  .timeline-card:hover {
+    background: rgba(239,126,27,0.1);
+    border-color: rgba(239,126,27,0.35);
+    transform: translateX(5px);
+  }
+  .timeline-card-label { font-size: 17px; font-weight: 700; color: #fff; }
+  .timeline-card-sub { font-size: 12px; color: rgba(255,255,255,0.38); margin-top: 4px; }
+  .timeline-card-action {
+    font-size: 13px; color: var(--gold); font-weight: 600;
+    opacity: 0.75; white-space: nowrap; margin-left: 16px;
+    transition: opacity .15s;
+  }
+  .timeline-card:hover .timeline-card-action { opacity: 1; }
+
+  /* Topics Card Grid */
+  .topics-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+  }
+  .topic-overview-card {
+    display: flex; flex-direction: column; gap: 12px;
+    padding: 26px 24px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 14px;
+    cursor: pointer;
+    transition: background .15s, border-color .15s, transform .15s;
+  }
+  .topic-overview-card:hover {
+    background: rgba(239,126,27,0.1);
+    border-color: rgba(239,126,27,0.35);
+    transform: translateY(-3px);
+  }
+  .topic-card-icon { font-size: 26px; line-height: 1; }
+  .topic-card-title { font-size: 16px; font-weight: 700; color: #fff; line-height: 1.45; }
+  .topic-card-body {
+    font-size: 13px; color: rgba(255,255,255,0.45);
+    line-height: 1.75;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .topic-card-footer { margin-top: auto; padding-top: 4px; }
+  .topic-card-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 7px 16px;
+    background: rgba(239,126,27,0.14);
+    border: 1px solid rgba(239,126,27,0.32);
+    border-radius: 100px;
+    font-size: 12px; font-weight: 600; color: var(--gold);
+    transition: background .15s;
+  }
+  .topic-card-btn.inactive {
+    color: rgba(255,255,255,0.3);
+    border-color: rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.04);
+    cursor: default;
+  }
+  .topic-overview-card:hover .topic-card-btn:not(.inactive) { background: rgba(239,126,27,0.28); }
+</style>
+</head>
+<body>
+
+<!-- ══════════ Banner ══════════ -->
+<header class="banner">
+  <a class="banner-home-btn" onclick="goHome()" title="返回首頁">
+    <div class="banner-logo">
+      <img src="logo.png" alt="P&amp;J Capital Logo">
+    </div>
+    <div class="banner-title">P&amp;J Capital Limited</div>
+  </a>
+  <div class="banner-divider"></div>
+  <div class="banner-client-badge" id="banner-client-badge">
+    <span style="font-size:11px;opacity:.6;font-weight:400;">客戶</span>
+    <span id="banner-client-name">—</span>
+  </div>
+</header>
+
+<!-- ══════════ Body ══════════ -->
+<div class="body-wrap">
+
+  <!-- ── Sidebar ── -->
+  <nav class="sidebar" id="sidebar">
+
+    <!-- Section 1: Monthly Reports -->
+    <div class="sidebar-section">
+      <div class="nav-group-header open" id="grp-monthly" onclick="toggleGroup('monthly')">
+        <span class="icon">📅</span>
+        每月報表 Monthly Reports
+        <span class="chevron">▶</span>
+      </div>
+      <div class="nav-sub open" id="sub-monthly"></div>
+    </div>
+
+    <!-- Section 2: Financial Topics -->
+    <div class="sidebar-section">
+      <div class="nav-group-header" id="grp-topics" onclick="toggleGroup('topics')">
+        <span class="icon">📌</span>
+        重要財經專題 Topics
+        <span class="chevron">▶</span>
+      </div>
+      <div class="nav-sub" id="sub-topics"></div>
+    </div>
+
+    <div class="sidebar-footer">
+      P&amp;J Capital Management Limited<br>
+      本系統僅供客戶內部參閱<br><br>
+      <a href="./admin.html" style="color:var(--gold);opacity:.7;font-size:10px;text-decoration:none;letter-spacing:.5px;" onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=.7">⚙ 後臺管理 Admin</a>
+    </div>
+  </nav>
+
+  <!-- ── Main Frame ── -->
+  <div class="main-frame">
+
+    <!-- Welcome screen (shown before any selection) -->
+    <div class="welcome" id="welcome-screen">
+      <div class="welcome-card">
+        <div class="welcome-logo">
+          <img src="logo.png" alt="P&amp;J Capital Logo">
+        </div>
+        <div class="welcome-company">P&amp;J Capital Limited</div>
+        <div class="welcome-divider"></div>
+        <h2>歡迎使用投資組合入口</h2>
+        <div class="welcome-form">
+          <div class="welcome-field-label">客戶 / Client</div>
+          <select class="welcome-select" id="client-selector">
+            <option value="sophia">Sophia</option>
+            <option value="placeholder1">— 未來客戶 —</option>
+          </select>
+          <div class="welcome-field-label">進入密碼 / Password</div>
+          <div class="welcome-input-wrap">
+            <input class="welcome-input" type="password" id="client-password"
+              placeholder="請輸入客戶專屬密碼"
+              onkeydown="if(event.key==='Enter') attemptLogin()" />
+            <button class="pw-toggle" type="button" onclick="togglePasswordVisibility()" aria-label="顯示／隱藏密碼" id="pw-toggle-btn">
+              <!-- eye-open icon (shown when password is hidden) -->
+              <svg id="icon-eye-open" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                <circle cx="12" cy="12" r="3"/>
+              </svg>
+              <!-- eye-off icon (shown when password is visible) -->
+              <svg id="icon-eye-off" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+                <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94"/>
+                <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19"/>
+                <line x1="1" y1="1" x2="23" y2="23"/>
+              </svg>
+            </button>
+          </div>
+          <div class="welcome-error" id="login-error"></div>
+          <button class="welcome-login-btn" onclick="attemptLogin()">進入 →</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Post-login idle (shows after login, before any sidebar click) -->
+    <div class="logged-in-idle" id="logged-in-idle">
+      <div class="idle-logo">
+        <img src="logo.png" alt="P&amp;J Capital Logo">
+      </div>
+      <div class="idle-company">P&amp;J Capital Limited</div>
+      <div class="idle-arrow">←</div>
+      <div class="idle-hint">請點選左側選單進行瀏覽</div>
+    </div>
+
+    <!-- Loading spinner -->
+    <div class="loading-overlay" id="loading-overlay">
+      <div class="spinner"></div>載入中…
+    </div>
+
+    <!-- Iframe for monthly reports -->
+    <iframe id="content-iframe" style="display:none;" onload="onIframeLoad()"></iframe>
+
+    <!-- Placeholder panel for topics -->
+    <div class="placeholder-panel" id="topic-panel" style="display:none;">
+      <span class="placeholder-tag" id="topic-tag">重要財經專題</span>
+      <h2 id="topic-title">專題標題</h2>
+      <p id="topic-body">此專題內容尚未建立，請聯絡管理員新增相關資料。</p>
+      <p style="font-size:12px;color:var(--muted);">Content coming soon — please check back later.</p>
+    </div>
+
+    <!-- Monthly Reports Overview (timeline) -->
+    <div class="category-overview" id="monthly-overview">
+      <div class="cat-header">
+        <div class="cat-header-badge">📅 每月報表</div>
+        <h1>Monthly Reports</h1>
+        <div class="cat-divider"></div>
+        <p>每月投資組合績效摘要，涵蓋資產配置、損益分析及市場評論，完整記錄您的投資歷程。</p>
+      </div>
+      <div class="timeline" id="monthly-timeline"></div>
+    </div>
+
+    <!-- Topics Overview (card grid) -->
+    <div class="category-overview" id="topics-overview">
+      <div class="cat-header">
+        <div class="cat-header-badge">📌 重要財經專題</div>
+        <h1>Financial Topics</h1>
+        <div class="cat-divider"></div>
+        <p>深度財經研究與市場洞察，由 P&amp;J Capital 研究團隊精選，協助您掌握重要金融趨勢與投資機遇。</p>
+      </div>
+      <div class="topics-grid" id="topics-grid"></div>
+    </div>
+
+  </div><!-- /.main-frame -->
+
+</div><!-- /.body-wrap -->
+
+<script src="./portal-config.js"></script>
+<script>
+  /* ── Config keys ──
+     ADMIN_KEY  : written by admin.html "儲存並套用", takes priority
+     PUB_KEY    : written by portal-config.js (GitHub-published snapshot)
+     portal-config.js NO LONGER overwrites ADMIN_KEY, so admin changes persist ── */
+  const STORAGE_KEY = 'pj_portal_config';        // admin key (priority)
+  const PUB_KEY     = 'pj_portal_config_published'; // published key (fallback)
+
+  const DEFAULT_CONFIG = {
+    monthlyReports: [
+      { key: '202604', label: '2026 年 04 月', src: './2026_04/202604_Monthly Report_index.html' },
+      { key: '202603', label: '2026 年 03 月', src: './2026_03/202603_Monthly Report_index.html' }
+    ],
+    topics: [
+      { key: 'topic-1', title: '2026 Q2 利率展望', body: '本專題將涵蓋 2026 年第二季主要央行政策方向分析、殖利率曲線變化，以及對固定收益投資組合的潛在影響評估。內容準備中，敬請期待。' },
+      { key: 'topic-2', title: '信用市場觀察',   body: '本專題聚焦投資等級及高收益債券信用利差走勢、企業財務健康度監測，以及當前持倉的信用風險評估。內容準備中，敬請期待。' }
+    ]
+  };
+
+  /* ── Client password hashes (SHA-256 hex — never store plaintext here) ── */
+  const CLIENT_PASSWORD_HASHES = {
+    sophia: '7a7087744cbce3941eceecb63f4479d675c4aab048a56d6b9498da3f8953a65f'
+  };
+
+  async function sha256hex(str) {
+    // Web Crypto API (requires HTTPS or localhost)
+    if (window.crypto && window.crypto.subtle) {
+      const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+      return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+    // Fallback: pure-JS SHA-256 (works on file:// or HTTP)
+    return pjSha256(str);
+  }
+
+  // Pure-JS SHA-256 (RFC 6234 compliant, no dependencies)
+  function pjSha256(msg) {
+    const K = [0x428a2f98,0x71374491,0xb5c0fbcf,0xe9b5dba5,0x3956c25b,0x59f111f1,0x923f82a4,0xab1c5ed5,
+               0xd807aa98,0x12835b01,0x243185be,0x550c7dc3,0x72be5d74,0x80deb1fe,0x9bdc06a7,0xc19bf174,
+               0xe49b69c1,0xefbe4786,0x0fc19dc6,0x240ca1cc,0x2de92c6f,0x4a7484aa,0x5cb0a9dc,0x76f988da,
+               0x983e5152,0xa831c66d,0xb00327c8,0xbf597fc7,0xc6e00bf3,0xd5a79147,0x06ca6351,0x14292967,
+               0x27b70a85,0x2e1b2138,0x4d2c6dfc,0x53380d13,0x650a7354,0x766a0abb,0x81c2c92e,0x92722c85,
+               0xa2bfe8a1,0xa81a664b,0xc24b8b70,0xc76c51a3,0xd192e819,0xd6990624,0xf40e3585,0x106aa070,
+               0x19a4c116,0x1e376c08,0x2748774c,0x34b0bcb5,0x391c0cb3,0x4ed8aa4a,0x5b9cca4f,0x682e6ff3,
+               0x748f82ee,0x78a5636f,0x84c87814,0x8cc70208,0x90befffa,0xa4506ceb,0xbef9a3f7,0xc67178f2];
+    let H = [0x6a09e667,0xbb67ae85,0x3c6ef372,0xa54ff53a,0x510e527f,0x9b05688c,0x1f83d9ab,0x5be0cd19];
+    const bytes = new TextEncoder().encode(msg);
+    const len = bytes.length;
+    const blocks = Math.ceil((len + 9) / 64);
+    const buf = new Uint8Array(blocks * 64);
+    buf.set(bytes); buf[len] = 0x80;
+    const view = new DataView(buf.buffer);
+    view.setUint32(blocks * 64 - 4, len * 8, false);
+    const r = (x, n) => (x >>> n) | (x << (32 - n));
+    for (let i = 0; i < blocks; i++) {
+      const W = new Uint32Array(64);
+      for (let t = 0; t < 16; t++) W[t] = view.getUint32((i * 64) + t * 4, false);
+      for (let t = 16; t < 64; t++) {
+        const s0 = r(W[t-15],7)^r(W[t-15],18)^(W[t-15]>>>3);
+        const s1 = r(W[t-2],17)^r(W[t-2],19)^(W[t-2]>>>10);
+        W[t] = (W[t-16]+s0+W[t-7]+s1)|0;
+      }
+      let [a,b,c,d,e,f,g,h] = H;
+      for (let t = 0; t < 64; t++) {
+        const S1 = r(e,6)^r(e,11)^r(e,25);
+        const ch = (e&f)^(~e&g);
+        const T1 = (h+S1+ch+K[t]+W[t])|0;
+        const S0 = r(a,2)^r(a,13)^r(a,22);
+        const maj = (a&b)^(a&c)^(b&c);
+        const T2 = (S0+maj)|0;
+        [h,g,f,e,d,c,b,a] = [g,f,e,(d+T1)|0,c,b,a,(T1+T2)|0];
+      }
+      H = H.map((v,i)=>(v+[a,b,c,d,e,f,g,h][i])|0);
+    }
+    return H.map(v=>v.toString(16).padStart(8,'0')).join('');
+  }
+
+  const CLIENT_LABELS = {
+    sophia: 'Sophia'
+  };
+
+  function loadConfig() {
+    try {
+      // Admin key (saved by 後臺 admin.html) takes priority
+      const admin = localStorage.getItem(STORAGE_KEY);
+      if (admin) return JSON.parse(admin);
+      // Fall back to published snapshot (written by portal-config.js)
+      const pub = localStorage.getItem(PUB_KEY);
+      if (pub) return JSON.parse(pub);
+    } catch {}
+    return DEFAULT_CONFIG;
+  }
+
+  /* ── Auth state ── */
+  let isAuthenticated = false;
+  let topicData = {};
+
+  /* ── Password visibility toggle ── */
+  function togglePasswordVisibility() {
+    const input   = document.getElementById('client-password');
+    const eyeOpen = document.getElementById('icon-eye-open');
+    const eyeOff  = document.getElementById('icon-eye-off');
+    const isHidden = input.type === 'password';
+    input.type     = isHidden ? 'text' : 'password';
+    eyeOpen.style.display = isHidden ? 'none'  : '';
+    eyeOff.style.display  = isHidden ? ''      : 'none';
+  }
+
+  /* ── Login ── */
+  async function attemptLogin() {
+    const clientKey = document.getElementById('client-selector').value;
+    const password  = document.getElementById('client-password').value;
+    const errorEl   = document.getElementById('login-error');
+    const btn       = document.querySelector('.welcome-login-btn');
+
+    const expectedHash = CLIENT_PASSWORD_HASHES[clientKey];
+    if (!expectedHash) {
+      errorEl.textContent = '此客戶帳號尚未開通，請聯絡管理員。';
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = '驗證中…';
+
+    const inputHash = await sha256hex(password);
+
+    btn.disabled = false;
+    btn.textContent = '進入 →';
+
+    if (inputHash !== expectedHash) {
+      errorEl.textContent = '密碼錯誤，請再試一次。';
+      document.getElementById('client-password').value = '';
+      document.getElementById('client-password').focus();
+      return;
+    }
+
+    // Authenticated
+    isAuthenticated = true;
+    errorEl.textContent = '';
+
+    // Show client badge in banner
+    document.getElementById('banner-client-name').textContent = CLIENT_LABELS[clientKey] || clientKey;
+    document.getElementById('banner-client-badge').classList.add('visible');
+
+    // Hide welcome screen, show idle
+    document.getElementById('welcome-screen').classList.add('hidden');
+    document.getElementById('logged-in-idle').classList.add('visible');
+  }
+
+  /* ── Go home (logo click) ── */
+  function goHome() {
+    isAuthenticated = false;
+
+    // Clear content
+    document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+    const iframe = document.getElementById('content-iframe');
+    iframe.style.display = 'none';
+    iframe.src = '';
+    hideTopic();
+
+    // Hide client badge and idle screen
+    document.getElementById('banner-client-badge').classList.remove('visible');
+    document.getElementById('logged-in-idle').classList.remove('visible');
+
+    // Reset form and show welcome
+    document.getElementById('client-password').value = '';
+    document.getElementById('login-error').textContent = '';
+    document.getElementById('welcome-screen').classList.remove('hidden');
+  }
+
+  function renderSidebar() {
+    const cfg = loadConfig();
+
+    // Monthly reports
+    document.getElementById('sub-monthly').innerHTML = cfg.monthlyReports.map(r => `
+      <div class="nav-item" data-type="report" data-src="${r.src}" data-label="${r.label}" onclick="loadContent(this)">
+        <span class="dot"></span>${r.label}
+      </div>`).join('');
+
+    // Topics — group by category with nested accordion
+    topicData = {};
+    cfg.topics.forEach(t => { topicData[t.key] = { title: t.title, body: t.body, src: t.src || '' }; });
+
+    const cats = cfg.categories || [];
+    const topicItem = t => `
+      <div class="nav-item" data-type="topic" data-topic="${t.key}" data-label="${t.title}" onclick="loadContent(this)">
+        <span class="dot"></span>${t.title}
+      </div>`;
+
+    let topicsHTML = '';
+    if (cats.length === 0) {
+      // No categories — flat list (backward compatible)
+      topicsHTML = cfg.topics.map(topicItem).join('');
+    } else {
+      // Group topics under their category
+      cats.forEach(c => {
+        const inCat = cfg.topics
+          .filter(t => t.categoryKey === c.key)
+          .sort((a, b) => (a.order || 999) - (b.order || 999));
+        if (inCat.length === 0) return;
+        const catId = 'cat-' + c.key;
+        topicsHTML += `
+          <div class="nav-cat-header" id="hdr-${catId}" onclick="toggleCat('${catId}')">
+            <span>${c.name}</span><span class="cat-chevron">▶</span>
+          </div>
+          <div class="nav-cat-items" id="${catId}">${inCat.map(topicItem).join('')}</div>`;
+      });
+      // Uncategorized topics
+      const uncat = cfg.topics
+        .filter(t => !t.categoryKey || !cats.some(c => c.key === t.categoryKey))
+        .sort((a, b) => (a.order || 999) - (b.order || 999));
+      if (uncat.length > 0) {
+        topicsHTML += `
+          <div class="nav-cat-header" id="hdr-cat-uncat" onclick="toggleCat('cat-uncat')">
+            <span>未分類</span><span class="cat-chevron">▶</span>
+          </div>
+          <div class="nav-cat-items" id="cat-uncat">${uncat.map(topicItem).join('')}</div>`;
+      }
+    }
+    document.getElementById('sub-topics').innerHTML = topicsHTML;
+  }
+
+  /* ── Toggle level-2 category sub-accordion ── */
+  function toggleCat(catId) {
+    const hdr   = document.getElementById('hdr-' + catId);
+    const items = document.getElementById(catId);
+    if (!hdr || !items) return;
+    const isOpen = hdr.classList.contains('open');
+    hdr.classList.toggle('open', !isOpen);
+    items.classList.toggle('open', !isOpen);
+  }
+
+  /* ── Toggle accordion group + show category overview ── */
+  function toggleGroup(id) {
+    const header = document.getElementById('grp-' + id);
+    const sub    = document.getElementById('sub-' + id);
+    const isOpen = header.classList.contains('open');
+    header.classList.toggle('open', !isOpen);
+    sub.classList.toggle('open', !isOpen);
+
+    if (isAuthenticated) {
+      showCategoryOverview(id);
+    }
+  }
+
+  /* ── Load content on nav-item click ── */
+  function loadContent(el) {
+    if (!isAuthenticated) {
+      // Not logged in — bounce back to welcome
+      document.getElementById('welcome-screen').classList.remove('hidden');
+      document.getElementById('client-password').focus();
+      return;
+    }
+
+    document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+    el.classList.add('active');
+
+    const type = el.dataset.type;
+    hideWelcome();
+    hideTopic();
+    hideCategoryOverviews();
+    document.getElementById('logged-in-idle').classList.remove('visible');
+
+    if (type === 'report') {
+      showReport(el.dataset.src);
+    } else if (type === 'topic') {
+      showTopic(el.dataset.topic, el.dataset.label);
+    }
+  }
+
+  /* ── Report (iframe) ── */
+  function showReport(src) {
+    const iframe  = document.getElementById('content-iframe');
+    const loading = document.getElementById('loading-overlay');
+    iframe.style.display = 'none';
+    loading.classList.add('show');
+    iframe.src = src;
+  }
+
+  function onIframeLoad() {
+    const iframe  = document.getElementById('content-iframe');
+    const loading = document.getElementById('loading-overlay');
+    loading.classList.remove('show');
+    iframe.style.display = 'block';
+  }
+
+  /* ── Topic placeholder ── */
+  function showTopic(topicId, label) {
+    const data = topicData[topicId] || { title: label, body: '內容準備中。', src: '' };
+    if (data.src) {
+      showReport(data.src);
+    } else {
+      const panel = document.getElementById('topic-panel');
+      document.getElementById('topic-tag').textContent   = '重要財經專題';
+      document.getElementById('topic-title').textContent = data.title;
+      document.getElementById('topic-body').textContent  = data.body;
+      panel.style.display = 'block';
+    }
+  }
+
+  /* ── Hide helpers ── */
+  function hideWelcome() {
+    document.getElementById('welcome-screen').classList.add('hidden');
+  }
+  function hideTopic() {
+    document.getElementById('topic-panel').style.display = 'none';
+  }
+  function hideCategoryOverviews() {
+    document.getElementById('monthly-overview').classList.remove('visible');
+    document.getElementById('topics-overview').classList.remove('visible');
+  }
+
+  /* ── Category overview ── */
+  function showCategoryOverview(id) {
+    document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+    hideWelcome();
+    hideTopic();
+    hideCategoryOverviews();
+    document.getElementById('logged-in-idle').classList.remove('visible');
+    const iframe = document.getElementById('content-iframe');
+    iframe.style.display = 'none';
+    iframe.src = '';
+
+    if (id === 'monthly') {
+      renderMonthlyTimeline();
+      document.getElementById('monthly-overview').classList.add('visible');
+    } else if (id === 'topics') {
+      renderTopicsCards();
+      document.getElementById('topics-overview').classList.add('visible');
+    }
+  }
+
+  function renderMonthlyTimeline() {
+    const cfg = loadConfig();
+    document.getElementById('monthly-timeline').innerHTML = cfg.monthlyReports.map(r => `
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-card" onclick="loadReportFromOverview('${r.src}', '${r.label}')">
+          <div>
+            <div class="timeline-card-label">${r.label}</div>
+            <div class="timeline-card-sub">月度投資組合報告</div>
+          </div>
+          <div class="timeline-card-action">查看報表 →</div>
+        </div>
+      </div>`).join('');
+  }
+
+  function renderTopicsCards() {
+    const cfg = loadConfig();
+    document.getElementById('topics-grid').innerHTML = cfg.topics.map(t => {
+      const hasSrc = t.src && t.src.trim();
+      return `
+      <div class="topic-overview-card" onclick="loadTopicFromOverview('${t.key}', '${t.title}')">
+        <div class="topic-card-icon">📌</div>
+        <div class="topic-card-title">${t.title}</div>
+        ${t.body ? `<div class="topic-card-body">${t.body}</div>` : ''}
+        <div class="topic-card-footer">
+          <span class="topic-card-btn${hasSrc ? '' : ' inactive'}">${hasSrc ? '閱讀報告 →' : '內容準備中'}</span>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  function loadReportFromOverview(src, label) {
+    document.querySelectorAll('.nav-item[data-type="report"]').forEach(item => {
+      if (item.dataset.src === src) loadContent(item);
+    });
+  }
+
+  function loadTopicFromOverview(topicKey, label) {
+    document.querySelectorAll('.nav-item[data-type="topic"]').forEach(item => {
+      if (item.dataset.topic === topicKey) loadContent(item);
+    });
+  }
+
+  /* ── Init ── */
+  renderSidebar();
+</script>
+</body>
+</html>
