@@ -534,6 +534,121 @@
     cursor: default;
   }
   .topic-overview-card:hover .topic-card-btn:not(.inactive) { background: rgba(239,126,27,0.28); }
+
+  /* ── Hamburger button (mobile only) ── */
+  .hamburger-btn {
+    display: none;
+    align-items: center; justify-content: center;
+    width: 40px; height: 40px;
+    background: none; border: none;
+    cursor: pointer;
+    color: #fff;
+    border-radius: 8px;
+    transition: background .15s;
+    flex-shrink: 0;
+    margin-left: auto;
+  }
+  .hamburger-btn:hover { background: rgba(255,255,255,.12); }
+  .hamburger-btn svg { display: block; pointer-events: none; }
+
+  /* ── Sidebar overlay backdrop (mobile only) ── */
+  .sidebar-overlay {
+    display: none;
+    position: fixed;
+    top: var(--banner-height); left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,.55);
+    z-index: 150;
+  }
+  .sidebar-overlay.visible { display: block; }
+
+  /* ── Utility: desktop/mobile visibility ── */
+  .desktop-only { display: block; }
+  .mobile-only  { display: none; }
+  .desktop-hint { display: inline; }
+  .mobile-hint  { display: none; }
+
+  /* ── Upward nudge animation for mobile idle arrow ── */
+  @keyframes nudge-up {
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(-8px); }
+  }
+
+  /* ══════════════════════════════════════════
+     MOBILE RESPONSIVE  ≤ 768px
+  ══════════════════════════════════════════ */
+  @media (max-width: 768px) {
+    .hamburger-btn { display: flex; }
+
+    .banner { padding: 0 14px; gap: 10px; }
+    .banner-divider { display: none; }
+    .banner-title { font-size: 15px; letter-spacing: .2px; }
+
+    /* Sidebar: slide-in drawer */
+    .sidebar {
+      position: fixed;
+      top: var(--banner-height); left: 0; bottom: 0;
+      z-index: 200;
+      transform: translateX(-100%);
+      transition: transform .28s ease;
+      box-shadow: 4px 0 28px rgba(0,0,0,.5);
+    }
+    .sidebar.open { transform: translateX(0); }
+
+    /* Welcome card: compact padding */
+    .welcome { padding: 20px 16px; }
+    .welcome-card { padding: 32px 24px; gap: 14px; border-radius: 18px; }
+    .welcome h2 { font-size: 20px; }
+    .welcome-logo { width: 180px; height: 114px; }
+    .welcome-logo img { width: 390px; height: 390px; margin-top: -94px; margin-left: -106px; }
+
+    /* Idle screen: mobile arrow & hint */
+    .desktop-only { display: none; }
+    .mobile-only  { display: block; }
+    .desktop-hint { display: none; }
+    .mobile-hint  { display: inline; }
+    .idle-logo { width: 240px; height: 153px; }
+    .idle-logo img { width: 523px; height: 523px; margin-top: -125px; margin-left: -142px; }
+    .idle-company { font-size: 17px; letter-spacing: 2px; }
+    .idle-hint { font-size: 15px; }
+
+    /* Category overview: compact */
+    .category-overview { padding: 24px 18px 48px; }
+    .cat-header { margin-bottom: 22px; }
+    .cat-header h1 { font-size: 22px; }
+    .cat-header p { font-size: 13px; }
+
+    /* Timeline: full width */
+    .timeline { padding-left: 28px; max-width: 100%; }
+    .timeline-card { padding: 14px 16px; }
+    .timeline-card-label { font-size: 15px; }
+
+    /* Topics grid: single column */
+    .topics-grid { grid-template-columns: 1fr; }
+
+    /* Placeholder panel: compact */
+    .placeholder-panel { padding: 28px 20px; }
+  }
+
+  /* ══════════════════════════════════════════
+     SMALL PHONES  ≤ 480px
+  ══════════════════════════════════════════ */
+  @media (max-width: 480px) {
+    .banner-title { font-size: 13px; letter-spacing: 0; }
+    .banner-logo { width: 38px; height: 38px; }
+
+    .welcome-card { padding: 24px 16px; border-radius: 14px; }
+    .welcome h2 { font-size: 17px; }
+    .welcome-logo { width: 160px; height: 102px; }
+    .welcome-logo img { width: 349px; height: 349px; margin-top: -84px; margin-left: -95px; }
+
+    .idle-logo { width: 200px; height: 127px; }
+    .idle-logo img { width: 436px; height: 436px; margin-top: -104px; margin-left: -118px; }
+    .idle-company { font-size: 15px; letter-spacing: 1.5px; }
+    .idle-hint { font-size: 14px; }
+
+    .category-overview { padding: 16px 12px 40px; }
+    .cat-header h1 { font-size: 20px; }
+  }
 </style>
 </head>
 <body>
@@ -551,10 +666,20 @@
     <span style="font-size:11px;opacity:.6;font-weight:400;">客戶</span>
     <span id="banner-client-name">—</span>
   </div>
+  <button class="hamburger-btn" id="hamburger-btn" onclick="toggleSidebar()" aria-label="開啟選單">
+    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <line x1="3" y1="6" x2="21" y2="6"/>
+      <line x1="3" y1="12" x2="21" y2="12"/>
+      <line x1="3" y1="18" x2="21" y2="18"/>
+    </svg>
+  </button>
 </header>
 
 <!-- ══════════ Body ══════════ -->
 <div class="body-wrap">
+
+  <!-- ── Sidebar overlay backdrop (mobile) ── -->
+  <div class="sidebar-overlay" id="sidebar-overlay" onclick="closeSidebar()"></div>
 
   <!-- ── Sidebar ── -->
   <nav class="sidebar" id="sidebar">
@@ -635,8 +760,12 @@
         <img src="logo.png" alt="P&amp;J Capital Logo">
       </div>
       <div class="idle-company">P&amp;J Capital Limited</div>
-      <div class="idle-arrow">←</div>
-      <div class="idle-hint">請點選左側選單進行瀏覽</div>
+      <div class="idle-arrow desktop-only">←</div>
+      <div class="idle-arrow mobile-only" style="animation: nudge-up 1.8s ease-in-out infinite; font-size:26px; color:rgba(239,126,27,.8);">↑</div>
+      <div class="idle-hint">
+        <span class="desktop-hint">請點選左側選單進行瀏覽</span>
+        <span class="mobile-hint">請點選右上角選單進行瀏覽</span>
+      </div>
     </div>
 
     <!-- Loading spinner -->
@@ -943,6 +1072,7 @@
     hideTopic();
     hideCategoryOverviews();
     document.getElementById('logged-in-idle').classList.remove('visible');
+    closeSidebar();
 
     if (type === 'report') {
       showReport(el.dataset.src);
@@ -1000,6 +1130,7 @@
     hideTopic();
     hideCategoryOverviews();
     document.getElementById('logged-in-idle').classList.remove('visible');
+    closeSidebar();
     const iframe = document.getElementById('content-iframe');
     iframe.style.display = 'none';
     iframe.src = '';
@@ -1054,6 +1185,20 @@
     document.querySelectorAll('.nav-item[data-type="topic"]').forEach(item => {
       if (item.dataset.topic === topicKey) loadContent(item);
     });
+  }
+
+  /* ── Mobile sidebar drawer ── */
+  function toggleSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebar-overlay');
+    const isOpen  = sidebar.classList.contains('open');
+    sidebar.classList.toggle('open', !isOpen);
+    overlay.classList.toggle('visible', !isOpen);
+  }
+
+  function closeSidebar() {
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('sidebar-overlay').classList.remove('visible');
   }
 
   /* ── Init ── */
