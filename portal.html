@@ -1083,6 +1083,11 @@
 
   /* ── Report (iframe) ── */
   function showReport(src) {
+    // On mobile, open PDFs in a new tab — native viewer handles zoom perfectly
+    if (window.innerWidth < 768 && src.toLowerCase().endsWith('.pdf')) {
+      window.open(src, '_blank');
+      return;
+    }
     const iframe  = document.getElementById('content-iframe');
     const loading = document.getElementById('loading-overlay');
     iframe.style.display = 'none';

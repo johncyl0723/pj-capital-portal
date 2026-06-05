@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
 <title>投資月報 Investment Monthly Report | KS Capital | 2026/3</title>
 <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 <script>
@@ -1031,6 +1031,7 @@ function renderOverview(){
     },
     options: {
       maintainAspectRatio:false,
+      layout:{ padding:{ right:18 } },
       plugins:{ legend:{display:false}, tooltip:{callbacks:{label:c=>"NAV: "+fmt.money(c.parsed.y)}} },
       scales: {
         y: { ticks:{ callback: v=>fmt.money(v/1000)+"K" }, grid:{color:"#F3EFE7"} },
@@ -1153,6 +1154,7 @@ function renderPerformance(){
     },
     options: {
       maintainAspectRatio: false,
+      layout:{ padding:{ right:18 } },
       plugins: {
         legend: {
           position: "top",
@@ -1191,6 +1193,7 @@ function renderPerformance(){
     },
     options: {
       maintainAspectRatio:false,
+      layout:{ padding:{ right:18 } },
       plugins:{
         legend:{display:false},
         tooltip:{callbacks:{label:c=>fmt.pct(c.parsed.y/100)}}
@@ -1546,6 +1549,7 @@ function renderCashflow(){
     },
     options: {
       maintainAspectRatio:false,
+      layout:{ padding:{ right:18 } },
       plugins:{ legend:{position:"bottom"}, tooltip:{callbacks:{label:c=>c.dataset.label+": "+fmt.money(c.parsed.y)}} },
       scales:{
         x:{ stacked:true, grid:{display:false} },
