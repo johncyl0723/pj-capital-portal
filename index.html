@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Compound Company Limited — About</title>
+<title>P&J Capital Company — About</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,300;1,400;1,600&family=Libre+Baskerville:wght@400;700&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;1,8..60,400&family=JetBrains+Mono:wght@300;400&family=Poppins:wght@700;800&display=swap" rel="stylesheet">
@@ -174,8 +174,8 @@ body {
 
 .hero-brand {
   font-family: 'Libre Baskerville', serif;
-  font-size: clamp(13px, 2vw, 17px);
-  letter-spacing: 3.5px;
+  font-size: clamp(17px, 2.6vw, 24px);
+  letter-spacing: 4px;
   text-transform: uppercase;
   color: var(--text);
   opacity: 0;
@@ -185,10 +185,10 @@ body {
 .hero-brand-sub {
   display: block;
   font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
-  color: var(--gold-dim);
-  letter-spacing: 2px;
-  margin-top: 6px;
+  font-size: 15px;
+  color: rgba(201,169,110,0.65);
+  letter-spacing: 2.5px;
+  margin-top: 10px;
 }
 
 .hero-tagline {
@@ -280,7 +280,7 @@ body {
 .precision-visual {
   flex: 1;
   max-width: 400px;
-  height: 480px;
+  height: 540px;
   position: relative;
   overflow: hidden;
 }
@@ -314,9 +314,9 @@ body {
 }
 .flow-row {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 12px;
-  letter-spacing: 3px;
-  line-height: 2;
+  font-size: 20px;
+  letter-spacing: 4px;
+  line-height: 2.2;
   user-select: none;
   white-space: nowrap;
 }
@@ -703,7 +703,7 @@ body {
     </div>
     <div class="hero-line" id="hero-line"></div>
     <div class="hero-brand" id="hero-brand">
-      Compound Company Limited
+      P&amp;J Capital Company
       <span class="hero-brand-sub">資產配置顧問 · Fixed Income Investment</span>
     </div>
     <div class="hero-tagline" id="hero-tagline">
@@ -830,7 +830,7 @@ body {
   </div>
 
   <div class="footer-legal">
-    © 2026 Compound Company Limited &nbsp;&middot;&nbsp; All rights reserved &nbsp;&middot;&nbsp;
+    © 2026 P&amp;J Capital Company &nbsp;&middot;&nbsp; All rights reserved &nbsp;&middot;&nbsp;
     本頁面僅供參閱，不構成任何投資建議 &nbsp;&middot;&nbsp;
     This material is for reference only and does not constitute investment advice.
   </div>
@@ -884,7 +884,7 @@ var PI = '1415926535897932384626433832795028841971693993751' +
     for (let row = 0; row < 12; row++) {
       const chunk = digits.slice(row * 8, row * 8 + 8);
       const isGold = row < 3;
-      const op = Math.max(0.08, 0.55 - row * 0.04);
+      const op = Math.max(0.28, 0.72 - row * 0.04);
       html += `<div class="flow-row" style="color:${isGold ? 'var(--gold)' : 'var(--text)'};opacity:${op}">${chunk}</div>`;
     }
     return html;
