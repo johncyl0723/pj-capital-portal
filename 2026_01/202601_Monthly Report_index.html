@@ -180,6 +180,13 @@
   .table-scroll::-webkit-scrollbar-thumb{background:var(--gold);border-radius:4px}
   .table-scroll::-webkit-scrollbar-track{background:transparent}
 
+  /* ── Scrollable chart wrapper (time-series) ── */
+  .chart-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .chart-scroll::-webkit-scrollbar{height:4px}
+  .chart-scroll::-webkit-scrollbar-thumb{background:rgba(201,169,97,.45);border-radius:2px}
+  .chart-scroll::-webkit-scrollbar-track{background:transparent}
+  @media(max-width:600px){.chart-scroll .chart-wrap{min-width:500px}}
+
   /* Allow flex containers (section titles, header inner, KPI rows) to wrap on small screens */
   .section-title{flex-wrap:wrap}
 
@@ -371,7 +378,7 @@
     <!-- Monthly trend chart -->
     <div class="card">
       <div class="section-title">淨值走勢 <span class="en">NAV Trajectory (last 14 months)</span></div>
-      <div class="chart-wrap"><canvas id="chart-nav-trend"></canvas></div>
+      <div class="chart-scroll"><div class="chart-wrap"><canvas id="chart-nav-trend"></canvas></div></div>
     </div>
   </div>
 
@@ -404,11 +411,11 @@
   <div class="grid grid-2" style="margin-bottom:20px">
     <div class="card">
       <div class="section-title">各年度月報酬比較 <span class="en">Year-over-Year Monthly Return</span></div>
-      <div class="chart-wrap"><canvas id="chart-yearly"></canvas></div>
+      <div class="chart-scroll"><div class="chart-wrap"><canvas id="chart-yearly"></canvas></div></div>
     </div>
     <div class="card">
       <div class="section-title">月度報酬 <span class="en">Monthly Return (2025-2026)</span></div>
-      <div class="chart-wrap"><canvas id="chart-monthly"></canvas></div>
+      <div class="chart-scroll"><div class="chart-wrap"><canvas id="chart-monthly"></canvas></div></div>
     </div>
   </div>
 
@@ -682,7 +689,7 @@
 
   <div class="card" style="margin-bottom:20px">
     <div class="section-title">各年度預估現金流 <span class="en">Projected Annual Cash Flow</span></div>
-    <div class="chart-wrap tall"><canvas id="chart-cashflow"></canvas></div>
+    <div class="chart-scroll"><div class="chart-wrap tall"><canvas id="chart-cashflow"></canvas></div></div>
   </div>
 
   <div class="card">
@@ -1026,7 +1033,7 @@ function renderOverview(){
     },
     options: {
       maintainAspectRatio:false,
-      layout:{ padding:{ right:18 } },
+      layout:{ padding:{ right:40 } },
       plugins:{ legend:{display:false}, tooltip:{callbacks:{label:c=>"NAV: "+fmt.money(c.parsed.y)}} },
       scales: {
         y: { ticks:{ callback: v=>fmt.money(v/1000)+"K" }, grid:{color:"#F3EFE7"} },
@@ -1149,7 +1156,7 @@ function renderPerformance(){
     },
     options: {
       maintainAspectRatio: false,
-      layout:{ padding:{ right:18 } },
+      layout:{ padding:{ right:40 } },
       plugins: {
         legend: {
           position: "top",
@@ -1188,7 +1195,7 @@ function renderPerformance(){
     },
     options: {
       maintainAspectRatio:false,
-      layout:{ padding:{ right:18 } },
+      layout:{ padding:{ right:40 } },
       plugins:{
         legend:{display:false},
         tooltip:{callbacks:{label:c=>fmt.pct(c.parsed.y/100)}}
@@ -1544,7 +1551,7 @@ function renderCashflow(){
     },
     options: {
       maintainAspectRatio:false,
-      layout:{ padding:{ right:18 } },
+      layout:{ padding:{ right:40 } },
       plugins:{ legend:{position:"bottom"}, tooltip:{callbacks:{label:c=>c.dataset.label+": "+fmt.money(c.parsed.y)}} },
       scales:{
         x:{ stacked:true, grid:{display:false} },
