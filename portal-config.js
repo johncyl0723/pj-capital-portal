@@ -1,19 +1,12 @@
-﻿// P&J Capital Portal — Content Configuration (Published Snapshot)
-// Generated: 2026-05-22T09:43:59.851Z
-// Workflow: admin.html → 儲存並套用 → 匯出 portal-config.js → replace this file → git push
-// Writes to 'pj_portal_config_published' (fallback for new visitors).
-// Does NOT overwrite 'pj_portal_config' (admin key), so admin changes persist.
+// P&J Capital Portal — Content Configuration (Published Snapshot)
+// Generated: 2026-06-27T00:00:00.000Z
+// Workflow: admin.html -> Save & Apply -> Export portal-config.js -> replace this file -> git push
 localStorage.setItem('pj_portal_config_published', JSON.stringify({
   "monthlyReports": [
     {
-      "key": "202601",
-      "label": "2026 年 01 月",
-      "src": "./2026_01/202601_Monthly Report_index.html"
-    },
-    {
-      "key": "202602",
-      "label": "2026 年 02 月",
-      "src": "./2026_02/202602_Monthly Report_index.html"
+      "key": "202605",
+      "label": "2026 年 05 月",
+      "src": "./2026_05/202605_Monthly Report_index.html"
     },
     {
       "key": "202604",
@@ -24,6 +17,16 @@ localStorage.setItem('pj_portal_config_published', JSON.stringify({
       "key": "202603",
       "label": "2026 年 03 月",
       "src": "./2026_03/202603_Monthly Report_index.html"
+    },
+    {
+      "key": "202602",
+      "label": "2026 年 02 月",
+      "src": "./2026_02/202602_Monthly Report_index.html"
+    },
+    {
+      "key": "202601",
+      "label": "2026 年 01 月",
+      "src": "./2026_01/202601_Monthly Report_index.html"
     }
   ],
   "topics": [
