@@ -811,10 +811,10 @@
 </div><!-- /.body-wrap -->
 
 <script>
-  /* Cache-busting: append YYYYMMDD so browsers re-download portal-config.js
-     each new day, eliminating the need for manual Ctrl+Shift+R on any device. */
+  /* Cache-busting: append YYYYMMDDHH so browsers re-download portal-config.js
+     each new hour, ensuring config updates take effect without manual refresh. */
   (function(){
-    const v = new Date().toISOString().slice(0,10).replace(/-/g,'');
+    const d = new Date(); const v = d.toISOString().slice(0,13).replace(/[-T]/g,'');
     document.write('<scr'+'ipt src="./portal-config.js?v='+v+'"><\/scr'+'ipt>');
   })();
 </script>
