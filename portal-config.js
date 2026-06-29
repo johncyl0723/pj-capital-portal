@@ -1,5 +1,5 @@
 // P&J Capital Portal — Content Configuration (Published Snapshot)
-// Generated: 2026-06-27T00:00:00.000Z
+// Generated: 2026-06-29T00:00:00.000Z
 // Workflow: admin.html -> Save & Apply -> Export portal-config.js -> replace this file -> git push
 localStorage.setItem('pj_portal_config_published', JSON.stringify({
   "monthlyReports": [
@@ -34,17 +34,25 @@ localStorage.setItem('pj_portal_config_published', JSON.stringify({
       "key": "topic-1779443004537",
       "title": "SLR改革_財政主導的金融新時代",
       "body": "",
-      "src": "./SLR改革_財政主導的金融新時代.pdf",
+      "src": "./topics/SLR改革_財政主導的金融新時代.pdf",
       "categoryKey": "cat-1779442954583",
       "order": 1
     },
     {
       "key": "topic-1779443032479",
-      "title": "RMP制度_新貨幣時代的序幕解碼",
+      "title": "新貨幣時代的序幕解碼RMP",
       "body": "",
-      "src": "./RMP制度_新貨幣時代的序幕解碼.pdf",
+      "src": "./topics/新貨幣時代的序幕解碼RMP.pdf",
       "categoryKey": "cat-1779442954583",
       "order": 2
+    },
+    {
+      "key": "topic-1779443099999",
+      "title": "洞悉美聯儲底層邏輯的範式轉移",
+      "body": "",
+      "src": "./topics/洞悉美聯儲底層邏輯的範式轉移.pdf",
+      "categoryKey": "cat-1779442954583",
+      "order": 3
     }
   ],
   "categories": [
