@@ -1,7 +1,7 @@
 // P&J Capital Portal — Content Configuration (Published Snapshot)
 // Generated: 2026-06-29T00:00:00.000Z
 // Workflow: admin.html -> Save & Apply -> Export portal-config.js -> replace this file -> git push
-localStorage.setItem('pj_portal_config_published', JSON.stringify({
+const _pjCfg = JSON.stringify({
   "monthlyReports": [
     {
       "key": "202605",
@@ -65,4 +65,6 @@ localStorage.setItem('pj_portal_config_published', JSON.stringify({
       "name": "財經時事解讀"
     }
   ]
-}));
+});
+localStorage.setItem('pj_portal_config_published', _pjCfg);
+localStorage.setItem('pj_portal_config', _pjCfg);
