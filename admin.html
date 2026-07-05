@@ -389,7 +389,7 @@
 <div class="page">
   <div class="page-header">
     <h1>導覽內容管理</h1>
-    <p>在此新增或刪除側邊欄項目，儲存後立即反映至入口網站。</p>
+    <p>客戶端固定只使用 `portal.html` 這個單一入口網址。這個舊後台只會先儲存在目前瀏覽器；要更新正式內容，仍需匯出 `portal-config.js` 後再提交到 GitHub。</p>
   </div>
 
   <div class="sections">
@@ -599,15 +599,20 @@
 
   const DEFAULT_CONFIG = {
     monthlyReports: [
-      { key: '202601', label: '2026 年 01 月', src: './2026_01/202601_Monthly Report_index.html' },
-      { key: '202602', label: '2026 年 02 月', src: './2026_02/202602_Monthly Report_index.html' },
+      { key: '202605', label: '2026 年 05 月', src: './2026_05/202605_Monthly Report_index.html' },
       { key: '202604', label: '2026 年 04 月', src: './2026_04/202604_Monthly Report_index.html' },
-      { key: '202603', label: '2026 年 03 月', src: './2026_03/202603_Monthly Report_index.html' }
+      { key: '202603', label: '2026 年 03 月', src: './2026_03/202603_Monthly Report_index.html' },
+      { key: '202602', label: '2026 年 02 月', src: './2026_02/202602_Monthly Report_index.html' },
+      { key: '202601', label: '2026 年 01 月', src: './2026_01/202601_Monthly Report_index.html' },
     ],
-    categories: [],
+    categories: [
+      { key: 'cat-1779442954583', name: '財經市場硬核' },
+      { key: 'cat-1779442981868', name: '財經時事解讀' }
+    ],
     topics: [
-      { key: 'topic-slr', title: 'SLR改革_財政主導的金融新時代', body: '', src: './SLR改革_財政主導的金融新時代.pdf', categoryKey: '', order: 1 },
-      { key: 'topic-rmp', title: 'RMP制度_新貨幣時代的序幕解碼', body: '', src: './RMP制度_新貨幣時代的序幕解碼.pdf', categoryKey: '', order: 2 }
+      { key: 'topic-1779443004537', title: 'SLR改革_財政主導的金融新時代', body: '', src: './topics/SLR改革_財政主導的金融新時代.pdf', categoryKey: 'cat-1779442954583', order: 1 },
+      { key: 'topic-1779443032479', title: '新貨幣時代的序幕解碼RMP', body: '', src: './topics/新貨幣時代的序幕解碼RMP.pdf', categoryKey: 'cat-1779442954583', order: 2 },
+      { key: 'topic-1779443099999', title: '洞悉美聯儲底層邏輯的範式轉移', body: '', src: './topics/洞悉美聯儲底層邏輯的範式轉移.pdf', categoryKey: 'cat-1779442954583', order: 3 }
     ]
   };
 
@@ -634,7 +639,7 @@
     const file = event.target.files[0];
     if (!file) return;
     if (!document.getElementById('t-src').value) {
-      document.getElementById('t-src').value = `./${file.name}`;
+      document.getElementById('t-src').value = `./topics/${file.name}`;
     }
   }
 
@@ -650,6 +655,8 @@
     renderLists();
     updateReportPreview();
     setMonthToNext();
+    document.getElementById('save-status').textContent = '目前內容與此瀏覽器中已儲存版本一致。';
+    document.getElementById('save-status').className = 'save-status';
   }
 
   /* ── Set month selector to next logical month ── */
@@ -664,7 +671,7 @@
   }
 
   /* ── Render all lists ── */
-  function renderLists() { renderReports(); renderCategories(); renderTopics(); markDirty(); }
+  function renderLists() { renderReports(); renderCategories(); renderTopics(); }
 
   function renderReports() {
     const el = document.getElementById('list-reports');
@@ -888,9 +895,9 @@
   function saveConfig() {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(draft));
-      document.getElementById('save-status').textContent = '✓ 已儲存，入口網站將立即反映變更。';
+      document.getElementById('save-status').textContent = '已儲存到這個瀏覽器。客戶入口網址不會改，但正式內容仍需匯出 portal-config.js 並更新 GitHub。';
       document.getElementById('save-status').className = 'save-status success';
-      showToast('✓ 儲存成功！');
+      showToast('已儲存到本機瀏覽器');
     } catch (e) {
       document.getElementById('save-status').textContent = '⚠ 儲存失敗：' + e.message;
       document.getElementById('save-status').className = 'save-status error';
@@ -912,7 +919,7 @@
 
   /* ── Status helpers ── */
   function setStatusDirty() {
-    document.getElementById('save-status').textContent = '⚠ 有未儲存的變更，請記得點「儲存並套用」。';
+    document.getElementById('save-status').textContent = '⚠ 有未儲存的本機變更。客戶入口網址維持 portal.html，不過正式內容仍要重新匯出 portal-config.js。';
     document.getElementById('save-status').className = 'save-status';
   }
   function markDirty() { setStatusDirty(); }
@@ -933,6 +940,7 @@
     const content = `// P&J Capital Portal — Content Configuration (Published Snapshot)
 // Generated: ${new Date().toISOString()}
 // Workflow: admin.html → 儲存並套用 → 匯出 portal-config.js → replace this file → git push
+// Client-facing entry URL stays fixed at ./portal.html.
 // Writes to 'pj_portal_config_published' (fallback for new visitors).
 // Does NOT overwrite 'pj_portal_config' (admin key), so admin changes persist.
 localStorage.setItem('pj_portal_config_published', JSON.stringify(${json}));

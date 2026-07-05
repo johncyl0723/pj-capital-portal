@@ -67,4 +67,3 @@ const _pjCfg = JSON.stringify({
   ]
 });
 localStorage.setItem('pj_portal_config_published', _pjCfg);
-localStorage.setItem('pj_portal_config', _pjCfg);

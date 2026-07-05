@@ -774,7 +774,7 @@
     </div>
 
     <!-- Iframe for monthly reports -->
-    <iframe id="content-iframe" style="display:none;" onload="onIframeLoad()"></iframe>
+    <iframe id="content-iframe" style="display:none;"></iframe>
 
     <!-- Placeholder panel for topics -->
     <div class="placeholder-panel" id="topic-panel" style="display:none;">
@@ -1088,18 +1088,20 @@
     }
   }
 
+  function getEmbeddedSrc(src) {
+    if (!src) return '';
+    return src.toLowerCase().endsWith('.pdf')
+      ? `${src}#toolbar=1&navpanes=0&scrollbar=1`
+      : src;
+  }
+
   /* ── Report (iframe) ── */
   function showReport(src) {
-    // On mobile, open PDFs in a new tab — native viewer handles zoom perfectly
-    if (window.innerWidth < 768 && src.toLowerCase().endsWith('.pdf')) {
-      window.open(src, '_blank');
-      return;
-    }
     const iframe  = document.getElementById('content-iframe');
     const loading = document.getElementById('loading-overlay');
     iframe.style.display = 'none';
     loading.classList.add('show');
-    iframe.src = src;
+    iframe.src = getEmbeddedSrc(src);
   }
 
   function onIframeLoad() {
@@ -1212,6 +1214,8 @@
     document.getElementById('sidebar').classList.remove('open');
     document.getElementById('sidebar-overlay').classList.remove('visible');
   }
+
+  document.getElementById('content-iframe').addEventListener('load', onIframeLoad);
 
   /* ── Init ── */
   renderSidebar();
