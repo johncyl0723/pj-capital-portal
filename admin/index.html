@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>後臺管理 · P&J Capital Limited</title>
+<style>
+  :root {
+    --wine: #6B1E2C; --wine-dark: #4A1420; --wine-light: #8B3244;
+    --gold: #C9A961; --gold-dark: #A88740;
+    --cream: #FAF7F2; --ink: #1C1917; --muted: #6B6560;
+    --border: #E8E2D8; --card: #FFFFFF;
+    --pos: #15803D; --pos-bg: #DCFCE7;
+    --neg: #B91C1C; --neg-bg: #FEE2E2;
+    --banner-h: 64px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { min-height: 100%; background: var(--cream); color: var(--ink);
+    font-family: 'Segoe UI','Helvetica Neue','PingFang TC','Microsoft JhengHei',system-ui,sans-serif;
+    font-size: 14px; }
+
+  /* ── Banner ── */
+  .banner {
+    position: sticky; top: 0; z-index: 100;
+    height: var(--banner-h);
+    background: linear-gradient(135deg, var(--wine-dark) 0%, var(--wine) 55%, var(--wine-light) 100%);
+    color: #fff; display: flex; align-items: center;
+    padding: 0 32px; gap: 16px;
+    box-shadow: 0 2px 10px rgba(0,0,0,.25);
+  }
+  .banner-logo {
+    width: 40px; height: 40px; flex-shrink: 0;
+    border: 2px solid var(--gold); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 14px; color: var(--gold);
+    background: rgba(0,0,0,.15); letter-spacing: 1px;
+  }
+  .banner-title { font-size: 17px; font-weight: 600; letter-spacing: .4px; }
+  .banner-badge {
+    padding: 3px 10px; border-radius: 12px;
+    background: rgba(201,169,97,.25); border: 1px solid rgba(201,169,97,.5);
+    color: var(--gold); font-size: 11px; font-weight: 700; letter-spacing: 1px;
+  }
+  .banner-divider { width: 1px; height: 32px; background: rgba(255,255,255,.2); }
+  .banner-back {
+    margin-left: auto;
+    padding: 7px 16px; border-radius: 6px;
+    border: 1px solid rgba(255,255,255,.3);
+    background: rgba(255,255,255,.1);
+    color: #fff; font-size: 12px; font-weight: 500;
+    cursor: pointer; text-decoration: none;
+    transition: background .15s;
+  }
+  .banner-back:hover { background: rgba(255,255,255,.22); }
+
+  /* ── Layout ── */
+  .page { max-width: 1100px; margin: 0 auto; padding: 32px 24px 60px; }
+  .page-header { margin-bottom: 28px; }
+  .page-header h1 { font-size: 22px; color: var(--wine); font-weight: 700; }
+  .page-header p { font-size: 13px; color: var(--muted); margin-top: 4px; }
+
+  .sections { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  @media (max-width: 800px) { .sections { grid-template-columns: 1fr; } }
+
+  /* ── Card ── */
+  .card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,.06);
+    transition: box-shadow .2s;
+  }
+  .card:hover { box-shadow: 0 4px 16px rgba(0,0,0,.1); }
+  .card-header {
+    padding: 16px 20px; border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    background: linear-gradient(135deg, #FDFAF6 0%, #FBF5EC 100%);
+  }
+  .card-header-left { display: flex; align-items: center; gap: 10px; }
+  .card-icon { font-size: 18px; }
+  .card-title { font-size: 15px; font-weight: 700; color: var(--wine); }
+  .card-count {
+    font-size: 11px; font-weight: 600; padding: 2px 8px;
+    border-radius: 10px; background: rgba(107,30,44,.1); color: var(--wine);
+  }
+  .card-body { padding: 16px 20px; }
+
+  /* ── Item list ── */
+  .item-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; min-height: 40px; }
+  .item-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 14px; border-radius: 8px;
+    border: 1px solid var(--border); background: #FDFAF6;
+    transition: border-color .15s, transform .1s, box-shadow .15s;
+  }
+  .item-row:hover { border-color: var(--gold); transform: translateX(2px); box-shadow: 0 2px 8px rgba(201,169,97,.15); }
+  .item-row-info { flex: 1; min-width: 0; }
+  .item-row-title { font-size: 13px; font-weight: 600; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .item-row-sub { font-size: 11px; color: var(--muted); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .btn-delete {
+    flex-shrink: 0; width: 28px; height: 28px;
+    border: none; border-radius: 6px; cursor: pointer;
+    background: var(--neg-bg); color: var(--neg);
+    font-size: 14px; display: flex; align-items: center; justify-content: center;
+    transition: background .15s, transform .1s;
+  }
+  .btn-delete:hover { background: #FCA5A5; transform: scale(1.1); }
+  .empty-hint {
+    font-size: 12px; color: var(--muted); text-align: center;
+    padding: 20px 0; border: 1px dashed var(--border);
+    border-radius: 8px; background: rgba(0,0,0,.01);
+  }
+
+  /* ── Add form ── */
+  .add-form { border-top: 1px solid var(--border); padding-top: 16px; }
+  .add-form-title {
+    font-size: 12px; font-weight: 700; color: var(--muted);
+    letter-spacing: .8px; text-transform: uppercase; margin-bottom: 12px;
+  }
+  .form-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
+  .form-group { display: flex; flex-direction: column; gap: 4px; flex: 1; min-width: 80px; }
+  .form-group label { font-size: 11px; color: var(--muted); font-weight: 600; letter-spacing: .3px; }
+  .form-label-optional { font-size: 10px; color: var(--muted); font-weight: 400; margin-left: 4px; opacity: .7; }
+  .form-group input, .form-group select, .form-group textarea {
+    padding: 8px 10px; border: 1px solid var(--border);
+    border-radius: 6px; font-size: 13px; font-family: inherit;
+    background: #fff; color: var(--ink);
+    transition: border-color .15s, box-shadow .15s;
+  }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+    outline: none; border-color: var(--wine);
+    box-shadow: 0 0 0 2px rgba(107,30,44,.1);
+  }
+  .form-group textarea { resize: vertical; min-height: 80px; }
+  .form-preview {
+    padding: 8px 10px; background: #F5EFE5; border-radius: 6px;
+    font-size: 11px; color: var(--muted); margin-bottom: 10px;
+    border: 1px solid var(--border);
+  }
+  .form-preview span { color: var(--wine-dark); font-weight: 600; }
+
+  /* ── Input + Browse button combo ── */
+  .input-with-btn {
+    display: flex; border: 1px solid var(--border);
+    border-radius: 6px; overflow: hidden;
+    transition: border-color .15s, box-shadow .15s;
+  }
+  .input-with-btn:focus-within {
+    border-color: var(--wine);
+    box-shadow: 0 0 0 2px rgba(107,30,44,.1);
+  }
+  .input-with-btn input {
+    flex: 1; border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    min-width: 0;
+  }
+  .input-with-btn input:focus { box-shadow: none !important; }
+  .btn-browse-label {
+    display: flex; align-items: center; gap: 5px;
+    padding: 8px 12px;
+    background: var(--cream); color: var(--muted);
+    border-left: 1px solid var(--border);
+    font-size: 11px; font-weight: 600;
+    cursor: pointer; white-space: nowrap;
+    transition: background .15s, color .15s, border-color .15s;
+    user-select: none; flex-shrink: 0;
+  }
+  .btn-browse-label:hover { background: var(--gold); color: #fff; border-color: var(--gold-dark); }
+  .file-input-hidden { display: none; }
+
+  /* ── Section divider ── */
+  .form-divider {
+    display: flex; align-items: center; gap: 8px;
+    margin: 12px 0 10px; color: var(--muted); font-size: 11px;
+    font-weight: 600; letter-spacing: .5px;
+  }
+  .form-divider::before, .form-divider::after {
+    content: ''; flex: 1; height: 1px; background: var(--border);
+  }
+
+  /* ── Add button ── */
+  .btn-add {
+    width: 100%; padding: 11px;
+    background: linear-gradient(135deg, var(--wine-dark) 0%, var(--wine) 60%, var(--wine-light) 100%);
+    color: #fff; border: none; border-radius: 8px;
+    font-size: 13px; font-weight: 700; font-family: inherit;
+    cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 7px;
+    box-shadow: 0 2px 8px rgba(107,30,44,.25);
+    transition: opacity .15s, transform .1s, box-shadow .15s;
+    letter-spacing: .3px; margin-top: 4px;
+  }
+  .btn-add:hover { opacity: .9; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(107,30,44,.3); }
+  .btn-add:active { transform: translateY(0); }
+  .btn-add:disabled { background: var(--muted); cursor: not-allowed; transform: none; box-shadow: none; }
+
+  /* ── Save bar ── */
+  .save-bar {
+    position: sticky; bottom: 0;
+    background: rgba(250,247,242,.95); backdrop-filter: blur(6px);
+    border-top: 1px solid var(--border);
+    padding: 14px 24px;
+    display: flex; align-items: center; justify-content: flex-end; gap: 12px;
+    z-index: 50;
+  }
+  .save-status { font-size: 13px; color: var(--muted); flex: 1; }
+  .save-status.success { color: var(--pos); font-weight: 600; }
+  .save-status.error   { color: var(--neg); font-weight: 600; }
+  .btn-reset {
+    padding: 9px 20px; border-radius: 7px;
+    border: 1px solid var(--border); background: #fff;
+    font-size: 13px; font-weight: 500; font-family: inherit;
+    color: var(--muted); cursor: pointer;
+    transition: border-color .15s, color .15s;
+  }
+  .btn-reset:hover { border-color: var(--wine); color: var(--wine); }
+  .btn-save {
+    padding: 9px 28px; border-radius: 7px;
+    background: linear-gradient(135deg, var(--wine-dark), var(--wine));
+    color: #fff; border: none;
+    font-size: 13px; font-weight: 700; font-family: inherit;
+    cursor: pointer; box-shadow: 0 2px 6px rgba(107,30,44,.25);
+    transition: opacity .15s, transform .1s;
+  }
+  .btn-save:hover { opacity: .9; transform: translateY(-1px); }
+
+  /* ── Password Gate ── */
+  .gate-overlay {
+    position: fixed; inset: 0; z-index: 9999;
+    background: linear-gradient(135deg, var(--wine-dark) 0%, #1a0a10 100%);
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px;
+  }
+  .gate-overlay.hidden { display: none; }
+  .gate-card {
+    background: #fff; border-radius: 16px;
+    padding: 44px 40px; width: 100%; max-width: 380px;
+    box-shadow: 0 24px 60px rgba(0,0,0,.5);
+    text-align: center;
+  }
+  .gate-logo {
+    width: 64px; height: 64px; border-radius: 50%;
+    border: 3px solid var(--gold); margin: 0 auto 20px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; font-weight: 700; color: var(--gold);
+    background: rgba(107,30,44,.06); letter-spacing: 1px;
+  }
+  .gate-title { font-size: 20px; font-weight: 700; color: var(--wine); margin-bottom: 6px; }
+  .gate-sub { font-size: 13px; color: var(--muted); margin-bottom: 28px; }
+  .gate-input-wrap { position: relative; margin-bottom: 14px; }
+  .gate-input {
+    width: 100%; padding: 12px 44px 12px 14px;
+    border: 1.5px solid var(--border); border-radius: 8px;
+    font-size: 15px; font-family: inherit; background: #FDFAF6;
+    color: var(--ink); letter-spacing: 2px;
+    transition: border-color .15s, box-shadow .15s;
+  }
+  .gate-input:focus { outline: none; border-color: var(--wine); box-shadow: 0 0 0 3px rgba(107,30,44,.1); }
+  .gate-input.shake { animation: shake .4s ease; }
+  .gate-eye {
+    position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+    cursor: pointer; color: var(--muted); font-size: 16px; user-select: none;
+    background: none; border: none; padding: 0;
+  }
+  .gate-eye:hover { color: var(--wine); }
+  .gate-error {
+    font-size: 12px; color: var(--neg); min-height: 18px;
+    margin-bottom: 14px; font-weight: 500;
+  }
+  .gate-btn {
+    width: 100%; padding: 12px;
+    background: linear-gradient(135deg, var(--wine-dark), var(--wine));
+    color: #fff; border: none; border-radius: 8px;
+    font-size: 14px; font-weight: 700; font-family: inherit;
+    cursor: pointer; letter-spacing: .5px;
+    box-shadow: 0 3px 10px rgba(107,30,44,.3);
+    transition: opacity .15s;
+  }
+  .gate-btn:hover { opacity: .9; }
+  .gate-btn:active { opacity: .8; }
+  @keyframes shake {
+    0%,100%{transform:translateX(0)}
+    20%{transform:translateX(-8px)}
+    40%{transform:translateX(8px)}
+    60%{transform:translateX(-6px)}
+    80%{transform:translateX(6px)}
+  }
+
+  .btn-export {
+    padding: 9px 20px; border-radius: 7px;
+    border: 1px solid var(--gold); background: #fff;
+    color: var(--gold-dark); font-size: 13px; font-weight: 600; font-family: inherit;
+    cursor: pointer;
+    transition: background .15s, color .15s;
+  }
+  .btn-export:hover { background: var(--gold); color: #fff; }
+
+  /* ── Topic order input ── */
+  .order-input {
+    width: 46px; padding: 5px 4px; border: 1px solid var(--border);
+    border-radius: 6px; font-size: 12px; font-weight: 700;
+    text-align: center; color: var(--wine);
+    background: rgba(107,30,44,.06); font-family: inherit;
+    flex-shrink: 0; margin-right: 8px;
+    transition: border-color .15s, box-shadow .15s;
+  }
+  .order-input:focus { outline: none; border-color: var(--wine); box-shadow: 0 0 0 2px rgba(107,30,44,.1); }
+  .order-input::-webkit-inner-spin-button { opacity: .4; }
+
+  /* ── Drag handle ── */
+  .drag-handle {
+    flex-shrink: 0; width: 20px; cursor: grab;
+    color: var(--muted); font-size: 18px; line-height: 1;
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0.35; transition: opacity .15s, color .15s;
+    user-select: none;
+  }
+  .drag-handle:active { cursor: grabbing; }
+  .item-row:hover .drag-handle { opacity: 0.75; color: var(--wine); }
+  .item-row.dragging {
+    opacity: 0.45; border: 2px dashed var(--gold);
+    background: #FFF9F0; transform: none !important; box-shadow: none !important;
+  }
+  .item-row.drag-over {
+    border-color: var(--wine); box-shadow: 0 0 0 2px rgba(107,30,44,.2);
+    background: #FDF0F2;
+  }
+
+  /* ── Category management ── */
+  .cat-manage { padding-top: 14px; margin-bottom: 4px; border-top: 1px solid var(--border); }
+  .btn-cat-add {
+    padding: 8px 14px; border: none;
+    background: var(--wine); color: #fff;
+    font-size: 12px; font-weight: 600; font-family: inherit;
+    cursor: pointer; white-space: nowrap; flex-shrink: 0;
+    border-radius: 0 6px 6px 0;
+    border-left: 1px solid var(--wine-dark);
+    transition: background .15s;
+  }
+  .btn-cat-add:hover { background: var(--wine-dark); }
+  .cat-badge {
+    display: inline-block; padding: 1px 7px; border-radius: 10px;
+    background: rgba(107,30,44,.1); color: var(--wine);
+    font-size: 10px; font-weight: 600; margin-left: 6px; vertical-align: middle;
+  }
+
+  /* ── Toast ── */
+  .toast {
+    position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%) translateY(20px);
+    padding: 12px 24px; border-radius: 8px;
+    font-size: 13px; font-weight: 600; color: #fff;
+    background: var(--pos); box-shadow: 0 4px 16px rgba(0,0,0,.2);
+    opacity: 0; pointer-events: none;
+    transition: opacity .25s, transform .25s;
+    z-index: 200; white-space: nowrap;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  .toast.error { background: var(--neg); }
+</style>
+</head>
+<body>
+
+<!-- ══ Password Gate ══ -->
+<div class="gate-overlay" id="gate-overlay">
+  <div class="gate-card">
+    <div class="gate-logo">P&amp;J</div>
+    <div class="gate-title">後臺管理</div>
+    <div class="gate-sub">P&amp;J Capital Limited · Admin Access</div>
+    <div class="gate-input-wrap">
+      <input class="gate-input" type="password" id="gate-input"
+        placeholder="請輸入管理密碼"
+        onkeydown="if(event.key==='Enter')submitGate()" />
+      <button class="gate-eye" id="gate-eye" onclick="toggleGateEye()" tabindex="-1">👁</button>
+    </div>
+    <div class="gate-error" id="gate-error"></div>
+    <button class="gate-btn" onclick="submitGate()">進入後臺 →</button>
+  </div>
+</div>
+
+<!-- ══ Banner ══ -->
+<header class="banner">
+  <div class="banner-logo">P&amp;J</div>
+  <div class="banner-title">P&amp;J Capital Limited</div>
+  <span class="banner-badge">後臺管理 ADMIN</span>
+  <div class="banner-divider"></div>
+  <a href="../portal/" class="banner-back">← 回到入口網站</a>
+</header>
+
+<!-- ══ Page ══ -->
+<div class="page">
+  <div class="page-header">
+    <h1>導覽內容管理</h1>
+    <p>客戶端固定只使用 `/portal/` 這個單一入口網址。這個舊後台只會先儲存在目前瀏覽器；要更新正式內容，仍需匯出 `portal-config.js` 後再提交到 GitHub。</p>
+  </div>
+
+  <div class="sections">
+
+    <!-- ─ Monthly Reports ─ -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-header-left">
+          <span class="card-icon">📅</span>
+          <span class="card-title">每月報表</span>
+          <span class="card-count" id="count-reports">0</span>
+        </div>
+      </div>
+      <div class="card-body">
+
+        <div class="item-list" id="list-reports">
+          <div class="empty-hint">尚無月報項目</div>
+        </div>
+
+        <div class="add-form">
+          <div class="add-form-title">＋ 新增月報</div>
+
+          <!-- Unified path form -->
+          <div class="form-row">
+            <div class="form-group" style="flex:1.2">
+              <label>年份 Year</label>
+              <select id="r-year" onchange="updateReportPreview()">
+                <option value="2022">2022</option>
+                <option value="2023">2023</option>
+                <option value="2024">2024</option>
+                <option value="2025">2025</option>
+                <option value="2026" selected>2026</option>
+                <option value="2027">2027</option>
+                <option value="2028">2028</option>
+                <option value="2029">2029</option>
+                <option value="2030">2030</option>
+              </select>
+            </div>
+            <div class="form-group" style="flex:1">
+              <label>月份 Month</label>
+              <select id="r-month" onchange="updateReportPreview()">
+                <option value="01">01 月</option><option value="02">02 月</option>
+                <option value="03">03 月</option><option value="04">04 月</option>
+                <option value="05">05 月</option><option value="06">06 月</option>
+                <option value="07">07 月</option><option value="08">08 月</option>
+                <option value="09">09 月</option><option value="10">10 月</option>
+                <option value="11">11 月</option><option value="12">12 月</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>檔案路徑
+                <span class="form-label-optional">（自動生成，可手動修改或貼上路徑）</span>
+              </label>
+              <div class="input-with-btn">
+                <input type="text" id="r-path"
+                  placeholder="/2026_05/202605_Monthly Report_index.html" />
+                <label class="btn-browse-label" for="r-file-input">📂 選取檔案</label>
+                <input type="file" class="file-input-hidden" id="r-file-input"
+                  accept=".html,.htm" onchange="fillReportPath(event)" />
+              </div>
+            </div>
+          </div>
+
+          <button class="btn-add" onclick="addReport()">＋ 新增此月報</button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ─ Financial Topics ─ -->
+    <div class="card">
+      <div class="card-header">
+        <div class="card-header-left">
+          <span class="card-icon">📌</span>
+          <span class="card-title">重要財經專題</span>
+          <span class="card-count" id="count-topics">0</span>
+        </div>
+      </div>
+      <div class="card-body">
+
+        <div class="item-list" id="list-topics">
+          <div class="empty-hint">尚無專題項目</div>
+        </div>
+
+        <!-- Category management -->
+        <div class="cat-manage">
+          <div class="add-form-title">🏷 分類管理</div>
+          <div class="item-list" id="list-categories" style="margin-bottom:10px">
+            <div class="empty-hint">尚無分類，請先新增再建立專題</div>
+          </div>
+          <div class="form-row" style="margin-bottom:0">
+            <div class="form-group">
+              <label>新增分類名稱</label>
+              <div class="input-with-btn">
+                <input type="text" id="cat-name" placeholder="例：貨幣政策"
+                  onkeydown="if(event.key==='Enter')addCategory()" />
+                <button class="btn-cat-add" onclick="addCategory()">＋ 新增</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="add-form" style="border-top:1px solid var(--border);margin-top:16px">
+          <div class="add-form-title">＋ 新增專題</div>
+          <div class="form-row">
+            <div class="form-group" style="flex:0 0 90px;min-width:90px">
+              <label>排序編號</label>
+              <input type="number" id="t-order" min="1" value="1"
+                style="text-align:center;font-weight:700;color:var(--wine)" />
+            </div>
+            <div class="form-group">
+              <label>所屬分類</label>
+              <select id="t-category" onchange="suggestTopicOrder()">
+                <option value="">— 未分類 —</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>專題標題</label>
+              <input type="text" id="t-title" placeholder="例：2026 Q3 聯準會觀察" />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>說明內容<span class="form-label-optional">（選填）</span></label>
+              <textarea id="t-body" placeholder="簡要說明此專題的範圍與目的…"></textarea>
+            </div>
+          </div>
+          <div class="form-divider">連結檔案</div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>PDF 或 HTML 檔案路徑
+                <span class="form-label-optional">（選填，手動填寫或點「選取檔案」）</span>
+              </label>
+              <div class="input-with-btn">
+                <input type="text" id="t-src" placeholder="/topics/credit_market.pdf" />
+                <label class="btn-browse-label" for="t-file-input">📂 選取檔案</label>
+                <input type="file" class="file-input-hidden" id="t-file-input"
+                  accept=".pdf,.html,.htm" onchange="fillTopicPath(event)" />
+              </div>
+            </div>
+          </div>
+          <button class="btn-add" onclick="addTopic()">＋ 新增此專題</button>
+        </div>
+
+      </div>
+    </div>
+
+  </div><!-- /.sections -->
+</div><!-- /.page -->
+
+<!-- ══ Save bar ══ -->
+<div class="save-bar">
+  <div class="save-status" id="save-status">尚未儲存的變更將不會反映到入口網站。</div>
+  <button class="btn-reset" onclick="resetToDefault()">還原預設</button>
+  <button class="btn-export" onclick="exportConfig()">匯出 portal-config.js ↓</button>
+  <button class="btn-save" onclick="saveConfig()">儲存並套用 ✓</button>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+  /* ── Password Gate (SHA-256) ── */
+  const PASS_HASH = '982f840d0dffbbd69c5c24c3ab4550af7b39451436da4a1a030b2d1d2cbf1a58';
+  const AUTH_KEY  = 'pj_admin_auth';
+
+  async function sha256(str) {
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('');
+  }
+
+  function checkGate() {
+    if (sessionStorage.getItem(AUTH_KEY) === '1') {
+      document.getElementById('gate-overlay').classList.add('hidden');
+    } else {
+      setTimeout(() => document.getElementById('gate-input').focus(), 100);
+    }
+  }
+
+  async function submitGate() {
+    const input = document.getElementById('gate-input');
+    const errEl = document.getElementById('gate-error');
+    const hash  = await sha256(input.value);
+    if (hash === PASS_HASH) {
+      sessionStorage.setItem(AUTH_KEY, '1');
+      document.getElementById('gate-overlay').classList.add('hidden');
+      errEl.textContent = '';
+    } else {
+      errEl.textContent = '密碼錯誤，請再試一次。';
+      input.classList.add('shake');
+      input.value = '';
+      setTimeout(() => { input.classList.remove('shake'); input.focus(); }, 450);
+    }
+  }
+
+  function toggleGateEye() {
+    const input = document.getElementById('gate-input');
+    input.type = input.type === 'password' ? 'text' : 'password';
+  }
+
+  /* ── App config ── */
+  const STORAGE_KEY = 'pj_portal_config';
+
+  const DEFAULT_CONFIG = {
+    monthlyReports: [
+      { key: '202605', label: '2026 年 05 月', src: '/2026_05/202605_Monthly Report_index.html' },
+      { key: '202604', label: '2026 年 04 月', src: '/2026_04/202604_Monthly Report_index.html' },
+      { key: '202603', label: '2026 年 03 月', src: '/2026_03/202603_Monthly Report_index.html' },
+      { key: '202602', label: '2026 年 02 月', src: '/2026_02/202602_Monthly Report_index.html' },
+      { key: '202601', label: '2026 年 01 月', src: '/2026_01/202601_Monthly Report_index.html' },
+    ],
+    categories: [
+      { key: 'cat-1779442954583', name: '財經市場硬核' },
+      { key: 'cat-1779442981868', name: '財經時事解讀' }
+    ],
+    topics: [
+      { key: 'topic-1779443004537', title: 'SLR改革_財政主導的金融新時代', body: '', src: '/topics/SLR改革_財政主導的金融新時代.pdf', categoryKey: 'cat-1779442954583', order: 1 },
+      { key: 'topic-1779443032479', title: '新貨幣時代的序幕解碼RMP', body: '', src: '/topics/新貨幣時代的序幕解碼RMP.pdf', categoryKey: 'cat-1779442954583', order: 2 },
+      { key: 'topic-1779443099999', title: '洞悉美聯儲底層邏輯的範式轉移', body: '', src: '/topics/洞悉美聯儲底層邏輯的範式轉移.pdf', categoryKey: 'cat-1779442954583', order: 3 }
+    ]
+  };
+
+  function clone(o) { return JSON.parse(JSON.stringify(o)); }
+  let draft = clone(DEFAULT_CONFIG);
+
+  /* ── Fill path from file picker ── */
+  function fillReportPath(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    const name = file.name;
+    const match = name.match(/^(\d{4})(\d{2})/);
+    if (match) {
+      const y = match[1], m = match[2];
+      document.getElementById('r-year').value  = y;
+      document.getElementById('r-month').value = m;
+      document.getElementById('r-path').value  = `/${y}_${m}/${name}`;
+    } else {
+      document.getElementById('r-path').value = `/${name}`;
+    }
+  }
+
+  function fillTopicPath(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    if (!document.getElementById('t-src').value) {
+      document.getElementById('t-src').value = `/topics/${file.name}`;
+    }
+  }
+
+  /* ── Load from localStorage on init ── */
+  function init() {
+    try {
+      const s = localStorage.getItem(STORAGE_KEY);
+      draft = s ? JSON.parse(s) : clone(DEFAULT_CONFIG);
+      // Migrate: ensure new fields exist on old data
+      if (!draft.categories) draft.categories = [];
+      draft.topics = draft.topics.map((t, i) => ({ src: '', categoryKey: '', order: i + 1, ...t }));
+    } catch { draft = clone(DEFAULT_CONFIG); }
+    renderLists();
+    updateReportPreview();
+    setMonthToNext();
+    document.getElementById('save-status').textContent = '目前內容與此瀏覽器中已儲存版本一致。';
+    document.getElementById('save-status').className = 'save-status';
+  }
+
+  /* ── Set month selector to next logical month ── */
+  function setMonthToNext() {
+    if (draft.monthlyReports.length === 0) return;
+    const last = draft.monthlyReports[0].key;
+    const y = parseInt(last.slice(0,4)), m = parseInt(last.slice(4,6));
+    const next = m === 12 ? { y: y+1, m: 1 } : { y, m: m+1 };
+    document.getElementById('r-year').value  = next.y;
+    document.getElementById('r-month').value = String(next.m).padStart(2,'0');
+    updateReportPreview();
+  }
+
+  /* ── Render all lists ── */
+  function renderLists() { renderReports(); renderCategories(); renderTopics(); }
+
+  function renderReports() {
+    const el = document.getElementById('list-reports');
+    document.getElementById('count-reports').textContent = draft.monthlyReports.length;
+    if (draft.monthlyReports.length === 0) {
+      el.innerHTML = '<div class="empty-hint">尚無月報項目</div>'; return;
+    }
+    el.innerHTML = draft.monthlyReports.map((r, i) => `
+      <div class="item-row" draggable="true" data-idx="${i}">
+        <div class="drag-handle" title="拖曳以調整順序">⠿</div>
+        <div class="item-row-info">
+          <div class="item-row-title">${r.label}</div>
+          <div class="item-row-sub">${r.src}</div>
+        </div>
+        <button class="btn-delete" title="刪除" onclick="deleteReport(${i})">✕</button>
+      </div>`).join('');
+    initReportDrag();
+  }
+
+  function renderTopics() {
+    const el = document.getElementById('list-topics');
+    document.getElementById('count-topics').textContent = draft.topics.length;
+    if (draft.topics.length === 0) {
+      el.innerHTML = '<div class="empty-hint">尚無專題項目</div>'; return;
+    }
+    // Display sorted by category name then order, but preserve original index for mutations
+    const sorted = draft.topics
+      .map((t, i) => ({ ...t, _idx: i }))
+      .sort((a, b) => {
+        const catA = (draft.categories.find(c => c.key === a.categoryKey) || {}).name || '　';
+        const catB = (draft.categories.find(c => c.key === b.categoryKey) || {}).name || '　';
+        if (catA !== catB) return catA.localeCompare(catB, 'zh-Hant');
+        return (a.order || 999) - (b.order || 999);
+      });
+    el.innerHTML = sorted.map(t => {
+      const cat = draft.categories.find(c => c.key === t.categoryKey);
+      const catLabel = cat ? cat.name : '未分類';
+      return `
+        <div class="item-row">
+          <input type="number" class="order-input" value="${t.order || 1}" min="1"
+            title="排序編號" onchange="updateTopicOrder(${t._idx}, this.value)" />
+          <div class="item-row-info">
+            <div class="item-row-title">${t.title}<span class="cat-badge">${catLabel}</span></div>
+            <div class="item-row-sub">${t.src ? '🔗 ' + t.src : (t.body ? t.body.slice(0,50)+'…' : '（無說明）')}</div>
+          </div>
+          <button class="btn-delete" title="刪除" onclick="deleteTopic(${t._idx})">✕</button>
+        </div>`;
+    }).join('');
+  }
+
+  function updateTopicOrder(i, val) {
+    draft.topics[i].order = Math.max(1, parseInt(val) || 1);
+    setStatusDirty();
+  }
+
+  /* ── Render categories + populate select ── */
+  function renderCategories() {
+    const el = document.getElementById('list-categories');
+    if (draft.categories.length === 0) {
+      el.innerHTML = '<div class="empty-hint">尚無分類，請先新增再建立專題</div>';
+    } else {
+      el.innerHTML = draft.categories.map((c, i) => {
+        const count = draft.topics.filter(t => t.categoryKey === c.key).length;
+        return `
+          <div class="item-row" style="padding:7px 14px">
+            <div class="item-row-info">
+              <div class="item-row-title" style="font-size:12px">🏷 ${c.name}</div>
+              <div class="item-row-sub" style="font-size:10px">${count} 個專題</div>
+            </div>
+            <button class="btn-delete" title="刪除分類" onclick="deleteCategory(${i})">✕</button>
+          </div>`;
+      }).join('');
+    }
+    populateCategorySelect();
+  }
+
+  function populateCategorySelect() {
+    const sel = document.getElementById('t-category');
+    const cur = sel.value;
+    sel.innerHTML = '<option value="">— 未分類 —</option>' +
+      draft.categories.map(c => `<option value="${c.key}">${c.name}</option>`).join('');
+    if (draft.categories.some(c => c.key === cur)) sel.value = cur;
+  }
+
+  /* ── Add / delete category ── */
+  function addCategory() {
+    const name = document.getElementById('cat-name').value.trim();
+    if (!name) { showToast('請輸入分類名稱', true); return; }
+    if (draft.categories.some(c => c.name === name)) { showToast('此分類名稱已存在', true); return; }
+    draft.categories.push({ key: 'cat-' + Date.now(), name });
+    renderCategories();
+    document.getElementById('cat-name').value = '';
+    setStatusDirty();
+    showToast(`✓ 分類「${name}」已新增`);
+  }
+
+  function deleteCategory(i) {
+    const c = draft.categories[i];
+    const count = draft.topics.filter(t => t.categoryKey === c.key).length;
+    const msg = count > 0
+      ? `分類「${c.name}」下有 ${count} 個專題，刪除後這些專題將變為未分類。確定刪除？`
+      : `確定要刪除分類「${c.name}」嗎？`;
+    if (!confirm(msg)) return;
+    if (count > 0) draft.topics = draft.topics.map(t => t.categoryKey === c.key ? { ...t, categoryKey: '' } : t);
+    draft.categories.splice(i, 1);
+    renderLists();
+    setStatusDirty();
+  }
+
+  /* ── Report: auto-fill path when year/month changes ── */
+  function updateReportPreview() {
+    const y = document.getElementById('r-year').value;
+    const m = document.getElementById('r-month').value;
+    document.getElementById('r-path').value = `/${y}_${m}/${y}${m}_Monthly Report_index.html`;
+  }
+
+  /* ── Add report ── */
+  function addReport() {
+    const y   = document.getElementById('r-year').value;
+    const m   = document.getElementById('r-month').value;
+    const src = document.getElementById('r-path').value.trim();
+    if (!src) { showToast('請輸入或選取檔案路徑', true); return; }
+    const key   = `${y}${m}`;
+    const label = `${y} 年 ${m} 月`;
+    if (draft.monthlyReports.some(r => r.key === key)) {
+      showToast('此月報已存在，請勿重複新增', true); return;
+    }
+    draft.monthlyReports.unshift({ key, label, src });
+    renderReports();
+    // advance selector to next logical month
+    const nextM = parseInt(m) === 12 ? 1 : parseInt(m) + 1;
+    const nextY = parseInt(m) === 12 ? String(parseInt(y) + 1) : y;
+    document.getElementById('r-year').value  = nextY;
+    document.getElementById('r-month').value = String(nextM).padStart(2, '0');
+    updateReportPreview();
+    setStatusDirty();
+    showToast('✓ 月報已新增，記得儲存！');
+  }
+
+  /* ── Delete report ── */
+  function deleteReport(i) {
+    const r = draft.monthlyReports[i];
+    if (!confirm(`確定要刪除「${r.label}」嗎？`)) return;
+    draft.monthlyReports.splice(i, 1);
+    renderReports();
+    setStatusDirty();
+  }
+
+  /* ── Report drag-and-drop reorder ── */
+  let _dragSrcIdx = null;
+
+  function initReportDrag() {
+    const list = document.getElementById('list-reports');
+    list.querySelectorAll('.item-row[draggable]').forEach(row => {
+      row.addEventListener('dragstart', e => {
+        _dragSrcIdx = parseInt(row.dataset.idx);
+        setTimeout(() => row.classList.add('dragging'), 0);
+        e.dataTransfer.effectAllowed = 'move';
+      });
+      row.addEventListener('dragend', () => {
+        row.classList.remove('dragging');
+        list.querySelectorAll('.item-row').forEach(r => r.classList.remove('drag-over'));
+      });
+      row.addEventListener('dragover', e => {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        list.querySelectorAll('.item-row').forEach(r => r.classList.remove('drag-over'));
+        row.classList.add('drag-over');
+      });
+      row.addEventListener('dragleave', () => row.classList.remove('drag-over'));
+      row.addEventListener('drop', e => {
+        e.preventDefault();
+        const targetIdx = parseInt(row.dataset.idx);
+        if (_dragSrcIdx === null || _dragSrcIdx === targetIdx) return;
+        const [moved] = draft.monthlyReports.splice(_dragSrcIdx, 1);
+        draft.monthlyReports.splice(targetIdx, 0, moved);
+        _dragSrcIdx = null;
+        renderReports();
+        setStatusDirty();
+        showToast('✓ 順序已更新，記得儲存！');
+      });
+    });
+  }
+
+  /* ── Suggest next order number for the selected category ── */
+  function suggestTopicOrder() {
+    const catKey = document.getElementById('t-category').value;
+    const inCat  = draft.topics.filter(t => t.categoryKey === catKey);
+    const maxOrd = inCat.length > 0 ? Math.max(...inCat.map(t => t.order || 1)) : 0;
+    document.getElementById('t-order').value = maxOrd + 1;
+  }
+
+  /* ── Add topic ── */
+  function addTopic() {
+    const title       = document.getElementById('t-title').value.trim();
+    const body        = document.getElementById('t-body').value.trim();
+    const src         = document.getElementById('t-src').value.trim();
+    const categoryKey = document.getElementById('t-category').value;
+    const order       = Math.max(1, parseInt(document.getElementById('t-order').value) || 1);
+    if (!title) { showToast('請輸入專題標題', true); return; }
+    draft.topics.push({ key: 'topic-' + Date.now(), title, body, src, categoryKey, order });
+    renderTopics();
+    document.getElementById('t-title').value = '';
+    document.getElementById('t-body').value  = '';
+    document.getElementById('t-src').value   = '';
+    suggestTopicOrder();   // auto-advance to next number
+    setStatusDirty();
+    showToast('✓ 專題已新增，記得儲存！');
+  }
+
+  /* ── Delete topic ── */
+  function deleteTopic(i) {
+    const t = draft.topics[i];
+    if (!confirm(`確定要刪除「${t.title}」嗎？`)) return;
+    draft.topics.splice(i, 1);
+    renderTopics();
+    setStatusDirty();
+  }
+
+  /* ── Save ── */
+  function saveConfig() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(draft));
+      document.getElementById('save-status').textContent = '已儲存到這個瀏覽器。客戶入口網址不會改，但正式內容仍需匯出 portal-config.js 並更新 GitHub。';
+      document.getElementById('save-status').className = 'save-status success';
+      showToast('已儲存到本機瀏覽器');
+    } catch (e) {
+      document.getElementById('save-status').textContent = '⚠ 儲存失敗：' + e.message;
+      document.getElementById('save-status').className = 'save-status error';
+      showToast('儲存失敗', true);
+    }
+  }
+
+  /* ── Reset ── */
+  function resetToDefault() {
+    if (!confirm('確定要還原為預設內容？目前所有變更將遺失。')) return;
+    localStorage.removeItem(STORAGE_KEY);
+    draft = clone(DEFAULT_CONFIG);
+    renderLists();
+    updateReportPreview();
+    setMonthToNext();
+    document.getElementById('save-status').textContent = '已還原預設，請點「儲存並套用」確認。';
+    document.getElementById('save-status').className = 'save-status';
+  }
+
+  /* ── Status helpers ── */
+  function setStatusDirty() {
+    document.getElementById('save-status').textContent = '⚠ 有未儲存的本機變更。客戶入口網址維持 /portal/，不過正式內容仍要重新匯出 portal-config.js。';
+    document.getElementById('save-status').className = 'save-status';
+  }
+  function markDirty() { setStatusDirty(); }
+
+  /* ── Toast ── */
+  let toastTimer;
+  function showToast(msg, isError = false) {
+    const el = document.getElementById('toast');
+    el.textContent = msg;
+    el.className = 'toast' + (isError ? ' error' : '') + ' show';
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => { el.classList.remove('show'); }, 2800);
+  }
+
+  /* ── Export portal-config.js ── */
+  function exportConfig() {
+    const json = JSON.stringify(draft, null, 2);
+    const content = `// P&J Capital Portal — Content Configuration (Published Snapshot)
+// Generated: ${new Date().toISOString()}
+// Workflow: /admin/ → 儲存並套用 → 匯出 portal-config.js → replace this file → git push
+// Client-facing entry URL stays fixed at /portal/.
+// Writes to 'pj_portal_config_published' (fallback for new visitors).
+// Does NOT overwrite 'pj_portal_config' (admin key), so admin changes persist.
+localStorage.setItem('pj_portal_config_published', JSON.stringify(${json}));
+`;
+    const blob = new Blob([content], { type: 'text/javascript' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'portal-config.js';
+    a.click();
+    URL.revokeObjectURL(url);
+    showToast('✓ portal-config.js 已下載，請加入 repo 並 git push');
+  }
+
+  /* ── Boot ── */
+  checkGate();
+  init();
+</script>
+</body>
+</html>
