@@ -1,0 +1,72 @@
+# Netlify Build Configuration
+# P&J Capital Portal - Client Portal & Admin Dashboard
+
+[build]
+  # 根目錄本身就是靜態站點，無需 build 步驟
+  base = "."
+  publish = "."
+  command = ""  # 無 build 命令（純靜態）
+
+[build.environment]
+  # 環境變數（如需要）
+  NODE_VERSION = "18"
+
+# 重定向規則（適配 SPA 路由）
+[[redirects]]
+  from = "/portal/*"
+  to = "/portal/"
+  status = 301
+
+[[redirects]]
+  from = "/admin/*"
+  to = "/admin/"
+  status = 301
+
+# SPA 單頁應用：404 回到首頁（用於前端路由）
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# HTTP 安全標頭
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "SAMEORIGIN"
+    X-Content-Type-Options = "nosniff"
+    X-XSS-Protection = "1; mode=block"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    # 允許自訂域名下的跨域資源
+    Access-Control-Allow-Origin = "*"
+
+# 緩存策略
+[[headers]]
+  for = "/index.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/portal-config.js"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/admin/index.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+# 靜態資源：長期緩存
+[[headers]]
+  for = "/logo*.png"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.pdf"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"
+
+# 部署通知
+[deploy]
+  on_success = "notify"
+  on_failure = "notify"
