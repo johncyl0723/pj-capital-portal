@@ -41,10 +41,13 @@ export const config: Config = {
   path: "/*",
   excludedPath: [
     // 品牌歡迎頁（index.html）。這是對外的公開門面，客戶要先看到它才能按
-    // 「客戶登入」。頁面本身只有公司介紹，不含任何客戶資料，也沒有引用本站
-    // 的其他檔案（字型走 Google CDN），所以放行它不會連帶暴露別的東西。
+    // 「客戶登入」。頁面本身只有公司介紹，不含任何客戶資料。
     "/",
     "/index.html",
+    // 歡迎頁唯一引用的本站資源（index.html 裡寫作 src="logo-icon.png"）。
+    // 不放行的話，未登入的訪客會看到破圖的 logo。
+    // 注意：/logo.png 只有登入後的 portal 會用到，維持保護不要放行。
+    "/logo-icon.png",
     // Netlify 自己的內部端點。
     "/.netlify/*",
   ],
