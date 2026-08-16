@@ -35,4 +35,9 @@ export default async (req: Request, context: Context) => {
 
 export const config: Config = {
   path: "/*",
+  // Let Netlify's own internal endpoints (e.g. the bot-protection challenge
+  // submission at /.netlify/submit-challenge) pass through unauthenticated —
+  // otherwise the challenge's verification request gets a 401 from us and the
+  // page reload-loops forever.
+  excludedPath: "/.netlify/*",
 };
