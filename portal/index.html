@@ -826,6 +826,17 @@
   const STORAGE_KEY = 'pj_portal_config';        // admin key (priority)
   const PUB_KEY     = 'pj_portal_config_published'; // published key (fallback)
 
+  /* Site root-relative paths (e.g. "/2026_05/...") are authored assuming the
+     portal is served from the domain root. On GitHub Pages project sites this
+     page actually lives under "/<repo>/portal/", so root-relative links must
+     be re-based onto that prefix or they 404. Detect the prefix from the
+     current URL instead of hardcoding it, so this also works unmodified on
+     Netlify (deployed at the true domain root, no prefix). */
+  const REPO_BASE = (() => {
+    const i = location.pathname.indexOf('/portal/');
+    return i > 0 ? location.pathname.slice(0, i) : '';
+  })();
+
   const DEFAULT_CONFIG = {
     monthlyReports: [
       { key: '202604', label: '2026 年 04 月', src: '/2026_04/202604_Monthly Report_index.html' },
@@ -1090,9 +1101,10 @@
 
   function getEmbeddedSrc(src) {
     if (!src) return '';
-    return src.toLowerCase().endsWith('.pdf')
-      ? `${src}#toolbar=1&navpanes=0&scrollbar=1`
-      : src;
+    const resolved = src.startsWith('/') ? REPO_BASE + src : src;
+    return resolved.toLowerCase().endsWith('.pdf')
+      ? `${resolved}#toolbar=1&navpanes=0&scrollbar=1`
+      : resolved;
   }
 
   /* ── Report (iframe) ── */
