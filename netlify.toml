@@ -11,16 +11,11 @@
   # 環境變數（如需要）
   NODE_VERSION = "18"
 
-# 重定向規則（適配 SPA 路由）
-[[redirects]]
-  from = "/portal/*"
-  to = "/portal/"
-  status = 301
-
-[[redirects]]
-  from = "/admin/*"
-  to = "/admin/"
-  status = 301
+# 注意：不要為 /portal/* 或 /admin/* 加「導向自己所屬目錄」的 301 規則。
+# 例如 from = "/portal/*" → to = "/portal/" 會讓 /portal/ 自己命中自己
+# （splat 可比對空字串），與 Netlify 內建的去尾斜線正規化互相拉扯，
+# 形成無限轉址迴圈。目錄索引 (portal/index.html) Netlify 本來就會處理，
+# 不需要任何額外規則。
 
 # SPA 單頁應用：404 回到首頁（用於前端路由）
 [[redirects]]

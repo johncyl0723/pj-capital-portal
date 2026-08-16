@@ -1,4 +1,8 @@
-// KS Capital Portal — site-wide Basic Auth gate
+// KS Capital Portal — Basic Auth gate
+//
+// 預設全站擋下（path: "/*"），只在 excludedPath 明確放行少數公開路徑。
+// 用「預設拒絕」而非「逐一列舉要保護的路徑」，是為了讓日後新增的月報資料夾
+// （例如 2027_01/）自動受保護，不會因為忘了加規則而外洩。
 import type { Context, Config } from "@netlify/edge-functions";
 
 export default async (req: Request, context: Context) => {
@@ -35,9 +39,13 @@ export default async (req: Request, context: Context) => {
 
 export const config: Config = {
   path: "/*",
-  // Let Netlify's own internal endpoints (e.g. the bot-protection challenge
-  // submission at /.netlify/submit-challenge) pass through unauthenticated —
-  // otherwise the challenge's verification request gets a 401 from us and the
-  // page reload-loops forever.
-  excludedPath: "/.netlify/*",
+  excludedPath: [
+    // 品牌歡迎頁（index.html）。這是對外的公開門面，客戶要先看到它才能按
+    // 「客戶登入」。頁面本身只有公司介紹，不含任何客戶資料，也沒有引用本站
+    // 的其他檔案（字型走 Google CDN），所以放行它不會連帶暴露別的東西。
+    "/",
+    "/index.html",
+    // Netlify 自己的內部端點。
+    "/.netlify/*",
+  ],
 };
