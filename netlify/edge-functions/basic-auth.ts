@@ -1,3 +1,4 @@
+// KS Capital Portal — site-wide Basic Auth gate
 import type { Context, Config } from "@netlify/edge-functions";
 
 export default async (req: Request, context: Context) => {
