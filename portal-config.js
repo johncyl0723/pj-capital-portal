@@ -1,8 +1,13 @@
 // P&J Capital Portal — Content Configuration (Published Snapshot)
-// Generated: 2026-08-16T00:00:00.000Z
+// Generated: 2026-10-04T00:00:00.000Z
 // Workflow: /admin/ -> Save & Apply -> Export portal-config.js -> replace this file -> git push
 const _pjCfg = JSON.stringify({
   "monthlyReports": [
+    {
+      "key": "202608",
+      "label": "2026 年 08 月",
+      "src": "/2026_08/202608_Monthly Report_index.html"
+    },
     {
       "key": "202607",
       "label": "2026 年 07 月",
