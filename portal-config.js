@@ -1,7 +1,9 @@
 // P&J Capital Portal — Content Configuration (Published Snapshot)
-// Generated: 2026-10-04T00:00:00.000Z
-// Workflow: /admin/ -> Save & Apply -> Export portal-config.js -> replace this file -> git push
-const _pjCfg = JSON.stringify({
+// Generated: 2026-10-05T00:00:00.000Z
+// 前台 /portal/ 與後台 /admin/ 都以這個檔案為唯一資料來源。
+// Workflow: /admin/ -> 儲存並套用 -> 匯出 portal-config.js -> replace this file -> git push
+window.PJ_PORTAL_CONFIG = {
+  "publishedAt": "2026-10-05T00:00:00.000Z",
   "monthlyReports": [
     {
       "key": "202608",
@@ -80,5 +82,5 @@ const _pjCfg = JSON.stringify({
       "name": "財經時事解讀"
     }
   ]
-});
-localStorage.setItem('pj_portal_config_published', _pjCfg);
+};
+try { localStorage.setItem('pj_portal_config_published', JSON.stringify(window.PJ_PORTAL_CONFIG)); } catch (e) {}

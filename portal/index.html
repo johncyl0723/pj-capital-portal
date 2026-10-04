@@ -819,12 +819,10 @@
   })();
 </script>
 <script>
-  /* ── Config keys ──
-     ADMIN_KEY  : written by admin.html "儲存並套用", takes priority
-     PUB_KEY    : written by portal-config.js (GitHub-published snapshot)
-     portal-config.js NO LONGER overwrites ADMIN_KEY, so admin changes persist ── */
-  const STORAGE_KEY = 'pj_portal_config';        // admin key (priority)
-  const PUB_KEY     = 'pj_portal_config_published'; // published key (fallback)
+  /* ── Config source ──
+     portal-config.js (GitHub-published snapshot) is the only source of truth.
+     It sets window.PJ_PORTAL_CONFIG and mirrors it into PUB_KEY. ── */
+  const PUB_KEY     = 'pj_portal_config_published';
 
   /* Site root-relative paths (e.g. "/2026_05/...") are authored assuming the
      portal is served from the domain root. On GitHub Pages project sites this
@@ -910,11 +908,9 @@
   };
 
   function loadConfig() {
+    // 只使用已發布的 portal-config.js，後台在某個瀏覽器裡的草稿不會影響前台。
+    if (window.PJ_PORTAL_CONFIG) return window.PJ_PORTAL_CONFIG;
     try {
-      // Admin key (saved by 後臺 admin.html) takes priority
-      const admin = localStorage.getItem(STORAGE_KEY);
-      if (admin) return JSON.parse(admin);
-      // Fall back to published snapshot (written by portal-config.js)
       const pub = localStorage.getItem(PUB_KEY);
       if (pub) return JSON.parse(pub);
     } catch {}
