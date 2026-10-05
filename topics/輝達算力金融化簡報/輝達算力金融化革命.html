@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 算力金融化革命｜輝達 5,000 億美元融資平台深度解析</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=Noto+Serif+TC:wght@500;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy-950:#080d18;
+    --navy-900:#0a1120;
+    --navy-800:#0d1830;
+    --navy-700:#122040;
+    --navy-600:#1a2c52;
+    --cream:#f4efe2;
+    --cream-dim:#cfc8b4;
+    --gold:#d4af37;
+    --gold-bright:#f0cd6b;
+    --red:#c0392b;
+    --red-bright:#e8604f;
+    --teal:#2fa38c;
+    --teal-bright:#4fd3b8;
+    --line:rgba(212,175,55,0.28);
+    --serif:'Noto Serif TC',serif;
+    --sans:'Noto Sans TC',sans-serif;
+    --mono:'JetBrains Mono',monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html,body{
+    width:100%;height:100%;
+    background:var(--navy-950);
+    color:var(--cream);
+    font-family:var(--sans);
+    overflow:hidden;
+  }
+  .deck{position:relative;width:100vw;height:100vh;}
+  .slide{
+    position:absolute;inset:0;
+    width:100%;height:100%;
+    display:flex;flex-direction:column;
+    background:
+      radial-gradient(circle at 85% -10%, rgba(212,175,55,0.10), transparent 45%),
+      radial-gradient(circle at -5% 110%, rgba(47,163,140,0.08), transparent 45%),
+      linear-gradient(180deg, var(--navy-950) 0%, var(--navy-900) 100%);
+    opacity:0;visibility:hidden;
+    transform:translateY(18px);
+    transition:opacity .55s ease, transform .55s ease, visibility 0s linear .55s;
+    padding:clamp(28px,4vh,56px) clamp(32px,5vw,88px);
+    overflow:hidden;
+  }
+  .slide.active{
+    opacity:1;visibility:visible;transform:translateY(0);
+    transition:opacity .55s ease, transform .55s ease;
+  }
+  .blueprint-grid{
+    position:absolute;inset:0;pointer-events:none;
+    background-image:
+      linear-gradient(rgba(212,175,55,0.045) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(212,175,55,0.045) 1px, transparent 1px);
+    background-size:42px 42px;
+    -webkit-mask-image:radial-gradient(ellipse at center, black 40%, transparent 82%);
+            mask-image:radial-gradient(ellipse at center, black 40%, transparent 82%);
+  }
+  .frame-corner{position:absolute;width:26px;height:26px;border-color:var(--gold);opacity:.55;pointer-events:none;}
+  .frame-corner.tl{top:18px;left:18px;border-top:2px solid;border-left:2px solid;}
+  .frame-corner.tr{top:18px;right:18px;border-top:2px solid;border-right:2px solid;}
+  .frame-corner.bl{bottom:18px;left:18px;border-bottom:2px solid;border-left:2px solid;}
+  .frame-corner.br{bottom:18px;right:18px;border-bottom:2px solid;border-right:2px solid;}
+
+  /* ---------- top chrome ---------- */
+  .eyebrow{
+    display:flex;align-items:center;gap:10px;
+    font-family:var(--mono);font-size:12px;letter-spacing:.16em;color:var(--gold-bright);
+    text-transform:uppercase;margin-bottom:10px;z-index:2;
+  }
+  .eyebrow::before{content:'';width:22px;height:1px;background:var(--gold);display:inline-block;}
+  h1.slide-title{
+    font-family:var(--sans);font-weight:900;color:var(--cream);
+    font-size:clamp(26px,3.4vw,44px);line-height:1.28;letter-spacing:.01em;
+    z-index:2;
+  }
+  h1.slide-title .accent{color:var(--gold-bright);}
+  h1.slide-title .danger{color:var(--red-bright);}
+  .slide-sub{
+    font-family:var(--sans);font-weight:500;color:var(--cream-dim);
+    font-size:clamp(13px,1.15vw,16px);margin-top:10px;line-height:1.6;max-width:900px;z-index:2;
+  }
+  .slide-head{margin-bottom:clamp(16px,2.4vh,28px);flex-shrink:0;}
+  .slide-body{flex:1;min-height:0;z-index:2;display:flex;flex-direction:column;}
+
+  /* ---------- nav ---------- */
+  .nav{
+    position:fixed;left:0;right:0;bottom:16px;
+    display:flex;align-items:center;justify-content:center;gap:18px;
+    z-index:50;font-family:var(--mono);
+  }
+  .nav-btn{
+    width:38px;height:38px;border-radius:50%;
+    border:1px solid var(--line);background:rgba(10,17,32,0.75);
+    color:var(--gold-bright);display:flex;align-items:center;justify-content:center;
+    cursor:pointer;transition:all .2s ease;backdrop-filter:blur(6px);
+  }
+  .nav-btn:hover{background:var(--gold);color:var(--navy-950);}
+  .dots{display:flex;gap:9px;padding:8px 16px;border:1px solid var(--line);border-radius:20px;background:rgba(10,17,32,0.75);backdrop-filter:blur(6px);}
+  .dot{width:7px;height:7px;border-radius:50%;background:rgba(244,239,226,0.28);cursor:pointer;transition:all .25s ease;}
+  .dot.active{background:var(--gold-bright);width:20px;border-radius:4px;}
+  .counter{
+    position:fixed;top:22px;right:clamp(20px,4vw,56px);z-index:50;
+    font-family:var(--mono);font-size:12px;color:var(--cream-dim);letter-spacing:.08em;
+    display:flex;align-items:baseline;gap:4px;
+  }
+  .counter b{color:var(--gold-bright);font-size:16px;}
+  .brand{
+    position:fixed;top:22px;left:clamp(20px,4vw,56px);z-index:50;
+    font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--cream-dim);
+    text-transform:uppercase;opacity:.75;
+  }
+
+  /* ---------- reusable components ---------- */
+  .tag{
+    display:inline-flex;align-items:center;gap:6px;
+    font-family:var(--mono);font-size:11px;letter-spacing:.05em;
+    padding:4px 10px;border-radius:20px;border:1px solid var(--line);
+    color:var(--gold-bright);white-space:nowrap;
+  }
+  .tag.red{color:var(--red-bright);border-color:rgba(232,96,79,0.4);}
+  .tag.teal{color:var(--teal-bright);border-color:rgba(79,211,184,0.4);}
+
+  .card{
+    background:linear-gradient(180deg, rgba(244,239,226,0.055), rgba(244,239,226,0.02));
+    border:1px solid var(--line);border-radius:12px;padding:18px 20px;position:relative;
+  }
+  .card .card-num{
+    font-family:var(--mono);font-size:11px;color:var(--gold);opacity:.7;letter-spacing:.1em;
+  }
+  .card h3{font-size:clamp(14px,1.15vw,17px);font-weight:700;margin:6px 0 8px;line-height:1.4;color:var(--cream);}
+  .card p{font-size:clamp(12px,0.95vw,13.5px);line-height:1.72;color:var(--cream-dim);font-weight:400;}
+  .card strong{color:var(--gold-bright);font-weight:700;}
+
+  .stat-card{
+    background:linear-gradient(155deg, rgba(212,175,55,0.10), rgba(244,239,226,0.02));
+    border:1px solid var(--line);border-radius:12px;padding:18px 20px;
+  }
+  .stat-card .stat-num{font-family:var(--mono);font-weight:700;font-size:clamp(24px,2.4vw,34px);color:var(--gold-bright);line-height:1;}
+  .stat-card .stat-label{font-size:clamp(11.5px,0.9vw,13px);color:var(--cream);font-weight:700;margin-top:8px;}
+  .stat-card .stat-desc{font-size:clamp(11px,0.85vw,12.5px);color:var(--cream-dim);margin-top:6px;line-height:1.65;}
+
+  .grid{display:grid;gap:16px;}
+  .grid-3{grid-template-columns:repeat(3,1fr);}
+  .grid-2{grid-template-columns:repeat(2,1fr);}
+  .grid-4{grid-template-columns:repeat(4,1fr);}
+
+  .quote-card{
+    border:1px solid var(--line);border-left:3px solid var(--red-bright);border-radius:4px 12px 12px 4px;
+    padding:20px 24px;background:linear-gradient(90deg, rgba(192,57,43,0.10), rgba(244,239,226,0.02));
+  }
+  .quote-card .q-mark{font-family:var(--serif);font-size:34px;color:var(--red-bright);line-height:.5;opacity:.7;}
+  .quote-card p{font-family:var(--serif);font-size:clamp(15px,1.3vw,19px);color:var(--cream);line-height:1.65;font-weight:500;margin:8px 0 10px;}
+  .quote-card .who{font-family:var(--mono);font-size:11.5px;color:var(--red-bright);letter-spacing:.05em;}
+
+  .conclusion-box{
+    border:1px solid var(--gold);border-radius:14px;padding:22px 26px;
+    background:linear-gradient(135deg, rgba(212,175,55,0.14), rgba(244,239,226,0.02));
+  }
+  .conclusion-box h4{font-family:var(--mono);font-size:11.5px;letter-spacing:.12em;color:var(--gold-bright);text-transform:uppercase;margin-bottom:10px;}
+  .conclusion-box p{font-size:clamp(13px,1.05vw,15.5px);line-height:1.8;color:var(--cream);}
+
+  svg text{font-family:var(--sans);}
+  .flow-box{fill:rgba(244,239,226,0.05);stroke:var(--line);stroke-width:1.4;}
+  .flow-box.gold{stroke:var(--gold);fill:rgba(212,175,55,0.10);}
+  .flow-box.red{stroke:var(--red-bright);fill:rgba(192,57,43,0.10);}
+  .flow-box.teal{stroke:var(--teal-bright);fill:rgba(47,163,140,0.10);}
+  .flow-label{fill:var(--cream);font-size:13px;font-weight:700;}
+  .flow-sub{fill:var(--cream-dim);font-size:10.5px;}
+  .flow-arrow{stroke:var(--gold);stroke-width:1.6;fill:none;marker-end:url(#arrowhead);}
+  .flow-arrow.red{stroke:var(--red-bright);marker-end:url(#arrowhead-red);}
+
+  /* ---------- SLIDE 1 : cover ---------- */
+  #s1{padding:0;}
+  #s1 .cover-wrap{position:relative;flex:1;display:flex;align-items:stretch;}
+  #s1 .cover-img{
+    position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+    opacity:.62;filter:saturate(1.05) contrast(1.02);
+  }
+  #s1 .cover-scrim{
+    position:absolute;inset:0;
+    background:linear-gradient(100deg, rgba(8,13,24,0.97) 0%, rgba(8,13,24,0.86) 32%, rgba(8,13,24,0.35) 62%, rgba(8,13,24,0.15) 100%);
+  }
+  #s1 .cover-content{position:relative;z-index:3;padding:clamp(40px,7vh,90px) clamp(40px,6vw,90px);display:flex;flex-direction:column;justify-content:center;height:100%;max-width:900px;}
+  #s1 .kicker{font-family:var(--mono);font-size:12px;letter-spacing:.22em;color:var(--gold-bright);text-transform:uppercase;border:1px solid var(--line);display:inline-flex;padding:6px 14px;border-radius:20px;margin-bottom:26px;width:fit-content;}
+  #s1 h1{font-family:var(--sans);font-weight:900;font-size:clamp(38px,5.2vw,68px);line-height:1.16;color:var(--cream);}
+  #s1 h1 .g{color:var(--gold-bright);}
+  #s1 .cover-sub{font-family:var(--serif);font-size:clamp(16px,1.5vw,21px);color:var(--cream-dim);margin-top:22px;line-height:1.65;max-width:640px;}
+  #s1 .cover-sub2{font-size:clamp(13px,1.05vw,15px);color:var(--teal-bright);margin-top:14px;font-weight:700;letter-spacing:.02em;}
+  #s1 .cover-meta{
+    display:flex;gap:28px;margin-top:44px;font-family:var(--mono);font-size:11.5px;color:var(--cream-dim);
+    border-top:1px solid var(--line);padding-top:20px;flex-wrap:wrap;
+  }
+  #s1 .cover-meta b{color:var(--gold-bright);display:block;font-size:10px;letter-spacing:.1em;margin-bottom:4px;font-weight:400;}
+  #s1 .cover-meta span{color:var(--cream);font-weight:700;font-size:12.5px;}
+
+  /* ---------- SLIDE 3 ecosystem ---------- */
+  #s3 .eco-wrap{position:relative;flex:1;border-radius:16px;overflow:hidden;border:1px solid var(--line);min-height:0;}
+  #s3 .eco-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.5;}
+  #s3 .eco-scrim{position:absolute;inset:0;background:linear-gradient(180deg, rgba(8,13,24,0.55) 0%, rgba(8,13,24,0.88) 78%);}
+  #s3 .eco-cards{position:relative;z-index:2;height:100%;display:flex;flex-direction:column;justify-content:flex-end;padding:22px;gap:12px;}
+  #s3 .eco-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+  #s3 .eco-card{background:rgba(8,13,24,0.72);border:1px solid var(--line);border-radius:10px;padding:14px 16px;backdrop-filter:blur(4px);}
+  #s3 .eco-card .n{font-family:var(--mono);font-size:10px;color:var(--gold);letter-spacing:.1em;}
+  #s3 .eco-card h4{font-size:13.5px;font-weight:700;color:var(--gold-bright);margin:6px 0 6px;}
+  #s3 .eco-card p{font-size:11.5px;color:var(--cream-dim);line-height:1.55;}
+
+  /* ---------- SLIDE 10 finale ---------- */
+  #s10{padding:0;}
+  #s10 .fin-wrap{position:relative;flex:1;display:flex;}
+  #s10 .fin-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.55;}
+  #s10 .fin-scrim{position:absolute;inset:0;background:linear-gradient(90deg, rgba(8,13,24,0.95) 0%, rgba(8,13,24,0.55) 45%, rgba(8,13,24,0.82) 100%);}
+  #s10 .fin-content{position:relative;z-index:3;padding:clamp(30px,5vh,60px) clamp(36px,5vw,80px);display:flex;flex-direction:column;height:100%;width:100%;}
+
+  /* small helpers */
+  .pill-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;}
+  .divider{height:1px;background:var(--line);margin:18px 0;}
+  .two-col{display:grid;grid-template-columns:1.1fr .9fr;gap:24px;flex:1;min-height:0;}
+  .center-col{display:flex;flex-direction:column;justify-content:center;}
+  .mini-label{font-family:var(--mono);font-size:10.5px;color:var(--gold);letter-spacing:.12em;text-transform:uppercase;margin-bottom:6px;}
+  ul.blt{list-style:none;}
+  ul.blt li{position:relative;padding-left:16px;font-size:clamp(12px,0.95vw,13.5px);line-height:1.75;color:var(--cream-dim);margin-bottom:8px;}
+  ul.blt li::before{content:'';position:absolute;left:0;top:9px;width:6px;height:1.5px;background:var(--gold);}
+  ul.blt li strong{color:var(--cream);font-weight:700;}
+
+  @media (max-width:900px){
+    .grid-3,.grid-4{grid-template-columns:1fr 1fr;}
+    .two-col{grid-template-columns:1fr;}
+    #s3 .eco-grid{grid-template-columns:1fr 1fr;}
+  }
+</style>
+</head>
+<body>
+<div class="brand">輝達算力金融化革命 · 產業深度解析</div>
+<div class="counter"><b id="counterCur">01</b>&nbsp;/&nbsp;10</div>
+
+<div class="deck" id="deck">
+
+  <!-- SLIDE 1 — 封面 -->
+  <section class="slide active" id="s1">
+    <div class="cover-wrap">
+      <img class="cover-img" src="generated/cover_hero_20260818_083459.png" alt="">
+      <div class="cover-scrim"></div>
+      <div class="frame-corner tl"></div><div class="frame-corner tr"></div>
+      <div class="frame-corner bl"></div><div class="frame-corner br"></div>
+      <div class="cover-content">
+        <div class="kicker">The Compute Financialization Blueprint</div>
+        <h1>AI 算力金融化革命<br>解構輝達 <span class="g">5,000 億美元</span><br>融資平台的資本博弈與系統性風險</h1>
+        <p class="cover-sub">從「高折舊硬體」到「基礎設施生息資產」的金融工程革命——剖析 AI 產業如何從技術革命跨入資本形成革命。</p>
+        <p class="cover-sub2">深入解析這項史無前例巨額計畫背後的商機，與揮之不去的金融泡沫疑慮</p>
+        <div class="cover-meta">
+          <div><b>DATE</b><span>2026.08</span></div>
+          <div><b>TARGET</b><span>NVDA 5,000 億美元算力融資平台</span></div>
+          <div><b>SCOPE</b><span>機制拆解・商業模式・系統性風險</span></div>
+          <div><b>STATUS</b><span>產業深度分析</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 2 — 起心動念 -->
+  <section class="slide" id="s2">
+    <div class="blueprint-grid"></div>
+    <div class="frame-corner tl"></div><div class="frame-corner br"></div>
+    <div class="slide-head">
+      <div class="eyebrow">Slide 02 · Origin</div>
+      <h1 class="slide-title">起心動念 — 為什麼晶片巨頭需要<br>變身<span class="accent">「金融架構師」</span>？</h1>
+      <p class="slide-sub">揭示輝達推出融資平台的深層商業痛點與動機：資金瓶頸、生態忠誠度威脅，與傳統銀行不敢承接的折舊風險。</p>
+    </div>
+    <div class="slide-body">
+      <div class="grid grid-3" style="margin-bottom:18px;">
+        <div class="stat-card">
+          <div class="stat-num">$1.1兆</div>
+          <div class="stat-label">科技巨頭資金瓶頸</div>
+          <div class="stat-desc">高盛測算，五大雲端巨頭 2027 年 AI 資本開支將突破 1.1 萬億美元，已超出其營運現金流；Alphabet 2026 Q2 出現上市以來首次自由現金流轉負。</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">Maia / TPU</div>
+          <div class="stat-label">自研晶片威脅生態忠誠度</div>
+          <div class="stat-desc">微軟（Maia）、Google（TPU）等大客戶積極研發自研晶片，輝達急需扶植絕對忠誠的「新興雲服務商」（如 CoreWeave）以抗衡並鞏固生態系。</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num">≈30%</div>
+          <div class="stat-label">銀行折舊定價恐懼</div>
+          <div class="stat-desc">GPU 折舊極快且不可預測，三年後二手殘值可能僅剩三成，傳統金融機構無法為此風險定價，也不敢貸款給規模小、缺投資級信評的新興雲。</div>
+        </div>
+      </div>
+      <div class="conclusion-box">
+        <h4>Core Insight</h4>
+        <p>新興雲端公司擁有龐大的算力租賃需求，卻因規模太小、缺乏投資級信用評等，難以向銀行融資購買昂貴晶片。當「需求」與「信用」出現斷層，輝達必須親自下場設計金融工程，把自己的晶片變成銀行敢承接的抵押品。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 3 — 參與者生態圖譜 -->
+  <section class="slide" id="s3">
+    <div class="slide-head">
+      <div class="eyebrow">Slide 03 · Ecosystem</div>
+      <h1 class="slide-title">參與者生態圖譜 — 華爾街<span class="accent">「復仇者聯盟」</span></h1>
+      <p class="slide-sub">解析此平台如何動員全球最頂尖的第三方資本力量，形成四層緊密咬合的資本結構。</p>
+    </div>
+    <div class="slide-body">
+      <div class="eco-wrap">
+        <img class="eco-img" src="generated/ecosystem_hero_20260818_083531.png" alt="">
+        <div class="eco-scrim"></div>
+        <div class="eco-cards">
+          <div class="eco-grid">
+            <div class="eco-card">
+              <div class="n">01 · 最後兜底方</div>
+              <h4>NVIDIA</h4>
+              <p>提供關鍵的<strong style="color:var(--gold-bright)">剩餘價值擔保（RVG）</strong>與頂尖晶片作信用支持</p>
+            </div>
+            <div class="eco-card">
+              <div class="n">02 · 資本管理方</div>
+              <h4>華爾街六大巨頭</h4>
+              <p>Apollo・BlackRock・Blackstone・Brookfield・Goldman Sachs・KKR 動員並管理超過 5,000 億美元第三方資本</p>
+            </div>
+            <div class="eco-card">
+              <div class="n">03 · 算力營運/借款方</div>
+              <h4>前沿 AI 實驗室與新興雲</h4>
+              <p>頂尖 AI 實驗室、大型企業客戶，以及 CoreWeave、Nebius 等新興雲端服務商</p>
+            </div>
+            <div class="eco-card">
+              <div class="n">04 · 長線資金認購者</div>
+              <h4>全球機構資本</h4>
+              <p>尋求長期穩定收益的退休基金、保險公司及主權財富基金</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 4 — 運作機制 -->
+  <section class="slide" id="s4">
+    <div class="blueprint-grid"></div>
+    <div class="slide-head">
+      <div class="eyebrow">Slide 04 · Mechanism</div>
+      <h1 class="slide-title">運作機制 — 如何將 GPU 轉化為<br>類似房地產的<span class="accent">「生息資產」</span>？</h1>
+      <p class="slide-sub">解構該平台如何運用金融工程，將高折舊的科技硬體轉化為可抵押的合格金融資產。</p>
+    </div>
+    <div class="slide-body">
+      <div class="two-col">
+        <div class="card" style="display:flex;align-items:center;justify-content:center;padding:12px;">
+          <svg viewBox="0 0 560 300" width="100%" style="max-height:280px;">
+            <defs>
+              <marker id="arrowhead" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="var(--gold)"/></marker>
+            </defs>
+            <rect class="flow-box gold" x="14" y="28" width="118" height="58" rx="8"/>
+            <text class="flow-label" x="73" y="52" text-anchor="middle">NVIDIA</text>
+            <text class="flow-sub" x="73" y="70" text-anchor="middle">頂尖晶片供應</text>
+
+            <path class="flow-arrow" d="M132,57 L200,57"/>
+
+            <rect class="flow-box" x="200" y="28" width="150" height="58" rx="8"/>
+            <text class="flow-label" x="275" y="52" text-anchor="middle">SPV 特殊目的公司</text>
+            <text class="flow-sub" x="275" y="70" text-anchor="middle">發債購買晶片</text>
+
+            <path class="flow-arrow" d="M275,86 L275,120"/>
+
+            <rect class="flow-box" x="200" y="120" width="150" height="58" rx="8"/>
+            <text class="flow-label" x="275" y="144" text-anchor="middle">出租給使用者</text>
+            <text class="flow-sub" x="275" y="162" text-anchor="middle">算力合約現金流（租金）</text>
+
+            <path class="flow-arrow" d="M350,149 L420,149"/>
+
+            <rect class="flow-box teal" x="420" y="120" width="126" height="58" rx="8"/>
+            <text class="flow-label" x="483" y="144" text-anchor="middle">償債支撐</text>
+            <text class="flow-sub" x="483" y="162" text-anchor="middle">現金流覆蓋本息</text>
+
+            <path class="flow-arrow" d="M275,178 L275,212"/>
+
+            <rect class="flow-box gold" x="150" y="212" width="250" height="58" rx="8"/>
+            <text class="flow-label" x="275" y="236" text-anchor="middle">證券化包裝（比照 MBS）</text>
+            <text class="flow-sub" x="275" y="254" text-anchor="middle">租金/使用費收入分割出售</text>
+
+            <path class="flow-arrow" d="M400,241 L470,241"/>
+            <text class="flow-label" x="475" y="236" text-anchor="start" font-size="12">機構</text>
+            <text class="flow-label" x="475" y="252" text-anchor="start" font-size="12">投資人</text>
+          </svg>
+        </div>
+        <div class="center-col">
+          <div class="mini-label">Compute-as-Collateral</div>
+          <p style="font-size:13.5px;line-height:1.8;color:var(--cream-dim);margin-bottom:16px;">將 GPU 運算群組比照商業地產或收費公路，使其具有下列四項特質以符合抵押品資格：</p>
+          <div class="pill-row" style="margin-top:0;">
+            <span class="tag">生產性</span><span class="tag">長壽命</span><span class="tag">可替代性</span><span class="tag">靈活性</span>
+          </div>
+          <div class="divider"></div>
+          <div class="quote-card" style="border-left-color:var(--gold-bright);background:linear-gradient(90deg, rgba(212,175,55,0.12), rgba(244,239,226,0.02));">
+            <span class="q-mark" style="color:var(--gold-bright);">"</span>
+            <p style="font-size:14px;">下一個金融工程未來，就像 1970 年代不動產抵押貸款支持證券（MBS）的誕生。</p>
+            <div class="who" style="color:var(--gold-bright);">— Larry Fink，BlackRock 執行長</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 5 — 兩大機制支柱 -->
+  <section class="slide" id="s5">
+    <div class="slide-head">
+      <div class="eyebrow">Slide 05 · Pillars</div>
+      <h1 class="slide-title">兩大機制支柱 — <span class="accent">剩餘價值擔保（RVG）</span>與硬體標準化</h1>
+      <p class="slide-sub">分析輝達如何透過「信用兜底」與「藍圖統一」，給予金融機構敢於放貸的勇氣。</p>
+    </div>
+    <div class="slide-body">
+      <div class="grid grid-2" style="flex:1;">
+        <div class="card" style="display:flex;flex-direction:column;">
+          <div class="mini-label">Pillar 01</div>
+          <h3 style="font-size:19px;">剩餘價值擔保 RVG</h3>
+          <p style="margin-bottom:16px;">輝達扮演「最後兜底人」，承諾在必要時（如客戶違約或清算資產）吸收<strong>最高 25%</strong> 的跌價損失。這層下行保護成功將融資利率從高風險風投等級，降低至穩定的基礎設施地產等級。</p>
+          <div style="margin-top:auto;display:flex;align-items:center;gap:16px;">
+            <svg width="96" height="96" viewBox="0 0 100 100">
+              <path d="M50 6 L90 20 V48 C90 74 72 90 50 96 C28 90 10 74 10 48 V20 Z" fill="rgba(212,175,55,0.12)" stroke="var(--gold)" stroke-width="2"/>
+              <text x="50" y="56" text-anchor="middle" fill="var(--gold-bright)" font-family="JetBrains Mono" font-weight="700" font-size="22">25%</text>
+              <text x="50" y="72" text-anchor="middle" fill="var(--cream-dim)" font-size="8">MAX LOSS</text>
+            </svg>
+            <p style="font-size:12px;color:var(--cream-dim);flex:1;">風險等級：<span style="color:var(--red-bright);">高風險風投</span> → <span style="color:var(--teal-bright);">基礎設施地產級</span></p>
+          </div>
+        </div>
+        <div class="card" style="display:flex;flex-direction:column;">
+          <div class="mini-label">Pillar 02</div>
+          <h3 style="font-size:19px;">硬體標準化藍圖（DSX AI Factory）</h3>
+          <p style="margin-bottom:16px;">大力推廣統一機櫃、NVLink、電力與冷卻系統規格，使不同資料中心按同一套標準藍圖重複建設，抵押品因此具備<strong>「同質性」</strong>與高流通性。</p>
+          <div style="margin-top:auto;display:flex;align-items:center;gap:18px;">
+            <svg width="120" height="80" viewBox="0 0 140 90">
+              <g stroke="var(--gold)" stroke-width="1.2" fill="rgba(212,175,55,0.10)">
+                <rect x="4" y="4" width="26" height="82"/><rect x="38" y="4" width="26" height="82"/>
+                <rect x="72" y="4" width="26" height="82"/><rect x="106" y="4" width="26" height="82"/>
+              </g>
+              <g stroke="var(--gold)" stroke-width="0.8" opacity="0.6">
+                <line x1="4" y1="20" x2="30" y2="20"/><line x1="4" y1="36" x2="30" y2="36"/><line x1="4" y1="52" x2="30" y2="52"/><line x1="4" y1="68" x2="30" y2="68"/>
+                <line x1="38" y1="20" x2="64" y2="20"/><line x1="38" y1="36" x2="64" y2="36"/><line x1="38" y1="52" x2="64" y2="52"/><line x1="38" y1="68" x2="64" y2="68"/>
+                <line x1="72" y1="20" x2="98" y2="20"/><line x1="72" y1="36" x2="98" y2="36"/><line x1="72" y1="52" x2="98" y2="52"/><line x1="72" y1="68" x2="98" y2="68"/>
+                <line x1="106" y1="20" x2="132" y2="20"/><line x1="106" y1="36" x2="132" y2="36"/><line x1="106" y1="52" x2="132" y2="52"/><line x1="106" y1="68" x2="132" y2="68"/>
+              </g>
+            </svg>
+            <p style="font-size:12px;color:var(--cream-dim);flex:1;">一旦借款人違約，銀行扣押設備，新運營商能直接插電接手運作 —— 解決抵押品清算與變現難題。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 6 — 商業模式轉型 -->
+  <section class="slide" id="s6">
+    <div class="blueprint-grid"></div>
+    <div class="slide-head">
+      <div class="eyebrow">Slide 06 · Business Model</div>
+      <h1 class="slide-title">商業模式轉型 — 輝達的<br>「算力<span class="accent">收租與抽稅</span>」野心</h1>
+      <p class="slide-sub">探討輝達如何藉此機會，將一次性硬體銷售升級為永續、高毛利的經常性營收。</p>
+    </div>
+    <div class="slide-body">
+      <div class="two-col">
+        <div class="card" style="display:flex;flex-direction:column;justify-content:center;">
+          <div class="mini-label">Revenue Model Shift</div>
+          <ul class="blt">
+            <li><strong>擺脫景氣循環波動：</strong>傳統半導體面臨強烈景氣循環，輝達試圖推動「長期、與使用量掛鉤的收入」模式</li>
+            <li><strong>對挖出來的金子抽稅：</strong>假設輝達能從超出盈虧平衡點的 GPU 收益中抽取約 <strong style="color:var(--gold-bright)">35%</strong> 的盈餘分成</li>
+            <li><strong>幾乎零額外製造成本：</strong>此模式建立在既有硬體之上，邊際成本極低</li>
+          </ul>
+        </div>
+        <div class="stat-card" style="display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;">
+          <div class="stat-num" style="font-size:clamp(34px,4vw,54px);">$510億</div>
+          <div class="stat-label" style="font-size:15px;">潛在年度經常性營收</div>
+          <div class="stat-desc" style="margin-top:10px;">摩根士丹利估算：全球每年新增 5GW 算力，且租金維持高檔的前提下，此模式每年有潛力為輝達額外創造的收入</div>
+          <div class="pill-row" style="justify-content:center;">
+            <span class="tag teal">毛利率 ≈ 100%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 7 — 大空頭警告 -->
+  <section class="slide" id="s7">
+    <div class="slide-head">
+      <div class="eyebrow">Slide 07 · Bear Case</div>
+      <h1 class="slide-title">大空頭警告 — 安然醜聞與<br><span class="danger">「循環融資」</span>的幻影</h1>
+      <p class="slide-sub">探討電影《大空頭》原型 Michael Burry 對輝達 5,000 億美元帝國的尖銳質疑。</p>
+    </div>
+    <div class="slide-body">
+      <div class="two-col">
+        <div style="display:flex;flex-direction:column;gap:14px;">
+          <div class="quote-card">
+            <span class="q-mark">"</span>
+            <p>輝達當前的擴張與 2001 年安然財務造假醜聞如出一轍，其對全球經濟和投資人的潛在危險，比安然高出幾個數量級。</p>
+            <div class="who">— Michael Burry，Scion Asset Management ／ 2026 年 8 月 13 日</div>
+          </div>
+          <div class="card">
+            <h3 style="font-size:14.5px;">循環融資（Revolving Financing）疑慮</h3>
+            <p>批評者質疑 AI 產業存在資本閉環——輝達投資 AI 公司，AI 公司拿到錢再去買輝達晶片，或透過華爾街發債借錢買晶片，創造了缺乏終端實質盈利支撐的<strong>營收幻影</strong>。</p>
+          </div>
+        </div>
+        <div class="card" style="display:flex;flex-direction:column;">
+          <div class="mini-label">Historical Parallel</div>
+          <h3 style="font-size:16px;">思科（Cisco）的前車之鑑</h3>
+          <p style="margin-bottom:14px;">2000 年互聯網泡沫前，思科利用高信用向華爾街借便宜錢，再放貸給客戶（賣方融資），讓客戶買自己的路由器。泡沫破裂後客戶大規模破產，思科背負巨額壞帳。</p>
+          <svg viewBox="0 0 280 60" width="100%" style="margin-top:auto;">
+            <polyline points="0,15 40,18 80,10 120,20 160,15 200,42 240,55 280,58" fill="none" stroke="var(--red-bright)" stroke-width="2.4"/>
+            <circle cx="200" cy="42" r="3" fill="var(--red-bright)"/>
+            <text x="205" y="38" fill="var(--red-bright)" font-family="JetBrains Mono" font-size="10">泡沫破裂</text>
+          </svg>
+          <div class="pill-row"><span class="tag red">股價暴跌近 90%</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 8 — 技術流沙 -->
+  <section class="slide" id="s8">
+    <div class="blueprint-grid"></div>
+    <div class="slide-head">
+      <div class="eyebrow">Slide 08 · Depreciation Risk</div>
+      <h1 class="slide-title">技術流沙 — 一年一代的<span class="danger">折舊宿命</span><br>與殘值定價模型缺陷</h1>
+      <p class="slide-sub">分析 GPU 抵押品本質上面臨的快速貶值風險，與傳統定價模型的結構性缺陷。</p>
+    </div>
+    <div class="slide-body">
+      <div class="two-col">
+        <div class="card" style="display:flex;align-items:center;justify-content:center;">
+          <svg viewBox="0 0 500 260" width="100%" style="max-height:260px;">
+            <line x1="40" y1="20" x2="40" y2="220" stroke="var(--line)" stroke-width="1"/>
+            <line x1="40" y1="220" x2="480" y2="220" stroke="var(--line)" stroke-width="1"/>
+            <text x="20" y="24" fill="var(--cream-dim)" font-size="10">殘值</text>
+            <path d="M60,60 C140,64 180,80 220,150 C250,196 300,214 460,216" fill="none" stroke="var(--gold-bright)" stroke-width="2.6"/>
+            <circle cx="60" cy="60" r="4" fill="var(--gold-bright)"/>
+            <text x="55" y="46" fill="var(--gold-bright)" font-size="11" font-weight="700">H100</text>
+            <circle cx="220" cy="150" r="4" fill="var(--red-bright)"/>
+            <text x="205" y="138" fill="var(--red-bright)" font-size="11" font-weight="700">Blackwell 上市</text>
+            <circle cx="400" cy="215" r="4" fill="var(--red-bright)"/>
+            <text x="368" y="203" fill="var(--red-bright)" font-size="11" font-weight="700">Rubin 上市</text>
+            <text x="230" y="245" fill="var(--cream-dim)" font-size="10">更新週期：一年一代</text>
+          </svg>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:12px;justify-content:center;">
+          <div class="card">
+            <h3 style="font-size:14px;">更新週期極端狂飆</h3>
+            <p>房屋可存放數十年，但 AI 晶片更迭速度被加速到「一年一代」（Blackwell → Rubin）。</p>
+          </div>
+          <div class="card">
+            <h3 style="font-size:14px;">殘值瞬間歸零的威脅</h3>
+            <p>今日花數千萬美元購置的 H100 等算力集群，一旦下一代晶片算力出現數量級躍升，舊硬體將迅速過時，連運行電費都跑不贏。</p>
+          </div>
+          <div class="card" style="border-color:rgba(232,96,79,0.4);">
+            <h3 style="font-size:14px;color:var(--red-bright);">保底擔保的副作用</h3>
+            <p>產業技術大換代、舊 GPU 殘值崩塌時，輝達 25% 保底承諾這份「看跌選擇權」，將集中轉化為輝達與博通等晶片大廠沉重的<strong style="color:var(--red-bright);">表外財務包袱</strong>。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 9 — 債市警訊 -->
+  <section class="slide" id="s9">
+    <div class="slide-head">
+      <div class="eyebrow">Slide 09 · Credit Market Alert</div>
+      <h1 class="slide-title">債市警訊 — <span class="danger">700 億美元</span>「幽靈負債」<br>與系統性信用傳導</h1>
+      <p class="slide-sub">剖析 AI 算力金融化如何引發債市風險，並使科技風險向全球信貸市場傳導。</p>
+    </div>
+    <div class="slide-body">
+      <div class="grid grid-3" style="margin-bottom:16px;">
+        <div class="stat-card">
+          <div class="stat-num" style="color:var(--red-bright);">$700億</div>
+          <div class="stat-label">表外「幽靈負債」</div>
+          <div class="stat-desc">在輝達宣布 5,000 億平台前，主要 AI 晶片鏈累積的表外負債（如 RVG）已達約 700 億美元</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num" style="color:var(--red-bright);">$3,700億</div>
+          <div class="stat-label">博通推波助瀾</div>
+          <div class="stat-desc">已於「Big Sky」350 億美元交易中提供殘值擔保；其「AI XPV 平台」到 2029 年中期累積高順位債務可能高達此數</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-num" style="color:var(--red-bright);">+90%</div>
+          <div class="stat-label">CDS 違約保險成本狂飆</div>
+          <div class="stat-desc">今年以來，輝達 5 年期信用違約交換（CDS）價差已悄然狂飆約 90%，大資金正買入違約保險</div>
+        </div>
+      </div>
+      <div class="two-col" style="flex:0 0 auto;">
+        <div class="card" style="display:flex;align-items:center;">
+          <svg viewBox="0 0 480 130" width="100%">
+            <line x1="30" y1="110" x2="460" y2="110" stroke="var(--line)"/>
+            <line x1="30" y1="10" x2="30" y2="110" stroke="var(--line)"/>
+            <polyline points="30,95 100,92 170,88 240,78 300,58 360,32 430,14" fill="none" stroke="var(--red-bright)" stroke-width="2.4"/>
+            <circle cx="430" cy="14" r="4" fill="var(--red-bright)"/>
+            <text x="360" y="8" fill="var(--red-bright)" font-family="JetBrains Mono" font-size="12" font-weight="700">+90% YTD</text>
+            <text x="24" y="122" fill="var(--cream-dim)" font-size="10">年初</text>
+            <text x="430" y="122" fill="var(--cream-dim)" font-size="10" text-anchor="end">今日</text>
+            <text x="20" y="20" fill="var(--cream-dim)" font-size="10">CDS 價差</text>
+          </svg>
+        </div>
+        <div class="quote-card">
+          <span class="q-mark">"</span>
+          <p style="font-size:14px;">若或有義務（Contingent Liabilities）在短時間內大量增加，將嚴重壓縮晶片廠的財務彈性並壓低其信用狀況。</p>
+          <div class="who">— 穆迪（Moody's）與標普（S&P）評等示警</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SLIDE 10 — 終局展望 -->
+  <section class="slide" id="s10">
+    <div class="fin-wrap">
+      <img class="fin-img" src="generated/finale_hero_20260818_083557.png" alt="">
+      <div class="fin-scrim"></div>
+      <div class="frame-corner tl"></div><div class="frame-corner tr"></div>
+      <div class="frame-corner bl"></div><div class="frame-corner br"></div>
+      <div class="fin-content">
+        <div class="slide-head">
+          <div class="eyebrow">Slide 10 · Outlook</div>
+          <h1 class="slide-title">終局展望 — 產能閒置與<br><span class="accent">再融資懸崖</span>的考驗</h1>
+          <p class="slide-sub">分析平台在未來 3 到 5 年內即將迎來的宏觀產能與信用考驗。</p>
+        </div>
+        <div class="slide-body">
+          <div class="grid grid-2" style="margin-bottom:16px;max-width:820px;">
+            <div class="card">
+              <h3 style="font-size:13.5px;">算力嚴重閒置的現實</h3>
+              <p>Cast AI 估計目前 GPU 平均利用率僅約 <strong style="color:var(--gold-bright)">5%</strong>；ClearML 亦發現近半數企業正為閒置晶片承擔高額成本。</p>
+            </div>
+            <div class="card">
+              <h3 style="font-size:13.5px;">再融資懸崖（Refinancing Cliff）</h3>
+              <p>算力融資通常設定約 <strong style="color:var(--gold-bright)">5 年</strong>攤還期限。3 到 5 年後債務陸續到期，考驗終端 AI 應用能否產生真金白銀利潤。</p>
+            </div>
+          </div>
+          <div class="conclusion-box" style="max-width:820px;">
+            <h4>Bottom Line</h4>
+            <p>若終端應用（如自駕、機器人、AGI）順利爆發，此平台將是推動新工業革命的強大燃料；若否，這套利用金融工程強行吹出的「不自然信用結構化」，可能演變成<strong style="color:var(--red-bright);">「次貸危機 2.0」</strong>或系統性信用雪崩的導火線。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<button class="nav-btn" style="position:fixed;left:22px;top:50%;transform:translateY(-50%);z-index:50;" id="prevBtn" aria-label="上一頁">‹</button>
+<button class="nav-btn" style="position:fixed;right:22px;top:50%;transform:translateY(-50%);z-index:50;" id="nextBtn" aria-label="下一頁">›</button>
+
+<div class="nav">
+  <div class="dots" id="dots"></div>
+</div>
+
+<script>
+  const slides = Array.from(document.querySelectorAll('.slide'));
+  const total = slides.length;
+  const dotsWrap = document.getElementById('dots');
+  const counterCur = document.getElementById('counterCur');
+  let idx = 0;
+
+  slides.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'dot' + (i === 0 ? ' active' : '');
+    d.addEventListener('click', () => goTo(i));
+    dotsWrap.appendChild(d);
+  });
+  const dots = Array.from(dotsWrap.children);
+
+  function goTo(i){
+    if(i < 0 || i >= total) return;
+    slides[idx].classList.remove('active');
+    dots[idx].classList.remove('active');
+    idx = i;
+    slides[idx].classList.add('active');
+    dots[idx].classList.add('active');
+    counterCur.textContent = String(idx+1).padStart(2,'0');
+  }
+  document.getElementById('prevBtn').addEventListener('click', () => goTo(idx-1));
+  document.getElementById('nextBtn').addEventListener('click', () => goTo(idx+1));
+
+  window.addEventListener('keydown', (e) => {
+    if(['ArrowRight','PageDown',' '].includes(e.key)) { e.preventDefault(); goTo(idx+1); }
+    if(['ArrowLeft','PageUp'].includes(e.key)) { e.preventDefault(); goTo(idx-1); }
+    if(e.key === 'Home') goTo(0);
+    if(e.key === 'End') goTo(total-1);
+  });
+
+  let touchStartX = 0;
+  window.addEventListener('touchstart', e => touchStartX = e.changedTouches[0].screenX, {passive:true});
+  window.addEventListener('touchend', e => {
+    const dx = e.changedTouches[0].screenX - touchStartX;
+    if (dx > 60) goTo(idx-1);
+    if (dx < -60) goTo(idx+1);
+  }, {passive:true});
+
+  let wheelLock = false;
+  window.addEventListener('wheel', (e) => {
+    if (wheelLock) return;
+    if (Math.abs(e.deltaY) < 30) return;
+    wheelLock = true;
+    if (e.deltaY > 0) goTo(idx+1); else goTo(idx-1);
+    setTimeout(()=> wheelLock = false, 650);
+  }, {passive:true});
+</script>
+</body>
+</html>

@@ -1,9 +1,9 @@
 // P&J Capital Portal — Content Configuration (Published Snapshot)
-// Generated: 2026-10-05T00:00:00.000Z
+// Generated: 2026-10-05T12:00:00.000Z
 // 前台 /portal/ 與後台 /admin/ 都以這個檔案為唯一資料來源。
 // Workflow: /admin/ -> 儲存並套用 -> 匯出 portal-config.js -> replace this file -> git push
 window.PJ_PORTAL_CONFIG = {
-  "publishedAt": "2026-10-05T00:00:00.000Z",
+  "publishedAt": "2026-10-05T12:00:00.000Z",
   "monthlyReports": [
     {
       "key": "202608",
@@ -70,6 +70,14 @@ window.PJ_PORTAL_CONFIG = {
       "src": "/topics/洞悉美聯儲底層邏輯的範式轉移.pdf",
       "categoryKey": "cat-1779442954583",
       "order": 3
+    },
+    {
+      "key": "topic-1791201600000",
+      "title": "AI 算力金融化革命｜輝達 5,000 億美元融資平台深度解析",
+      "body": "",
+      "src": "/topics/輝達算力金融化簡報/輝達算力金融化革命.html",
+      "categoryKey": "cat-1779442954583",
+      "order": 4
     }
   ],
   "categories": [
