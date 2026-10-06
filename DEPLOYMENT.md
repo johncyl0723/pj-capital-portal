@@ -23,11 +23,15 @@ Netlify 會自動偵測 `netlify.toml`，你只需確認：
 
 ### Step 3: 部署環境變數
 
-點擊 **Site settings → Environment** 添加以下變數（如需要）：
+點擊 **Site settings → Environment** 設定 `SITE_LINK_TOKEN`，並重新部署。
+分享客戶入口時，必須傳送完整網址：
 
 ```
-（暫時不需要，保留為空）
+https://pj-capital-portal.netlify.app/portal/?k=<SITE_LINK_TOKEN>
 ```
+
+單獨傳送 `/portal/` 會遇到網站存取驗證，無法進入客戶登入頁。
+分享權杖請留在 Netlify 環境變數，勿寫入 GitHub。
 
 ### Step 4: 配置自訂域名（可選）
 

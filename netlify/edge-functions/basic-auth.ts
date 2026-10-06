@@ -3,8 +3,8 @@
 // 預設全站擋下（path: "/*"），只在 excludedPath 明確放行少數公開路徑。
 // 三種方式擇一通過即可：
 //   1. 分享連結：/portal/?k=<SITE_LINK_TOKEN>
-//      驗證成功後寫入 HttpOnly cookie，並 302 轉址到不帶 k 的乾淨網址。
-//      之後同一支手機開啟 iframe 內的月報、PDF 都靠 cookie 通過，不再跳帳密視窗。
+//      驗證成功後寫入 HttpOnly cookie，並保留完整分享網址，避免從網址列
+//      複製時遺失 k。之後同一支手機開啟月報、PDF 都靠 cookie 通過。
 //   2. 已持有有效 cookie（之前點過分享連結）。
 //   3. 原本的 HTTP Basic Auth（SITE_USER / SITE_PASS），保留給你自己用。
 //
@@ -40,15 +40,14 @@ export default async (req: Request, context: Context) => {
     // 1. 分享連結
     const k = url.searchParams.get("k");
     if (k && safeEqual(k, linkToken)) {
-      url.searchParams.delete("k");
-      return new Response(null, {
-        status: 302,
-        headers: {
-          Location: url.pathname + url.search,
-          "Set-Cookie": `${COOKIE_NAME}=${expected}; Path=/; Max-Age=${COOKIE_MAX_AGE}; HttpOnly; Secure; SameSite=Lax`,
-          "Cache-Control": "no-store",
-        },
-      });
+      const response = await context.next();
+      response.headers.append(
+        "Set-Cookie",
+        `${COOKIE_NAME}=${expected}; Path=/; Max-Age=${COOKIE_MAX_AGE}; HttpOnly; Secure; SameSite=Lax`,
+      );
+      response.headers.set("Cache-Control", "private, no-store");
+      response.headers.set("Referrer-Policy", "no-referrer");
+      return response;
     }
 
     // 2. cookie
