@@ -1,10 +1,15 @@
 // P&J Capital Portal — Content Configuration (Published Snapshot)
-// Generated: 2026-10-05T12:00:00.000Z
+// Generated: 2026-11-25T04:55:46.000Z
 // 前台 /portal/ 與後台 /admin/ 都以這個檔案為唯一資料來源。
 // Workflow: /admin/ -> 儲存並套用 -> 匯出 portal-config.js -> replace this file -> git push
 window.PJ_PORTAL_CONFIG = {
-  "publishedAt": "2026-10-05T12:00:00.000Z",
+  "publishedAt": "2026-11-25T04:55:46.000Z",
   "monthlyReports": [
+    {
+      "key": "202610",
+      "label": "2026 年 10 月",
+      "src": "/2026_10/202610_Monthly Report_index.html"
+    },
     {
       "key": "202608",
       "label": "2026 年 08 月",
