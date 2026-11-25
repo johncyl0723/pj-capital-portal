@@ -655,7 +655,7 @@
 
 <!-- ══════════ Banner ══════════ -->
 <header class="banner">
-  <a class="banner-home-btn" onclick="goHome()" title="返回首頁">
+  <a class="banner-home-btn" onclick="goHome()" title="登出並返回首頁">
     <div class="banner-logo">
       <img src="../logo.png" alt="P&amp;J Capital Logo">
     </div>
@@ -960,7 +960,15 @@
       return;
     }
 
-    // Authenticated
+    // Authenticated：記住此裝置（只存密碼雜湊，比對 CLIENT_PASSWORD_HASHES；改密碼後自動失效）
+    try { localStorage.setItem(REMEMBER_KEY, JSON.stringify({ client: clientKey, hash: inputHash })); } catch {}
+    enterPortal(clientKey);
+  }
+
+  const REMEMBER_KEY = 'pj_portal_login';
+
+  function enterPortal(clientKey) {
+    const errorEl = document.getElementById('login-error');
     isAuthenticated = true;
     errorEl.textContent = '';
 
@@ -973,8 +981,22 @@
     document.getElementById('logged-in-idle').classList.add('visible');
   }
 
-  /* ── Go home (logo click) ── */
+  /* ── 自動登入：此裝置先前登入過且密碼未變更 ── */
+  function tryRememberedLogin() {
+    try {
+      const saved = JSON.parse(localStorage.getItem(REMEMBER_KEY) || 'null');
+      if (saved && CLIENT_PASSWORD_HASHES[saved.client] && CLIENT_PASSWORD_HASHES[saved.client] === saved.hash) {
+        document.getElementById('client-selector').value = saved.client;
+        enterPortal(saved.client);
+        return true;
+      }
+    } catch {}
+    return false;
+  }
+
+  /* ── Go home (logo click) = 登出並清除此裝置的記住登入 ── */
   function goHome() {
+    try { localStorage.removeItem(REMEMBER_KEY); } catch {}
     isAuthenticated = false;
 
     // Clear content
@@ -1227,6 +1249,7 @@
 
   /* ── Init ── */
   renderSidebar();
+  tryRememberedLogin();
 </script>
 </body>
 </html>
