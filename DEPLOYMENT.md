@@ -21,17 +21,23 @@ Netlify 會自動偵測 `netlify.toml`，你只需確認：
 
 **不要改這些設定！** netlify.toml 已經配置好了。
 
-### Step 3: 部署環境變數
+### Step 3: 部署環境變數與登入機制
 
-點擊 **Site settings → Environment** 設定 `SITE_LINK_TOKEN`，並重新部署。
-分享客戶入口時，必須傳送完整網址：
+到 **Project configuration → Environment variables** 設定（scope 須含 Functions），改完後重新部署：
 
-```
-https://pj-capital-portal.netlify.app/portal/?k=<SITE_LINK_TOKEN>
-```
+| 變數 | 用途 |
+|------|------|
+| `SITE_LINK_TOKEN` | 通行 cookie 的金鑰，也是分享連結的 `k` 值；更換即讓所有已登入裝置與舊連結失效 |
+| `SITE_USER` / `SITE_PASS` | 客戶登入帳號與密碼（`/portal/` 登入畫面由伺服器比對） |
+| `CLIENT_LOGINS`（選用） | 多位客戶時使用，JSON 格式 `{"sophia":"密碼","客戶B":"密碼"}`，設定後取代 SITE_USER / SITE_PASS |
 
-單獨傳送 `/portal/` 會遇到網站存取驗證，無法進入客戶登入頁。
-分享權杖請留在 Netlify 環境變數，勿寫入 GitHub。
+登入流程（`netlify/edge-functions/basic-auth.ts`）：
+
+- 客戶直接開 `https://pj-capital-portal.netlify.app/portal/`，在登入畫面輸入一次密碼即可，不會跳出瀏覽器小視窗。
+- 通過後取得 400 天的通行 cookie，每次開網頁自動續期；同一裝置再開會自動登入。
+- 分享連結 `/portal/?k=<SITE_LINK_TOKEN>` 可直接進入、免輸入密碼。
+- 未登入時開月報網址會被導回登入畫面；點 portal 左上角首頁按鈕即登出。
+- 新增客戶時，portal/index.html 的客戶下拉選單與 `CLIENT_LABELS` 也要加上該客戶。
 
 ### Step 4: 配置自訂域名（可選）
 
