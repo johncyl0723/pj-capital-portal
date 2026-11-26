@@ -88,6 +88,14 @@ window.PJ_PORTAL_CONFIG = {
       "src": "/topics/輝達算力金融化簡報/輝達算力金融化革命.html",
       "categoryKey": "cat-1779442954583",
       "order": 4
+    },
+    {
+      "key": "topic-2027-bond-market-stress-test",
+      "title": "2027 債市壓力測試｜政府舉債與 AI 融資",
+      "body": "16 張互動教學投影片，涵蓋公債再融資、AI 資金缺口、信用利差與三種債市情境。",
+      "src": "/topics/2027-bond-market-stress-test/index.html",
+      "categoryKey": "cat-1779442954583",
+      "order": 5
     }
   ],
   "categories": [
