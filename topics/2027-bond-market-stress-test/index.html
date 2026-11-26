@@ -1,0 +1,664 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="從公債再融資、AI 資本支出到信用利差，透過互動試算學習判讀 2027 年債市。">
+  <title>2027 債市壓力測試｜互動課程</title>
+  <style>
+:root {
+  color-scheme: dark;
+  --bg: #0a1523;
+  --surface: #101f30;
+  --panel: #132638;
+  --ink: #f0f6fb;
+  --muted: #b7c8d6;
+  --accent: #87f4d2;
+  --gold: #ffdb9c;
+  --line: #365065;
+  font: 16px/1.65 system-ui, "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { margin: 0; background: var(--bg); color: var(--ink); }
+a { color: var(--accent); text-underline-offset: .2em; }
+button, input, select { font: inherit; }
+button, summary { cursor: pointer; }
+:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
+.masthead {
+  display: flex; align-items: center; flex-wrap: wrap; gap: .5rem 1.1rem; min-height: 64px;
+  padding: 0 clamp(1rem, 4vw, 3rem); border-bottom: 1px solid var(--line); background: #0d1b29;
+}
+.brand { display: inline-flex; align-items: center; gap: .6rem; color: var(--ink); text-decoration: none; font-size: .9rem; font-weight: 720; }
+.mark { display: grid; grid-auto-flow: column; place-items: center; min-width: 44px; min-height: 42px; color: var(--gold); font: 700 1.18rem Georgia, serif; }
+.mark span { font-style: italic; }
+.mast-label { color: var(--muted); font-size: .8rem; border-inline-start: 1px solid var(--line); padding-inline-start: 1rem; }
+.portal-link { margin-inline-start: auto; font-size: .86rem; padding-block: .65rem; }
+.layout { max-width: 1560px; margin-inline: auto; display: grid; grid-template-columns: minmax(198px, 248px) minmax(0, 1fr); }
+aside { border-inline-end: 1px solid var(--line); background: #0d1b29; }
+.outline { margin: 0; border: 0; background: transparent; border-radius: 0; padding: .65rem .9rem 1.4rem; }
+.outline summary { color: var(--ink); font-weight: 750; }
+.outline nav { display: grid; gap: .12rem; }
+.outline nav p { color: var(--gold); margin: .7rem .6rem .15rem; font-size: .78rem; letter-spacing: .04em; }
+.outline nav a {
+  display: flex; align-items: center; min-height: 44px; padding: .3rem .6rem; border: 1px solid transparent;
+  border-radius: 8px; color: var(--muted); font-size: .83rem; text-decoration: none;
+}
+.outline nav a:hover, .outline nav a[aria-current] { background: #1a3443; color: var(--accent); border-color: #3d666d; }
+.stage { align-self: start; min-width: 0; display: flex; flex-direction: column; }
+main { flex: 1; }
+.slide { padding: clamp(1.15rem, 4vw, 3.7rem); min-height: min(620px, 75vh); border-bottom: 1px solid var(--line); }
+.slide.active { border-bottom: 0; }
+.eyebrow { font: 700 .76rem/1.5 ui-monospace, monospace; letter-spacing: .09em; color: var(--accent); margin: 0 0 1rem; }
+h1, h2, h3 { line-height: 1.2; margin: 0 0 .65rem; text-wrap: balance; }
+h1 { font-size: clamp(2.9rem, 7.5vw, 6.9rem); letter-spacing: -.045em; }
+h1 em { color: var(--accent); font-style: normal; }
+h2 { font-size: clamp(1.65rem, 3.8vw, 3.25rem); letter-spacing: -.025em; }
+h3 { font-size: 1.12rem; }
+p { margin: .45rem 0 .8rem; }
+ol, ul { padding-inline-start: 1.45rem; }
+li + li { margin-block-start: .35rem; }
+.lead { color: var(--muted); max-width: 63ch; font-size: clamp(1rem, 1.7vw, 1.23rem); margin: 0 0 1.55rem; }
+.cover {
+  display: grid; align-content: center; align-items: center; grid-template-columns: minmax(0, 1.12fr) minmax(0, .88fr);
+  gap: clamp(1.4rem, 4vw, 3.4rem); background:
+    radial-gradient(ellipse at 80% 20%, #173740 0%, transparent 58%),
+    linear-gradient(145deg, #101f31, #0a1523);
+}
+.cover-copy .eyebrow { color: var(--gold); }
+.cover-panel { display: grid; gap: .85rem; }
+.cover-panel article { padding: 1.1rem 1.2rem; background: #132638; border: 1px solid var(--line); border-inline-start: 3px solid var(--accent); border-radius: 12px; }
+.cover-panel article + article { border-inline-start-color: var(--gold); }
+.cover-panel h2 { font-size: 1.35rem; margin: .5rem 0 0; }
+.cover-panel p { color: var(--muted); font-size: .88rem; }
+.cover-panel b { display: block; font-size: .9rem; padding-top: .4rem; border-top: 1px solid var(--line); }
+.cover-notes { grid-column: 1 / -1; }
+.grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; margin-block: 1rem; }
+.three, .metrics { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.panel, fieldset, .metrics > div {
+  margin: 0; min-width: 0; padding: clamp(.9rem, 2vw, 1.4rem);
+  background: var(--panel); border: 1px solid var(--line); border-radius: 12px;
+}
+.panel p:last-child { margin-bottom: 0; }
+.formula { color: var(--accent); font-weight: 750; }
+.large { color: var(--accent); font-size: clamp(1.6rem, 3.5vw, 2.75rem); font-weight: 790; font-variant-numeric: tabular-nums; }
+.metrics { display: grid; margin-block: 1.2rem; gap: .8rem; }
+.metrics span, .flow span { display: block; color: var(--muted); }
+.metrics strong { color: var(--accent); font-size: clamp(1.3rem, 3vw, 2.3rem); }
+.quiet { color: var(--muted); font-size: .86rem; }
+details { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; margin-block: .8rem; padding-inline: 1rem; }
+details > :last-child:not(summary) { margin-bottom: 1rem; }
+summary { padding-block: .68rem; color: var(--accent); font-weight: 680; }
+figure details { padding-inline: .65rem; margin-block-end: 0; }
+label { display: block; }
+legend { color: var(--gold); font-weight: 750; padding-inline: .3rem; }
+.lab fieldset label { display: flex; justify-content: space-between; gap: .65rem; margin-top: .5rem; }
+output { color: var(--accent); white-space: nowrap; }
+input[type=range] { display: block; width: 100%; min-height: 44px; margin: 0 0 .25rem; accent-color: var(--accent); }
+select, input[type=number] { width: 100%; min-height: 44px; padding: .4rem .6rem; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 7px; }
+figcaption { font-weight: 750; color: var(--accent); }
+canvas { display: block; width: 100%; height: clamp(175px, 22vw, 245px); }
+.stack { display: flex; height: 16px; margin: .4rem 0 .55rem; border-radius: 10px; overflow: hidden; background: #384f63; }
+.stack i { flex: 1; background: var(--accent); }
+.stack i + i { background: var(--gold); }
+.flow { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .7rem; padding: 0; list-style: none; }
+.flow li { margin: 0; padding: 1rem; background: var(--panel); border-top: 2px solid var(--accent); border-radius: 0 0 8px 8px; }
+.flow b { color: var(--accent); }
+.table-wrap { max-width: 100%; overflow: auto; border: 1px solid var(--line); border-radius: 10px; margin-block: 1rem; }
+table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+caption { text-align: start; padding: .6rem .8rem; color: var(--gold); }
+th, td { border-top: 1px solid var(--line); padding: .48rem .72rem; text-align: start; }
+thead { background: var(--panel); }
+td { color: var(--muted); }
+#funding td { text-align: end; }
+.scenarios { display: flex; flex-wrap: wrap; gap: .45rem; padding: .35rem .7rem .65rem; }
+.scenarios label { display: flex; align-items: center; gap: .5rem; min-height: 44px; padding: 0 .85rem; border: 1px solid var(--line); border-radius: 8px; cursor: pointer; }
+.scenarios label:focus-within { outline: 2px solid var(--gold); }
+.scenarios label:has(:checked) { border-color: var(--accent); color: var(--accent); }
+input[type=radio] { accent-color: var(--accent); }
+.controls { display: flex; justify-content: space-between; gap: .7rem; align-items: center; max-width: 100%; padding: .8rem clamp(.9rem, 4vw, 3.7rem); border-top: 1px solid var(--line); background: #0d1b29; }
+button, .button { display: inline-flex; align-items: center; justify-content: center; gap: .5rem; min-height: 44px; border-radius: 8px; border: 1px solid var(--line); background: var(--panel); color: var(--ink); font-weight: 720; padding: .45rem .8rem; text-decoration: none; }
+button:hover:not(:disabled), .button:hover { border-color: var(--accent); }
+.primary { color: #072a21; background: var(--accent); border-color: var(--accent); }
+button:disabled { opacity: .5; cursor: default; }
+.progress-area { display: grid; justify-items: center; gap: .25rem; color: var(--muted); font: 700 .8rem ui-monospace, monospace; }
+progress { width: clamp(3.2rem, 12vw, 8rem); height: .4rem; accent-color: var(--accent); }
+@media (prefers-reduced-motion: no-preference) {
+  .slide.active { animation: appear .22s ease-out both; }
+  @keyframes appear { from { opacity: .55; transform: translateY(.4rem); } to { opacity: 1; transform: translateY(0); } }
+  .stack i { transition: flex-basis .2s ease; }
+}
+@media (max-width: 920px) {
+  .layout { grid-template-columns: minmax(165px, 205px) minmax(0, 1fr); }
+  .cover { grid-template-columns: 1fr; min-height: auto; }
+  .flow { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 700px) {
+  .layout { display: block; }
+  aside { border-inline-end: 0; border-bottom: 1px solid var(--line); }
+  .outline { padding: 0 1rem; }
+  .outline nav { grid-template-columns: repeat(auto-fit, minmax(min(100%, 12rem), 1fr)); padding-block-end: .8rem; }
+  .outline nav p { grid-column: 1 / -1; }
+  .slide { min-height: auto; }
+  .grid { grid-template-columns: 1fr; }
+  .metrics { grid-template-columns: repeat(auto-fit, minmax(min(100%, 8rem), 1fr)); }
+}
+@media (max-width: 350px) {
+  .mast-label { display: none; }
+  .controls { padding-inline: .5rem; }
+  .controls button { font-size: .82rem; padding-inline: .45rem; }
+}
+@media print {
+  :root { color-scheme: light; --bg: #fff; --ink: #142536; --muted: #324b5e; --accent: #105747; --gold: #683c09; --line: #cbd5dd; --panel: #f3f7f8; --surface: #fff; }
+  .masthead, aside, .controls, .button, canvas { display: none !important; }
+  .layout { display: block; }
+  .slide, .slide[hidden] { display: block !important; min-height: auto; padding: 1rem 0; break-after: page; }
+  .cover, .cover-panel article { background: white; }
+  .slide.active { animation: none; }
+}
+  </style>
+  <noscript><style>.lab fieldset, .scenarios, canvas, .debt-data { display: none; }</style></noscript>
+</head>
+<body>
+  <header class="masthead">
+    <a class="brand" href="../../portal/" target="_top"><span class="mark" aria-hidden="true">P<span>&amp;</span>J</span> <span>Capital</span></a>
+    <span class="mast-label">財經市場硬核</span>
+    <a class="portal-link" href="../../portal/" target="_top">專題入口 ↗</a>
+  </header>
+  <div class="layout">
+    <aside>
+      <details class="outline" open>
+        <summary>課程目錄</summary>
+        <nav aria-label="課程投影片">
+          <p>導讀</p>
+          <a href="#intro">01 2027 債市，撐得住嗎？</a>
+          <a href="#framework">02 兩個分析框架</a>
+          <a href="#supply">03 公債和企業債同時增發</a>
+          <p>公債</p>
+          <a href="#budget">04 拆解政府融資需求</a>
+          <a href="#fiscal">05 財政改善與債務負擔</a>
+          <a href="#debt">06 債務比率試算</a>
+          <a href="#rollover">07 再融資如何推升利息</a>
+          <a href="#productivity">08 AI、生產力與稅收</a>
+          <p>AI 企業融資</p>
+          <a href="#gap">09 AI 資金缺口試算</a>
+          <a href="#funding">10 預先籌資與資金用途</a>
+          <a href="#buyers">11 誰能承接債券？</a>
+          <a href="#returns">12 投資報酬與資金成本</a>
+          <a href="#crowding">13 如何辨識排擠？</a>
+          <p>情境與複習</p>
+          <a href="#scenarios">14 三種情境</a>
+          <a href="#watchlist">15 建立觀察清單</a>
+          <a href="#review">16 綜合練習與來源</a>
+        </nav>
+      </details>
+    </aside>
+    <div class="stage">
+      <main id="deck">
+        <noscript><p class="quiet">目前顯示完整講義與試算的預設結果。啟用 JavaScript 後可逐頁瀏覽與修改假設。</p></noscript>
+        <section class="slide cover" id="intro">
+          <div class="cover-copy">
+            <p class="eyebrow">BOND MARKET OUTLOOK / 2027</p>
+            <h1 tabindex="-1">2027 債市<br><em>壓力測試</em></h1>
+            <p class="lead">政府舉債與 AI 融資同時擴張。哪些條件能讓市場繼續承接？</p>
+            <a href="#framework" class="button primary" data-jump>開始課程 <span aria-hidden="true">→</span></a>
+            <p class="quiet">16 張投影片 · 可按 ← → 翻頁，或由目錄跳至指定章節</p>
+          </div>
+          <div class="cover-panel" aria-label="兩種債務壓力">
+            <article><span class="eyebrow">01 / PUBLIC DEBT</span><h2>政府債務</h2><p>財政赤字、債務到期與名目成長</p><b>有效利率 − 名目 GDP 成長率</b></article>
+            <article><span class="eyebrow">02 / AI FINANCING</span><h2>企業融資</h2><p>AI 資本支出、現金流與信用利差</p><b>投入資本報酬率 − 資金成本</b></article>
+          </div>
+          <details class="cover-notes"><summary>教學目標與建議節奏</summary><p>建議安排約 40 分鐘。學完後應能自行推導債務比率、拆解 AI 建設的資金缺口，並用發行與交易數據分辨產業壓力和整體市場壓力。</p></details>
+        </section>
+
+        <section class="slide" id="framework">
+          <p class="eyebrow">導讀 / 分析框架</p>
+          <h2 tabindex="-1">先問長期能否負擔，再問短期能否籌錢</h2>
+          <p class="lead">政府與企業都要評估償債能力和再融資能力，但使用的指標不同。</p>
+          <div class="grid">
+            <article class="panel"><h3>政府</h3><p class="formula">有效利率 − 名目 GDP 成長率</p><p>借款成本影響債務分子，GDP 成長影響分母。再加入初級財政收支，才能判斷債務比率是否上升。</p></article>
+            <article class="panel"><h3>企業</h3><p class="formula">ROIC − WACC</p><p>衡量已投入資本創造的報酬是否高於資金成本，再看現金、到期債務及新發行條件，判斷能否撐過資金需求高峰。</p></article>
+          </div>
+          <details><summary>課堂討論｜報酬可觀的企業也會缺錢嗎？</summary><p>會。假設資料中心要先付建置款，兩年後才有租金。即使整體專案回報良好，若第一年到期債務多、可動用現金又少，仍可能需要縮減投資或高成本融資。</p></details>
+        </section>
+
+        <section class="slide" id="supply">
+          <p class="eyebrow">導讀 / 債券供需</p>
+          <h2 tabindex="-1">更多債券進入市場，哪裡會先出現壓力？</h2>
+          <p class="lead">政府與 AI 業者都需要融資。壓力取決於新增供給的期限、風險，以及相應投資人的承接能力。</p>
+          <div class="grid">
+            <article class="panel"><h3>公債供給</h3><p>財政赤字與到期再融資 → 按不同期限發債 → 市場重新評估持有久期所需的補償。</p></article>
+            <article class="panel"><h3>企業債供給</h3><p>資料中心、算力與電力設備投入 → 外部資金需求 → 投資人重新評估信用與發行定價。</p></article>
+          </div>
+          <details><summary>進階｜怎麼拆解殖利率？</summary><p>長天期國債殖利率可概念性拆成預期短率的平均與期限溢價。公司債還要考慮信用、流動性及契約差異。期限溢價是模型估計值。觀察殖利率上升時，應同時看預期政策利率與信用利差，才能提出可能的解釋。</p></details>
+        </section>
+
+        <section class="slide" id="budget">
+          <p class="eyebrow">公債 / 赤字與到期債務</p>
+          <h2 tabindex="-1">財政赤字之外，還有一筆到期本金要還</h2>
+          <p class="lead">初級赤字是非利息支出減收入。加上淨利息得到總赤字。到期本金則影響當期總融資需求。</p>
+          <div class="metrics">
+            <div><span>總發行</span><strong>1,250 億</strong></div>
+            <div><span>償還到期債券</span><strong>970 億</strong></div>
+            <div><span>取得新現金</span><strong>280 億</strong></div>
+          </div>
+          <p class="quiet">美元。美國財政部 2026 年 11 月 4 日季度再融資公告，限該批次發行。<a href="https://home.treasury.gov/news/press-releases/sb0678" target="_blank" rel="noopener">原始公告 ↗</a></p>
+          <details><summary>課堂練習｜大量發行代表當年赤字同幅增加嗎？</summary><p>這批發行約 78% 用於償還到期債券。分析整季時，還要對照其他期限發行、財政部現金餘額及其他融資項目，才能把淨籌資和預算赤字接起來。</p></details>
+        </section>
+
+        <section class="slide" id="fiscal">
+          <p class="eyebrow">公債 / 財政比較</p>
+          <h2 tabindex="-1">赤字收窄後，債務比率仍可能上升</h2>
+          <p class="lead">比較國家時，先對齊政府範圍、期間與初級收支，再看財政改善是否大於利息與成長差距帶來的壓力。</p>
+          <div class="grid">
+            <article class="panel"><h3>來源報告的判斷</h3><p>報告預期多數所比較的主要經濟體，在五年期初級財政收支上改善，日本則朝擴大赤字的方向走。政策落地、成長與利息支出會改變這個路徑。</p></article>
+            <article class="panel"><h3>三個可比性問題</h3><ol><li>中央政府還是一般政府？</li><li>初級收支還是含利息的總收支？</li><li>整體債務還是由公眾持有的債務？</li></ol></article>
+          </div>
+          <details><summary>比較示例｜美國 CBO 的 2056 年利率情境</summary><p>CBO 於 2026 年 9 月發布的比較，以 2026 年公眾持有聯邦債務為 GDP 的 101% 起算。2056 年延伸基準達 175%，利率逐步高於基準 1 個百分點的情境達 222%。這是具備特定預算與總經條件的長期推估。<a href="https://www.cbo.gov/publication/62758" target="_blank" rel="noopener">CBO 情境說明 ↗</a></p></details>
+        </section>
+
+        <section class="slide" id="debt">
+          <p class="eyebrow">公債 / 互動試算</p>
+          <h2 tabindex="-1">成長跑贏利率，仍要看初級赤字</h2>
+          <p class="lead">從債務占 GDP 100% 起算，改變利率、成長和初級赤字，觀察十年後的路徑。</p>
+          <div class="lab grid">
+            <fieldset>
+              <legend>年度假設</legend>
+              <label for="rate">有效名目利率 <output id="rate-value" for="rate">4.0%</output></label><input id="rate" type="range" min="0" max="9" step=".1" value="4">
+              <label for="growth">名目 GDP 成長 <output id="growth-value" for="growth">4.5%</output></label><input id="growth" type="range" min="-2" max="10" step=".1" value="4.5">
+              <label for="deficit">初級赤字／GDP <output id="deficit-value" for="deficit">2.0%</output></label><input id="deficit" type="range" min="-5" max="8" step=".1" value="2">
+              <p class="quiet">負的初級赤字代表盈餘。假設各年數值固定，存量流量調整設為零。</p>
+            </fieldset>
+            <figure class="panel">
+              <figcaption id="debt-answer">第 10 年債務比率約 114.9%</figcaption>
+              <canvas id="debt-chart" width="680" height="260" aria-hidden="true"></canvas>
+              <p class="quiet" id="debt-breakeven">維持期初債務比率所容許的初級赤字約 0.48% GDP。</p>
+              <details class="debt-data"><summary>查看各年數值</summary><div id="debt-table"></div></details>
+            </figure>
+          </div>
+          <details><summary>逐步推導公式與損益兩平點</summary>
+            <ol><li>先用金額寫期末債務。舊債本金與利息合計為 (1 ＋ r) × 期初債務，再加當年初級赤字。</li><li>同時除以當年 GDP。由於當年 GDP 等於前一年 GDP × (1 ＋ g)，故 dₜ = [(1 ＋ r) ÷ (1 ＋ g)] × dₜ₋₁ ＋ pₜ。</li><li>令 dₜ 等於 dₜ₋₁，得到可穩定債務比率的初級赤字 p* = [(g − r) ÷ (1 ＋ g)] × dₜ₋₁。</li></ol>
+            <p>r 與 g 都採名目值，pₜ 以當年 GDP 為分母。實際研究仍須處理匯率評價、現金餘額、資產交易等調整。<a href="https://www.imf.org/external/region/tlm/rr/pdf/aug7.pdf" target="_blank" rel="noopener">IMF 債務動態教材 ↗</a></p>
+          </details>
+        </section>
+
+        <section class="slide" id="rollover">
+          <p class="eyebrow">公債 / 再融資試算</p>
+          <h2 tabindex="-1">新債利率如何傳到存量債務？</h2>
+          <p class="lead">在固定利率舊債陸續到期時，市場利率才會透過換債逐步傳到平均票息。</p>
+          <div class="lab grid">
+            <fieldset>
+              <legend>等額換債示例</legend>
+              <label for="roll-share">本年到期本金占比 <output id="roll-share-value" for="roll-share">25%</output></label><input id="roll-share" type="range" min="0" max="100" step="5" value="25">
+              <label for="roll-rate">新債票息 <output id="roll-rate-value" for="roll-rate">5.0%</output></label><input id="roll-rate" type="range" min="0" max="10" step=".1" value="5">
+              <p class="quiet">舊債票息 3%，債務總額固定。</p>
+            </fieldset>
+            <article class="panel"><h3>換債後平均票息</h3><p class="large" id="roll-answer">3.50%</p><div class="stack" id="roll-stack" aria-hidden="true"><i></i><i></i></div><p class="quiet" id="roll-legend">保留舊債 75% · 換成新債 25%</p></article>
+          </div>
+          <details><summary>進階｜為何實際利息支出可能不同？</summary><p>這是換債完成後的年化票息。財政預算當年的利息支出還受實際換債日期、短債持續滾動、浮息重設、折溢價攤銷與通膨連結債券影響。</p></details>
+        </section>
+
+        <section class="slide" id="productivity">
+          <p class="eyebrow">公債 / 生產力</p>
+          <h2 tabindex="-1">AI 提高生產力後，債務比率會下降嗎？</h2>
+          <p class="lead">若生產力提升帶動產出及稅基擴張，債務比率較容易穩定。效果還取決於利率反應與財政支出。</p>
+          <ol class="flow" role="list"><li><b>導入投資</b><span>企業先投入算力與人力</span></li><li><b>產出效率改善</b><span>同樣投入創造更多價值</span></li><li><b>GDP 與稅基擴大</b><span>所得、利潤與應稅活動可能上升</span></li><li><b>檢驗淨影響</b><span>同時看利率及初級收支</span></li></ol>
+          <details><summary>課堂練習｜名目成長和有效利率都多 1 個百分點呢？</summary><p>兩者同步上升時，r − g 不變，精確公式的分母 1 ＋ g 仍有小幅變化。若稅收與支出也變動，初級赤字可能成為決定因素。可回到 <a href="#debt" data-jump>債務比率試算</a>，分別調整兩項數值。</p></details>
+        </section>
+
+        <section class="slide" id="gap">
+          <p class="eyebrow">AI 企業融資 / 互動試算</p>
+          <h2 tabindex="-1">AI 建設的現金缺口有多大？</h2>
+          <p class="lead">用資本支出減營運現金流，先看當年是現金缺口還是剩餘，再把到期債務與其他現金用途加回。</p>
+          <div class="lab grid">
+            <fieldset>
+              <legend>本文研究口徑（十億美元）</legend>
+              <label for="gap-year">帶入報告數值</label>
+              <select id="gap-year"><option value="2025">2025｜報告實際值</option><option value="2026" selected>2026｜報告估計</option><option value="2027">2027｜報告估計</option><option value="custom">自訂假設</option></select>
+              <label for="capex">資本支出</label><input id="capex" type="number" min="0" max="10000" step="any" value="1000" inputmode="decimal">
+              <label for="cashflow">營運現金流</label><input id="cashflow" type="number" min="-10000" max="10000" step="any" value="804" inputmode="decimal">
+            </fieldset>
+            <article class="panel">
+              <h3 id="gap-label">年度現金缺口</h3>
+              <p class="large" id="gap-answer" aria-live="polite">196 十億美元</p>
+              <div class="stack" id="gap-stack" aria-hidden="true"><i></i><i></i></div><p class="quiet" id="gap-legend">營運現金流約覆蓋資本支出 80.4%。</p>
+            </article>
+          </div>
+          <details><summary>讀懂數字｜這個差額涵蓋哪些現金流？</summary><p>數字採 MacroMicro 2026 年 11 月 11 日報告對科技生態系彙整，涵蓋的公司與用途以報告口徑為準。公司層級仍要核對租賃、收購、股東回饋、到期償還與受限現金。發債或增資金額也可能包含預先籌資。</p></details>
+        </section>
+
+        <section class="slide" id="funding">
+          <p class="eyebrow">AI 企業融資 / 預先籌資</p>
+          <h2 tabindex="-1">籌資總額超過當期現金缺口，錢去了哪裡？</h2>
+          <p class="lead">企業可為後續投資提前保留現金，也會用籌資來再融資、收購或因應不同年度的現金需求。</p>
+          <div class="table-wrap" role="region" aria-label="科技生態系 2026 與 2027 年融資比較" tabindex="0">
+            <table><caption>MacroMicro 報告估計（十億美元）</caption>
+              <thead><tr><th scope="col">項目</th><th scope="col">2026</th><th scope="col">2027</th></tr></thead>
+              <tbody><tr><th scope="row">資本支出 − 營運現金流</th><td>196</td><td>622</td></tr>
+              <tr><th scope="row">債務類融資</th><td>586</td><td>735</td></tr>
+              <tr><th scope="row">股權類融資（依原表分類）</th><td>501</td><td>560</td></tr>
+              <tr><th scope="row">表列融資合計</th><td>1,087</td><td>1,295</td></tr></tbody>
+            </table>
+          </div>
+          <details><summary>練習｜如何驗證預先籌資形成了現金緩衝？</summary><p>把同一公司的期初現金、自由現金流、債務及股權淨流入、到期償還和其他現金用途逐一對帳，再看期末可動用現金是否上升。研究報告的產業融資總額只能用來提出假說，個別公司的現金流量表才能驗證用途。</p></details>
+        </section>
+
+        <section class="slide" id="buyers">
+          <p class="eyebrow">AI 企業融資 / 債券買方</p>
+          <h2 tabindex="-1">誰願意吸收新增債券？</h2>
+          <p class="lead">投資組合有調整空間時，還要看殖利率、信用等級、久期與各自的配置限制。</p>
+          <div class="grid three">
+            <article class="panel"><h3>家庭與基金</h3><p>利率、股債相對報酬、資金流向和流動性需求，都會影響配置。</p></article>
+            <article class="panel"><h3>保險公司</h3><p>債券久期可配合長期保單負債。信用評等與資本要求影響可買範圍。</p></article>
+            <article class="panel"><h3>退休基金</h3><p>負債期限、提撥狀況與既有投資政策，影響增持機會。</p></article>
+          </div>
+          <details><summary>課堂試算｜配置增加 1 個百分點會是多少？</summary><p>依來源報告的示例，假設三類投資者合計資產為 127 兆美元、整體債券配置上升 1 個百分點，算術上相當於 1.27 兆美元。實證時要追不同種類及期限的實際持倉變化，也要辨別配置增加是買入、價格上漲或兩者都有。</p></details>
+        </section>
+
+        <section class="slide" id="returns">
+          <p class="eyebrow">AI 企業融資 / 投資報酬</p>
+          <h2 tabindex="-1">企業 ROIC 很高，新增 AI 投資也會賺錢嗎？</h2>
+          <p class="lead">整體 ROIC 可評估既有業務，評估新增投資則要估算專案的現金流、風險與資本成本。</p>
+          <div class="grid">
+            <article class="panel"><h3>投入資本報酬率</h3><p class="formula">ROIC = NOPAT ÷ 平均投入資本</p><p>NOPAT 為稅後營業利潤。比較不同企業時，須統一租賃、在建工程及投入資本的口徑。</p></article>
+            <article class="panel"><h3>加權平均資金成本</h3><p class="formula">WACC = wₑ × kₑ ＋ w𝑑 × k𝑑 × (1 − T)</p><p>權重以適當的市值資本結構估計。股權成本與稅前債務成本都要反映風險。</p></article>
+          </div>
+          <details><summary>帶數字算一次｜ROIC、WACC 與利差</summary><p>假設 NOPAT 為 15、平均投入資本為 100，ROIC 為 15%。若股權權重 70%、成本 12%，債務權重 30%、成本 6%，稅率 25%，WACC 為 9.75%，兩者差 5.25 個百分點。新增資料中心專案仍要檢查利用率、合約期限、租戶集中度及設備更新週期。</p></details>
+        </section>
+
+        <section class="slide" id="crowding">
+          <p class="eyebrow">AI 企業融資 / 市場訊號</p>
+          <h2 tabindex="-1">科技債承壓，如何確認有沒有蔓延？</h2>
+          <p class="lead">把公債、科技債和非科技債分開觀察，對照相近的發行條件與市場期間。</p>
+          <div class="grid three">
+            <article class="panel"><h3>美國公債</h3><p>看同期限標售尾差與投標倍數。尾差 = 得標殖利率 − 標售前同券交易殖利率。</p></article>
+            <article class="panel"><h3>科技公司債</h3><p>看選擇權調整利差（OAS）、新債折讓，以及訂單金額與發行額之比。</p></article>
+            <article class="panel"><h3>非科技公司債</h3><p>以相近評等與久期比較。若多產業持續同步轉弱，再檢查利率波動與景氣因素。</p></article>
+          </div>
+          <details><summary>練習｜科技債變貴，但非科技債持平</summary><p>這組證據支持科技發行人承壓。可再檢查同期限公債尾差、非科技新債折讓與發行成功率。如果只有科技債惡化，資料仍不足以判斷出現廣泛排擠。<a href="https://www.treasurydirect.gov/auctions/announcements-data-results/announcement-results-press-releases/" target="_blank" rel="noopener">美國國債標售公告與結果 ↗</a></p></details>
+        </section>
+
+        <section class="slide" id="scenarios">
+          <p class="eyebrow">情境 / 互動試算</p>
+          <h2 tabindex="-1">同一套框架，比較三種 2027 情境</h2>
+          <p class="lead">選擇一組課堂假設，比較一年期政府債務增幅與企業資本報酬利差。</p>
+          <fieldset class="scenarios"><legend>選擇情境</legend>
+            <label><input type="radio" name="scenario" value="base" checked> 基準</label>
+            <label><input type="radio" name="scenario" value="better"> 改善</label>
+            <label><input type="radio" name="scenario" value="stress"> 壓力</label>
+          </fieldset>
+          <div class="grid" id="scenario-results" aria-live="polite">
+            <article class="panel"><h3>政府｜債務占 GDP 的一年變化</h3><p class="large" id="scenario-debt">+2.00 個百分點</p><p id="scenario-fiscal">利率 4%、成長 4%、初級赤字 2% GDP。</p></article>
+            <article class="panel"><h3>企業｜ROIC − WACC</h3><p class="large" id="scenario-spread">+4.00 個百分點</p><p id="scenario-company">ROIC 12%、WACC 8%。</p></article>
+          </div>
+          <p class="quiet" id="scenario-note">基準假設下，企業仍有正利差，政府初級赤字推升債務比率。</p>
+          <details><summary>進階｜三組結果的適用範圍</summary><p>以債務占 GDP 100% 為起點，省略存量流量調整。ROIC 與 WACC 為企業示例。三組輸入是課堂假設，未加入市場機率或兩部門透過信用市場互相影響的回饋。</p></details>
+        </section>
+
+        <section class="slide" id="watchlist">
+          <p class="eyebrow">情境 / 監測框架</p>
+          <h2 tabindex="-1">把分析變成一張可持續更新的觀察清單</h2>
+          <p class="lead">先寫下你預期哪些指標會先動，再定期檢查壓力是否持續並向其他市場擴散。</p>
+          <div class="table-wrap" role="region" aria-label="債市監測指標與解讀" tabindex="0">
+            <table><caption>建議觀察項目</caption>
+              <thead><tr><th scope="col">指標</th><th scope="col">更新節奏</th><th scope="col">觀察重點</th></tr></thead>
+              <tbody><tr><th scope="row">有效利率、名目成長、初級赤字</th><td>月／季</td><td>融資成本上升與初級收支惡化是否同時發生。</td></tr>
+              <tr><th scope="row">公債尾差、投標倍數</th><td>每次標售</td><td>同期限持續出現尾差且投標倍數下降。</td></tr>
+              <tr><th scope="row">CapEx、營運現金流、到期債務</th><td>每季</td><td>現金缺口擴大，同時現金緩衝縮小。</td></tr>
+              <tr><th scope="row">ROIC、WACC</th><td>每季</td><td>報酬下滑與資本成本上升，導致利差縮小。</td></tr>
+              <tr><th scope="row">科技與非科技債 OAS、新債折讓</th><td>週／每次發行</td><td>惡化從少數發行人擴散至其他產業。</td></tr></tbody>
+            </table>
+          </div>
+          <details><summary>研究習慣｜如何避免把單點異動當成趨勢？</summary><p>先比較同期限與相似評等，再拉長觀察窗口。若多項指標同步轉弱，對照當時大盤波動、經濟數據與發行規模，避免將共同衝擊誤判為 AI 融資的單一效果。</p></details>
+        </section>
+
+        <section class="slide" id="review">
+          <p class="eyebrow">複習 / 綜合練習</p>
+          <h2 tabindex="-1">哪些證據會改變你對 2027 債市的判斷？</h2>
+          <p class="lead">練習先寫出主張、計算依據與能推翻主張的證據，再展開參考解析。</p>
+          <details><summary>練習 1｜有效利率 4%、名目 GDP 成長 5%，初級赤字 2%，債務比率會下降嗎？</summary><p>若初始債務比率為 100%，下一年約為 101.05%。成長帶來約 0.95 個百分點的改善，初級赤字增加 2 個百分點，合計上升約 1.05 個百分點。</p></details>
+          <details><summary>練習 2｜AI 企業 ROIC 大於 WACC，可以只看這兩個數字嗎？</summary><p>還要確認新增專案報酬、現金流時間與到期債務。若資本支出已發生而收入延後，未來 12 個月資金來源與流動性就會主導短期信用風險。</p></details>
+          <details><summary>練習 3｜什麼證據會讓你提高對全面排擠的警覺？</summary><p>多個期限的公債標售需求持續轉弱，科技與非科技業的同評等 OAS 與新債折讓同時擴大，且新發行實際縮減。接著再檢查景氣惡化或利率波動能否解釋這些現象。</p></details>
+          <details><summary>來源與資料口徑</summary><ul>
+            <li>MacroMicro 財經 M 平方，2026-11-11 之 2027 年債市展望，依提供的研究報告第 3–13 頁改寫與教學整理。</li>
+            <li><a href="https://www.cbo.gov/publication/62758" target="_blank" rel="noopener">CBO：利率與預算情境</a>，2026-09-24 長期推估。</li>
+            <li><a href="https://home.treasury.gov/news/press-releases/sb0678" target="_blank" rel="noopener">美國財政部：季度再融資公告</a>，2026-11-04；<a href="https://www.treasurydirect.gov/auctions/results/" target="_blank" rel="noopener">TreasuryDirect：標售結果</a>。</li>
+            <li><a href="https://www.imf.org/external/region/tlm/rr/pdf/aug7.pdf" target="_blank" rel="noopener">IMF：財政與債務永續教材</a>，債務動態推導。</li>
+          </ul><p>互動情境均標示假設。報告中的 2026、2027 年科技融資數值維持原研究發布時的估計口徑。</p></details>
+        </section>
+      </main>
+      <nav class="controls" aria-label="翻頁" hidden>
+        <button type="button" id="previous">← 上一頁</button>
+        <div class="progress-area"><span id="slide-count" aria-live="polite">01 / 16</span><progress id="reading-progress" value="1" max="16" aria-label="簡報頁數進度"></progress></div>
+        <button type="button" id="next" class="primary">下一頁 →</button>
+      </nav>
+    </div>
+  </div>
+<script>
+"use strict";
+
+const byId = (id) => document.getElementById(id);
+const slides = [...document.querySelectorAll(".slide")];
+const links = [...document.querySelectorAll(".outline nav a")];
+const outline = document.querySelector(".outline");
+const previous = byId("previous");
+const next = byId("next");
+const courseTitle = document.title;
+const narrow = window.matchMedia("(max-width: 700px)");
+let current = 0;
+
+function showSlide(index, focusHeading = false) {
+  current = index;
+  slides.forEach((slide, position) => {
+    const isCurrent = position === index;
+    slide.hidden = !isCurrent;
+    slide.classList.toggle("active", isCurrent);
+  });
+  links.forEach((link, position) => {
+    if (position === index) link.setAttribute("aria-current", "location");
+    else link.removeAttribute("aria-current");
+  });
+  previous.disabled = index === 0;
+  next.disabled = index === slides.length - 1;
+  byId("reading-progress").value = index + 1;
+  byId("slide-count").textContent = `${String(index + 1).padStart(2, "0")} / ${slides.length}`;
+  const heading = slides[index].querySelector("h1, h2");
+  document.title = index === 0 ? courseTitle : `${heading.textContent}｜${courseTitle}`;
+  if (focusHeading) {
+    if (narrow.matches) outline.open = false;
+    window.scrollTo(0, 0);
+    heading.focus({ preventScroll: true });
+  }
+  if (slides[index].id === "debt") updateDebt();
+}
+
+function showHash(focusHeading) {
+  const index = slides.findIndex((slide) => `#${slide.id}` === location.hash);
+  showSlide(Math.max(0, index), focusHeading);
+}
+
+function navigate(index) {
+  if (index < 0 || index >= slides.length || index === current) return;
+  history.pushState(null, "", `#${slides[index].id}`);
+  showSlide(index, true);
+}
+
+for (const link of [...links, ...document.querySelectorAll("[data-jump]")]) {
+  link.addEventListener("click", (event) => {
+    if (event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    event.preventDefault();
+    navigate(slides.findIndex((slide) => `#${slide.id}` === link.hash));
+  });
+}
+previous.addEventListener("click", () => navigate(current - 1));
+next.addEventListener("click", () => navigate(current + 1));
+window.addEventListener("hashchange", () => showHash(true));
+document.addEventListener("keydown", (event) => {
+  if (event.defaultPrevented || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
+  if (event.target.closest("input, select, textarea, button, a, summary, [contenteditable], .table-wrap")) return;
+  if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
+    event.preventDefault();
+    navigate(current + (event.key === "ArrowLeft" ? -1 : 1));
+  }
+});
+
+const format = new Intl.NumberFormat("zh-TW", { maximumFractionDigits: 2 });
+const percent = (value, digits = 1) => `${value.toFixed(digits)}%`;
+const number = (id) => byId(id).valueAsNumber;
+
+function nextDebt(debt, rate, growth, deficit) {
+  return debt * (100 + rate) / (100 + growth) + deficit;
+}
+
+function drawDebt(values) {
+  const canvas = byId("debt-chart");
+  const ctx = canvas.getContext("2d");
+  if (!ctx || !canvas.clientWidth) return;
+  const width = canvas.clientWidth;
+  const height = canvas.clientHeight;
+  const ratio = Math.min(window.devicePixelRatio || 1, 2);
+  canvas.width = Math.round(width * ratio);
+  canvas.height = Math.round(height * ratio);
+  ctx.scale(ratio, ratio);
+  const low = Math.floor((Math.min(...values) - 2) / 10) * 10;
+  const high = Math.ceil((Math.max(...values) + 2) / 10) * 10;
+  const x = (year) => 46 + (width - 64) * year / 10;
+  const y = (value) => 16 + (height - 46) * (high - value) / (high - low);
+  ctx.font = "11px system-ui";
+  ctx.fillStyle = "#b7c8d6";
+  ctx.strokeStyle = "#365065";
+  for (let tick = 0; tick <= 4; tick++) {
+    const value = low + (high - low) * tick / 4;
+    ctx.beginPath();
+    ctx.moveTo(x(0), y(value));
+    ctx.lineTo(x(10), y(value));
+    ctx.stroke();
+    ctx.fillText(`${format.format(value)}%`, 1, y(value) + 4);
+  }
+  ctx.fillText("期初", x(0), height - 6);
+  ctx.textAlign = "right";
+  ctx.fillText("第 10 年", x(10), height - 6);
+  ctx.strokeStyle = "#87f4d2";
+  ctx.lineWidth = 3;
+  ctx.beginPath();
+  values.forEach((value, year) => {
+    if (year === 0) ctx.moveTo(x(year), y(value));
+    else ctx.lineTo(x(year), y(value));
+  });
+  ctx.stroke();
+  ctx.fillStyle = "#87f4d2";
+  ctx.beginPath();
+  ctx.arc(x(10), y(values[10]), 4, 0, Math.PI * 2);
+  ctx.fill();
+}
+
+function updateDebt() {
+  const rate = number("rate");
+  const growth = number("growth");
+  const deficit = number("deficit");
+  const values = [100];
+  for (let year = 1; year <= 10; year++) values.push(nextDebt(values[year - 1], rate, growth, deficit));
+  byId("rate-value").textContent = percent(rate);
+  byId("growth-value").textContent = percent(growth);
+  byId("deficit-value").textContent = percent(deficit);
+  byId("debt-answer").textContent = `第 10 年債務比率為 ${percent(values[10])}`;
+  const maxDeficit = 100 * (growth - rate) / (100 + growth);
+  byId("debt-breakeven").textContent = maxDeficit >= 0
+    ? `維持期初債務比率的初級赤字上限為 ${percent(maxDeficit, 2)} GDP。`
+    : `維持期初債務比率需初級盈餘 ${percent(-maxDeficit, 2)} GDP。`;
+  const rows = values.map((value, year) => `<tr><th scope="row">${year === 0 ? "期初" : `第 ${year} 年`}</th><td>${percent(value, 2)}</td></tr>`);
+  byId("debt-table").innerHTML = `<table><caption>各年債務占 GDP 比率</caption><thead><tr><th scope="col">期間</th><th scope="col">占 GDP</th></tr></thead><tbody>${rows.join("")}</tbody></table>`;
+  drawDebt(values);
+}
+
+for (const id of ["rate", "growth", "deficit"]) byId(id).addEventListener("input", updateDebt);
+let pendingResize;
+window.addEventListener("resize", () => {
+  if (slides[current].id !== "debt") return;
+  cancelAnimationFrame(pendingResize);
+  pendingResize = requestAnimationFrame(updateDebt);
+});
+
+function setStack(id, first) {
+  const [left, right] = byId(id).children;
+  left.style.flex = `0 0 ${first}%`;
+  right.style.flex = `0 0 ${100 - first}%`;
+}
+
+function updateRollover() {
+  const share = number("roll-share");
+  const rate = number("roll-rate");
+  byId("roll-share-value").textContent = percent(share, 0);
+  byId("roll-rate-value").textContent = percent(rate);
+  byId("roll-answer").textContent = percent(3 * (1 - share / 100) + rate * share / 100, 2);
+  byId("roll-legend").textContent = `保留舊債 ${100 - share}% · 換成新債 ${share}%`;
+  setStack("roll-stack", 100 - share);
+}
+
+for (const id of ["roll-share", "roll-rate"]) byId(id).addEventListener("input", updateRollover);
+updateRollover();
+
+const gapPresets = { 2025: [514, 607], 2026: [1000, 804], 2027: [1700, 1078] };
+const gapYear = byId("gap-year");
+const gapInputs = [byId("capex"), byId("cashflow")];
+
+function updateGap() {
+  const [capex, cashflow] = gapInputs.map((input) => input.valueAsNumber);
+  if (gapInputs.some((input) => !Number.isFinite(input.valueAsNumber) || !input.validity.valid)) {
+    byId("gap-label").textContent = "年度現金差額";
+    byId("gap-answer").textContent = "請輸入有效金額";
+    byId("gap-legend").textContent = "金額需介於欄位允許的範圍內。資本支出須為零或正數。";
+    byId("gap-stack").hidden = true;
+    return;
+  }
+  const gap = capex - cashflow;
+  const coverage = capex > 0 ? 100 * cashflow / capex : null;
+  byId("gap-label").textContent = gap < 0 ? "年度現金剩餘" : "年度現金缺口";
+  byId("gap-answer").textContent = `${format.format(Math.abs(gap))} 十億美元`;
+  byId("gap-legend").textContent = coverage === null
+    ? "資本支出為零，未計算覆蓋率。"
+    : cashflow < 0
+      ? "營運現金流為負，所需資金高於資本支出。"
+      : `營運現金流約為資本支出的 ${percent(coverage)}。`;
+  byId("gap-stack").hidden = coverage === null;
+  setStack("gap-stack", Math.min(100, Math.max(0, coverage ?? 0)));
+}
+
+gapYear.addEventListener("change", () => {
+  const preset = gapPresets[gapYear.value];
+  if (preset) gapInputs.forEach((input, index) => { input.value = preset[index]; });
+  updateGap();
+});
+gapInputs.forEach((input) => input.addEventListener("input", () => {
+  gapYear.value = "custom";
+  updateGap();
+}));
+updateGap();
+
+const scenarios = {
+  base: { rate: 4, growth: 4, deficit: 2, roic: 12, wacc: 8, note: "企業維持正報酬利差。政府有效利率與名目成長相同，初級赤字推升債務比率。" },
+  better: { rate: 3.5, growth: 5.2, deficit: 1, roic: 15, wacc: 7.5, note: "成長帶來的債務比率改善超過初級赤字的影響。企業報酬利差同時擴大。" },
+  stress: { rate: 5.2, growth: 2.5, deficit: 3, roic: 8, wacc: 10.5, note: "成長放緩與較高利率疊加初級赤字。若新增專案也面臨負利差，應重新檢查投資規模與到期資金。" },
+};
+
+function updateScenario(key) {
+  const { rate, growth, deficit, roic, wacc, note } = scenarios[key];
+  const signed = (value) => `${value > 0 ? "+" : ""}${value.toFixed(2)} 個百分點`;
+  byId("scenario-debt").textContent = signed(nextDebt(100, rate, growth, deficit) - 100);
+  byId("scenario-fiscal").textContent = `利率 ${rate}%、成長 ${growth}%、初級赤字 ${deficit}% GDP。`;
+  byId("scenario-spread").textContent = signed(roic - wacc);
+  byId("scenario-company").textContent = `ROIC ${roic}%、WACC ${wacc}%。`;
+  byId("scenario-note").textContent = note;
+}
+
+for (const radio of document.querySelectorAll("[name=scenario]")) {
+  radio.addEventListener("change", () => updateScenario(radio.value));
+}
+
+outline.open = !narrow.matches;
+if (narrow.addEventListener) narrow.addEventListener("change", () => { outline.open = !narrow.matches; });
+showHash(false);
+document.querySelector(".controls").hidden = false;
+</script>
+</body>
+</html>
