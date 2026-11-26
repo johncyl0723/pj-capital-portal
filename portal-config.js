@@ -91,8 +91,8 @@ window.PJ_PORTAL_CONFIG = {
     },
     {
       "key": "topic-2027-bond-market-stress-test",
-      "title": "2027 債市壓力測試｜政府舉債與 AI 融資",
-      "body": "16 張互動教學投影片，涵蓋公債再融資、AI 資金缺口、信用利差與三種債市情境。",
+      "title": "2027 債市展望｜美債破 40 兆、AI 狂發債",
+      "body": "19 頁動態簡報：公債赤字與利息負擔、AI 融資缺口、排擠效應，附報告發布後最新數據。",
       "src": "/topics/2027-bond-market-stress-test/index.html",
       "categoryKey": "cat-1779442954583",
       "order": 5
