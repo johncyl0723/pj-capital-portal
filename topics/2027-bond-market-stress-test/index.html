@@ -529,10 +529,15 @@ function activate(i){if(i===cur&&slides[i].dataset.step!==undefined)return;cur=i
   setStep(arrive==='fwd'?Math.min(1,m):m);arrive=null;
   if(location.hash!=='#'+slides[i].id)history.replaceState(null,'','#'+slides[i].id);}
 
-const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting&&e.intersectionRatio>.6)activate(slides.indexOf(e.target));});},{root:deck,threshold:[.6]});
+let auto=false,autoT=0;
+const io=new IntersectionObserver(es=>{if(auto)return;es.forEach(e=>{if(e.isIntersecting&&e.intersectionRatio>.6)activate(slides.indexOf(e.target));});},{root:deck,threshold:[.6]});
+const endAuto=()=>{auto=false;clearTimeout(autoT);};
+deck.addEventListener('scrollend',endAuto);
 slides.forEach(s=>io.observe(s));
 
-function go(i,dir){if(i<0||i>=slides.length)return;arrive=dir;slides[i].scrollIntoView({inline:'start',block:'nearest',behavior:reduce.matches?'auto':'smooth'});}
+function go(i,dir){if(i<0||i>=slides.length)return;arrive=dir;activate(i);
+  auto=true;clearTimeout(autoT);autoT=setTimeout(endAuto,1200);
+  slides[i].scrollIntoView({inline:'start',block:'nearest',behavior:reduce.matches?'auto':'smooth'});}
 function next(){if(step<maxStep(slides[cur]))setStep(step+1);else go(cur+1,'fwd');}
 function prev(){if(step>Math.min(1,maxStep(slides[cur])))setStep(step-1);else go(cur-1,'back');}
 
