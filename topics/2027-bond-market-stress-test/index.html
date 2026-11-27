@@ -88,7 +88,16 @@ svg .tb{font-weight:800}
 .home{color:var(--teal);white-space:nowrap;padding:10px 4px;text-underline-offset:.2em}
 .home:focus-visible{outline:3px solid var(--teal);outline-offset:2px}
 .hint{color:var(--ink2);white-space:nowrap}
-@media (max-width:600px){.hint{display:none}}
+@media (max-width:600px),(pointer:coarse){.hint{display:none}}
+.rot{display:none}
+@media (orientation:portrait) and (max-width:600px){
+  .rot{display:grid;place-content:center;gap:18px;position:fixed;inset:0;z-index:10;background:var(--bg);text-align:center;padding:32px;font-size:18px}
+  .rot svg{margin:0 auto}
+  .rot p{margin:0;color:var(--ink2);text-wrap:balance}
+  .rot b{font-size:22px}
+  .rot button{justify-self:center;min-height:44px;padding:0 20px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:inherit;font-size:16px}
+  .rot.off{display:none}
+}
 </style>
 </head>
 <body>
@@ -394,6 +403,12 @@ svg .tb{font-weight:800}
 </div></section>
 
 </main>
+<div class="rot" id="rot" role="dialog" aria-label="建議橫放手機">
+  <svg width="96" height="96" viewBox="0 0 96 96" aria-hidden="true"><rect x="30" y="14" width="36" height="62" rx="6" fill="none" stroke="var(--teal)" stroke-width="4"/><path d="M78 44a30 30 0 0 1-14 26" fill="none" stroke="var(--claret)" stroke-width="4" stroke-linecap="round"/><path d="M58 66l6 4 2-7" fill="none" stroke="var(--claret)" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  <b>請將手機橫放觀看</b>
+  <p>本簡報為 16:9 版面，橫放時文字與圖表較清楚</p>
+  <button type="button" id="rotOk">直式繼續看</button>
+</div>
 <nav class="bar" aria-label="簡報控制">
   <button type="button" id="prev" aria-label="上一步">←</button>
   <button type="button" id="next" aria-label="下一步">→</button>
@@ -542,6 +557,7 @@ function next(){if(step<maxStep(slides[cur]))setStep(step+1);else go(cur+1,'fwd'
 function prev(){if(step>Math.min(1,maxStep(slides[cur])))setStep(step-1);else go(cur-1,'back');}
 
 document.getElementById('next').addEventListener('click',next);
+document.getElementById('rotOk').addEventListener('click',e=>{e.stopPropagation();document.getElementById('rot').classList.add('off');fit();});
 document.getElementById('prev').addEventListener('click',prev);
 deck.addEventListener('click',e=>{if(!e.target.closest('a,button'))next();});
 addEventListener('keydown',e=>{if(e.altKey||e.ctrlKey||e.metaKey)return;
